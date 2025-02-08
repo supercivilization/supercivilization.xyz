@@ -1,0 +1,94 @@
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  overflow: hidden;
+  background-color: #000000;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  text-align: center;
+}
+
+.pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(circle at 1px 1px, #333333 1px, transparent 0);
+  background-size: 40px 40px;
+  opacity: 0.1;
+  z-index: 1;
+}
+
+.title {
+  font-size: clamp(3rem, 10vw, 7rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.gradientText {
+  background: linear-gradient(to right, #993366, #993333, #996633, #999933, #339966, #339999, #336699, #333399, #663399);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.subtitle {
+  font-size: clamp(1.25rem, 4vw, 1.5rem);
+  color: #999999;
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  line-height: 1.5;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryButton,
+.secondaryButton {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.primaryButton {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.primaryButton:hover {
+  background-color: #cccccc;
+  transform: translateY(-2px);
+}
+
+.secondaryButton {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid #333333;
+}
+
+.secondaryButton:hover {
+  background-color: #333333;
+  transform: translateY(-2px);
+}
+

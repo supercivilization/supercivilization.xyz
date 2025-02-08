@@ -1,0 +1,13 @@
+supercivilization/
+├── app/
+│   ├── page.tsx
+│   ├── layout.tsx
+│   ├── globals.css
+│   └── components/
+│       ├── Hero.tsx
+│       ├── Features.tsx
+│       └── CTA.tsx
+├── package.json
+├── next.config.js
+└── vercel.json
+
