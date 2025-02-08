@@ -4,7 +4,7 @@ import type React from "react"
 
 export const metadata: Metadata = {
   title: "Supercivilization",
-  description: "Building a better future through innovation and collaboration",
+  description: "One worldwide drive to Avolve from Degens into Regens.",
 }
 
 export default function RootLayout({
@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="bg-black text-white">{children}</body>
     </html>
   )
 }

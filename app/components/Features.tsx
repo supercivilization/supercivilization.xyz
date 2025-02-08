@@ -1,5 +1,3 @@
-import styles from "./Features.module.css"
-
 const features = [
   {
     title: "Unlock Superachiever Playbook",
@@ -13,19 +11,14 @@ const features = [
 
 export default function Features() {
   return (
-    <section className={styles.features}>
-      <div className={styles.container}>
-        <h2 className={styles.sectionTitle}>Supercivilization Pathways</h2>
-        <p className={styles.sectionSubtitle}>
-          Let's get the important jobs done that relieve the Degen pains of the Anticivilization and create the Regen gains of the Supercivilization.
-        </p>
-        <div className={styles.featureGrid}>
+    <section className="py-20 bg-gray-900">
+      <div className="container mx-auto px-4">
+        <h2 className="text-4xl font-bold text-center mb-12">Supercivilization Pathways</h2>
+        <div className="grid md:grid-cols-2 gap-8">
           {features.map((feature, index) => (
-            <div key={index} className={styles.featureCard}>
-              <div className={styles.cardContent}>
-                <h3 className={styles.featureTitle}>{feature.title}</h3>
-                <p className={styles.featureDescription}>{feature.description}</p>
-              </div>
+            <div key={index} className="bg-gray-800 p-6 rounded-lg">
+              <h3 className="text-2xl font-semibold mb-4">{feature.title}</h3>
+              <p className="text-gray-400">{feature.description}</p>
             </div>
           ))}
         </div>
