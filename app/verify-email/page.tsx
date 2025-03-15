@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { AlertCircle, CheckCircle, Loader2 } from "lucide-react"
-import { createClient } from "@supabase/supabase-js"
+import { createBrowserClient } from "@supabase/ssr"
 
 function VerifyEmailContent() {
   const router = useRouter()
@@ -56,7 +56,7 @@ function VerifyEmailWithParams({
           return
         }
 
-        const supabase = createClient(
+        const supabase = createBrowserClient(
           process.env.NEXT_PUBLIC_SUPABASE_URL!,
           process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
         )
@@ -74,6 +74,7 @@ function VerifyEmailWithParams({
           router.push("/dashboard")
         }, 3000)
       } catch (err) {
+        console.error("Email verification error:", err)
         setStatus("error")
         setError(err instanceof Error ? err.message : "Failed to verify email")
       }
