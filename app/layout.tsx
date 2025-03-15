@@ -25,9 +25,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning className="h-full">
-      <head />
       <body className={cn(
-        "relative h-full font-sans antialiased",
+        "min-h-screen bg-background font-sans antialiased",
         GeistSans.variable,
         GeistMono.variable
       )}>
@@ -39,10 +38,12 @@ export default function RootLayout({
         >
           <UIRegistry>
             <div className="relative flex min-h-screen flex-col">
-              <div className="flex-1">{children}</div>
+              <main className="flex-1">
+                {children}
+              </main>
+              <ThemeToggle />
+              <Toaster />
             </div>
-            <ThemeToggle />
-            <Toaster />
             <Analytics />
           </UIRegistry>
         </ThemeProvider>
