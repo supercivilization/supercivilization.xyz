@@ -10,9 +10,40 @@ import { createClient } from "@supabase/supabase-js"
 
 function VerifyEmailContent() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const [status, setStatus] = useState<"verifying" | "success" | "error">("verifying")
   const [error, setError] = useState("")
+
+  return (
+    <Suspense fallback={
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Email Verification</CardTitle>
+          <CardDescription>Loading...</CardDescription>
+        </CardHeader>
+        <CardContent className="flex items-center justify-center p-8">
+          <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
+        </CardContent>
+      </Card>
+    }>
+      <VerifyEmailWithParams status={status} setStatus={setStatus} error={error} setError={setError} router={router} />
+    </Suspense>
+  )
+}
+
+function VerifyEmailWithParams({ 
+  status, 
+  setStatus, 
+  error, 
+  setError, 
+  router 
+}: { 
+  status: "verifying" | "success" | "error"
+  setStatus: (status: "verifying" | "success" | "error") => void
+  error: string
+  setError: (error: string) => void
+  router: ReturnType<typeof useRouter>
+}) {
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     const verifyEmail = async () => {
@@ -49,7 +80,7 @@ function VerifyEmailContent() {
     }
 
     verifyEmail()
-  }, [router, searchParams])
+  }, [router, searchParams, setError, setStatus])
 
   return (
     <Card className="w-full max-w-md">
@@ -98,19 +129,7 @@ function VerifyEmailContent() {
 export default function VerifyEmail() {
   return (
     <div className="container flex items-center justify-center min-h-screen py-12">
-      <Suspense fallback={
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Email Verification</CardTitle>
-            <CardDescription>Loading...</CardDescription>
-          </CardHeader>
-          <CardContent className="flex items-center justify-center p-8">
-            <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
-          </CardContent>
-        </Card>
-      }>
-        <VerifyEmailContent />
-      </Suspense>
+      <VerifyEmailContent />
     </div>
   )
 } 
