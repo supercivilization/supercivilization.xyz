@@ -7,6 +7,7 @@ import ThemeToggle from "@/components/theme-toggle"
 import { Analytics } from "@vercel/analytics/react"
 import { Toaster } from "@/components/ui/toaster"
 import { cn } from "@/lib/utils"
+import { UIRegistry } from "@/components/ui/registry"
 
 export const metadata = {
   title: "Supercivilization",
@@ -36,12 +37,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="relative flex min-h-screen flex-col">
-            <div className="flex-1">{children}</div>
-          </div>
-          <ThemeToggle />
-          <Toaster />
-          <Analytics />
+          <UIRegistry>
+            <div className="relative flex min-h-screen flex-col">
+              <div className="flex-1">{children}</div>
+            </div>
+            <ThemeToggle />
+            <Toaster />
+            <Analytics />
+          </UIRegistry>
         </ThemeProvider>
       </body>
     </html>
