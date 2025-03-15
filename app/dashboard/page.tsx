@@ -1,84 +1,64 @@
-"use client"
+import { getServerSupabaseClient } from "@/lib/supabase/server"
+import { redirect } from "next/navigation"
+import DashboardClient from "@/components/dashboard-client"
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loader2 } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
-import { supabase } from "@/lib/supabase"
+export default async function DashboardPage() {
+  const supabase = getServerSupabaseClient()
 
-export default function Dashboard() {
-  const router = useRouter()
-  const { toast } = useToast()
-  const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  // Check if user is authenticated
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) redirect("/login")
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const { data: { user }, error } = await supabase.auth.getUser()
-        if (error) throw error
-        setUser(user)
-      } catch (error: any) {
-        console.error("Error fetching user:", error)
-        toast({
-          title: "Error",
-          description: "Failed to load user data",
-          variant: "destructive",
-        })
-      } finally {
-        setLoading(false)
-      }
-    }
+  // Get user profile
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("user_id", user.id)
+    .single()
 
-    getUser()
-  }, [toast])
+  if (profileError || !profile) redirect("/login")
 
-  const handleSignOut = async () => {
-    try {
-      const { error } = await supabase.auth.signOut()
-      if (error) throw error
-      router.push("/login")
-    } catch (error: any) {
-      console.error("Error signing out:", error)
-      toast({
-        title: "Error",
-        description: "Failed to sign out",
-        variant: "destructive",
-      })
-    }
-  }
+  // Get user's invites
+  const { data: invites } = await supabase
+    .from("invites")
+    .select(`
+      id,
+      code,
+      created_at,
+      expires_at,
+      is_used,
+      invitee:profiles!invitee_id(name, status)
+    `)
+    .eq("inviter_id", user.id)
+    .order("created_at", { ascending: false })
+    .then(({ data }) => ({
+      data: data?.map((invite) => ({
+        ...invite,
+        invitee: invite.invitee[0] || { name: "", status: "" }
+      }))
+    }))
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-900">
-        <Loader2 className="h-8 w-8 animate-spin text-zinc-600 dark:text-zinc-400" />
-      </div>
-    )
-  }
+  // Get user's verifications
+  const { data: verifications } = await supabase
+    .from("verifications")
+    .select(`
+      id,
+      confirmed,
+      reason,
+      created_at,
+      invitee:profiles!invitee_id(name, status)
+    `)
+    .eq("verifier_id", user.id)
+    .order("created_at", { ascending: false })
+    .then(({ data }) => ({
+      data: data?.map((verification) => ({
+        ...verification,
+        invitee: verification.invitee[0] || { name: "", status: "" }
+      }))
+    }))
 
-  return (
-    <div className="min-h-screen p-4 bg-zinc-50 dark:bg-zinc-900 transition-colors duration-500">
-      <div className="max-w-4xl mx-auto space-y-4">
-        <Card className="backdrop-blur-sm bg-white/90 dark:bg-zinc-800/90 border border-zinc-200 dark:border-zinc-700 shadow-xl">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-zinc-800 dark:text-zinc-100">Welcome to Dashboard</CardTitle>
-            <CardDescription className="text-zinc-600 dark:text-zinc-400">
-              You are logged in as {user?.email}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button
-              onClick={handleSignOut}
-              variant="outline"
-              className="border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-            >
-              Sign Out
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  )
-} 
+  return <DashboardClient profile={profile} invites={invites || []} verifications={verifications || []} />
+}
+

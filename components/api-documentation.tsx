@@ -1,192 +1,386 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+"use client"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { AlertCircle } from "lucide-react"
+import { FileJson, Key, Users } from "lucide-react"
 
 export function ApiDocumentation() {
-  const endpoints = [
-    {
-      category: "Authentication",
-      routes: [
-        {
-          method: "POST",
-          path: "/api/auth/signup",
-          description: "Create a new user account",
-          request: {
-            email: "string",
-            password: "string",
-            name: "string",
-            inviteCode: "string",
-          },
-          response: {
-            user: {
-              id: "string",
-              email: "string",
-              name: "string",
-            },
-            session: {
-              accessToken: "string",
-              refreshToken: "string",
-            },
-          },
-        },
-        {
-          method: "POST",
-          path: "/api/auth/login",
-          description: "Log in to an existing account",
-          request: {
-            email: "string",
-            password: "string",
-          },
-          response: {
-            user: {
-              id: "string",
-              email: "string",
-              name: "string",
-            },
-            session: {
-              accessToken: "string",
-              refreshToken: "string",
-            },
-          },
-        },
-      ],
-    },
-    {
-      category: "Users",
-      routes: [
-        {
-          method: "GET",
-          path: "/api/users/me",
-          description: "Get the current user's profile",
-          response: {
-            id: "string",
-            email: "string",
-            name: "string",
-            createdAt: "string",
-            updatedAt: "string",
-          },
-        },
-        {
-          method: "PUT",
-          path: "/api/users/me",
-          description: "Update the current user's profile",
-          request: {
-            name: "string",
-            email: "string",
-          },
-          response: {
-            id: "string",
-            email: "string",
-            name: "string",
-            updatedAt: "string",
-          },
-        },
-      ],
-    },
-  ]
-
-  const getMethodColor = (method: string) => {
-    switch (method.toUpperCase()) {
-      case "GET":
-        return "bg-green-500"
-      case "POST":
-        return "bg-blue-500"
-      case "PUT":
-        return "bg-yellow-500"
-      case "DELETE":
-        return "bg-red-500"
-      default:
-        return "bg-gray-500"
-    }
-  }
-
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-          API Documentation
-        </h1>
+      <div className="space-y-2">
+        <h2 className="text-2xl font-bold">API Reference</h2>
         <p className="text-zinc-600 dark:text-zinc-400">
-          Complete documentation for the Supercivilization API
+          Complete reference for the Supercivilization API endpoints, built natively with Next.js API routes and
+          Supabase
         </p>
       </div>
 
-      <Alert>
-        <AlertCircle className="h-4 w-4" />
-        <AlertDescription>
-          All API endpoints require authentication unless specified otherwise.
-          Include the JWT token in the Authorization header:
-          <code className="ml-2 px-2 py-1 bg-zinc-100 dark:bg-zinc-800 rounded">
-            Authorization: Bearer your_jwt_token
-          </code>
-        </AlertDescription>
-      </Alert>
+      <Tabs defaultValue="auth" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="auth" className="flex items-center gap-2">
+            <Key className="h-4 w-4" />
+            Authentication
+          </TabsTrigger>
+          <TabsTrigger value="users" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Users
+          </TabsTrigger>
+          <TabsTrigger value="invites" className="flex items-center gap-2">
+            <FileJson className="h-4 w-4" />
+            Invites
+          </TabsTrigger>
+        </TabsList>
 
-      <div className="space-y-8">
-        {endpoints.map((category) => (
-          <Card key={category.category}>
+        <TabsContent value="auth" className="space-y-4">
+          <Card>
             <CardHeader>
-              <CardTitle>{category.category}</CardTitle>
-              <CardDescription>
-                {category.category} related endpoints
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">Authentication Endpoints</CardTitle>
+                <Badge variant="outline" className="font-mono text-xs">
+                  /api/auth/*
+                </Badge>
+              </div>
+              <CardDescription>Endpoints for user authentication and session management</CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                {category.routes.map((route) => (
-                  <div
-                    key={route.path}
-                    className="border border-zinc-200 dark:border-zinc-700 rounded-lg overflow-hidden"
-                  >
-                    <div className="flex items-center gap-2 p-4 bg-zinc-50 dark:bg-zinc-800">
-                      <Badge
-                        className={`${getMethodColor(
-                          route.method
-                        )} text-white font-mono`}
-                      >
-                        {route.method}
-                      </Badge>
-                      <code className="text-sm">{route.path}</code>
-                    </div>
-                    <div className="p-4">
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
-                        {route.description}
-                      </p>
-                      <Tabs defaultValue="request">
-                        <TabsList>
-                          {route.request && (
-                            <TabsTrigger value="request">Request</TabsTrigger>
-                          )}
-                          <TabsTrigger value="response">Response</TabsTrigger>
-                        </TabsList>
-                        {route.request && (
-                          <TabsContent value="request">
-                            <ScrollArea className="h-[200px] w-full rounded border border-zinc-200 dark:border-zinc-700 p-4">
-                              <pre className="text-sm">
-                                {JSON.stringify(route.request, null, 2)}
-                              </pre>
-                            </ScrollArea>
-                          </TabsContent>
-                        )}
-                        <TabsContent value="response">
-                          <ScrollArea className="h-[200px] w-full rounded border border-zinc-200 dark:border-zinc-700 p-4">
-                            <pre className="text-sm">
-                              {JSON.stringify(route.response, null, 2)}
-                            </pre>
-                          </ScrollArea>
-                        </TabsContent>
-                      </Tabs>
-                    </div>
+            <CardContent className="space-y-6">
+              {/* Signup Endpoint */}
+              <div className="space-y-3 border-b border-zinc-200 dark:border-zinc-800 pb-4">
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-green-600">POST</Badge>
+                  <code className="font-mono text-sm">/api/auth/signup</code>
+                </div>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  Creates a new user account with the provided information and invite code.
+                </p>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Request Body</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "email": "user@example.com",
+  "password": "securepassword",
+  "name": "John Doe",
+  "invite_code": "ABC123XYZ"
+}`}
+                    </pre>
                   </div>
-                ))}
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Response</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "success": true,
+  "message": "User created successfully",
+  "user": {
+    "id": "user_id",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "status": "pending"
+  }
+}`}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+
+              {/* Login Endpoint */}
+              <div className="space-y-3 border-b border-zinc-200 dark:border-zinc-800 pb-4">
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-green-600">POST</Badge>
+                  <code className="font-mono text-sm">/api/auth/login</code>
+                </div>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  Authenticates a user and returns a session token.
+                </p>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Request Body</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "email": "user@example.com",
+  "password": "securepassword"
+}`}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Response</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "success": true,
+  "session": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refresh_token": "ey5hbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expires_at": 1672531200
+  },
+  "user": {
+    "id": "user_id",
+    "email": "user@example.com",
+    "name": "John Doe"
+  }
+}`}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+
+              {/* Reset Password Endpoint */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-green-600">POST</Badge>
+                  <code className="font-mono text-sm">/api/auth/reset-password</code>
+                </div>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  Sends a password reset link to the user's email.
+                </p>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Request Body</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "email": "user@example.com"
+}`}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Response</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "success": true,
+  "message": "Password reset link sent to email"
+}`}
+                    </pre>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
-        ))}
-      </div>
+        </TabsContent>
+
+        <TabsContent value="users" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">User Endpoints</CardTitle>
+                <Badge variant="outline" className="font-mono text-xs">
+                  /api/users/*
+                </Badge>
+              </div>
+              <CardDescription>Endpoints for user management and profile operations</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Get User Profile Endpoint */}
+              <div className="space-y-3 border-b border-zinc-200 dark:border-zinc-800 pb-4">
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-blue-600">GET</Badge>
+                  <code className="font-mono text-sm">/api/users/profile</code>
+                </div>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  Retrieves the profile information for the authenticated user.
+                </p>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Headers</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "Authorization": "Bearer {access_token}"
+}`}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Response</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "id": "user_id",
+  "email": "user@example.com",
+  "name": "John Doe",
+  "status": "active",
+  "reputation": 25,
+  "created_at": "2023-01-01T00:00:00Z"
+}`}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+
+              {/* Update User Profile Endpoint */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-yellow-600">PATCH</Badge>
+                  <code className="font-mono text-sm">/api/users/profile</code>
+                </div>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  Updates the profile information for the authenticated user.
+                </p>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Headers</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "Authorization": "Bearer {access_token}"
+}`}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Request Body</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "name": "John Smith",
+  "bio": "Software developer and community member"
+}`}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Response</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "success": true,
+  "user": {
+    "id": "user_id",
+    "email": "user@example.com",
+    "name": "John Smith",
+    "bio": "Software developer and community member",
+    "status": "active",
+    "reputation": 25
+  }
+}`}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="invites" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-xl">Invite Endpoints</CardTitle>
+                <Badge variant="outline" className="font-mono text-xs">
+                  /api/invites/*
+                </Badge>
+              </div>
+              <CardDescription>Endpoints for managing invitation codes</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Generate Invite Endpoint */}
+              <div className="space-y-3 border-b border-zinc-200 dark:border-zinc-800 pb-4">
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-green-600">POST</Badge>
+                  <code className="font-mono text-sm">/api/invites/generate</code>
+                </div>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  Generates a new invite code for the authenticated user.
+                </p>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Headers</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "Authorization": "Bearer {access_token}"
+}`}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Response</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "success": true,
+  "invite": {
+    "id": "invite_id",
+    "code": "ABC123XYZ",
+    "created_at": "2023-01-01T00:00:00Z",
+    "expires_at": "2023-02-01T00:00:00Z",
+    "used": false
+  }
+}`}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+
+              {/* List Invites Endpoint */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Badge className="bg-blue-600">GET</Badge>
+                  <code className="font-mono text-sm">/api/invites</code>
+                </div>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  Lists all invites created by the authenticated user.
+                </p>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Headers</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "Authorization": "Bearer {access_token}"
+}`}
+                    </pre>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h4 className="font-medium">Response</h4>
+                  <div className="bg-zinc-100 dark:bg-zinc-800 p-3 rounded-md font-mono text-sm overflow-x-auto">
+                    <pre>
+                      {`{
+  "invites": [
+    {
+      "id": "invite_id_1",
+      "code": "ABC123XYZ",
+      "created_at": "2023-01-01T00:00:00Z",
+      "expires_at": "2023-02-01T00:00:00Z",
+      "used": false
+    },
+    {
+      "id": "invite_id_2",
+      "code": "DEF456UVW",
+      "created_at": "2022-12-01T00:00:00Z",
+      "expires_at": "2023-01-01T00:00:00Z",
+      "used": true,
+      "used_by": {
+        "id": "user_id",
+        "name": "Jane Doe"
+      }
+    }
+  ]
+}`}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   )
-} 
+}
+

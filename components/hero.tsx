@@ -1,11 +1,12 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { motion } from "framer-motion"
 import ScrollIndicator from "./scroll-indicator"
-import { track } from "@vercel/analytics"
+import { useRouter } from "next/navigation"
 
 export default function Hero() {
+  const router = useRouter()
+
   const scrollToCards = () => {
     const cardsSection = document.getElementById("featured-cards")
     if (cardsSection) {
@@ -14,55 +15,33 @@ export default function Hero() {
   }
 
   const handleParticipateClick = () => {
-    track("participate_button_clicked")
-    window.open("https://www.superachiever.xyz/", "_blank")
+    router.push("/join")
   }
 
   const handleContributeClick = () => {
-    track("contribute_button_clicked")
-    window.open("https://www.superachievers.xyz/", "_blank")
+    router.push("/login")
   }
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-zinc-100 via-zinc-50 to-zinc-200 dark:from-zinc-900 dark:via-zinc-950 dark:to-zinc-900">
       <div className="absolute inset-0 z-0">
-        <motion.div
-          className="absolute inset-0 bg-[url('/futuristic-cityscape.jpg')] bg-cover bg-center opacity-10 dark:opacity-5"
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, repeatType: "reverse" }}
-        />
+        <div className="absolute inset-0 bg-[url('/futuristic-cityscape.jpg')] bg-cover bg-center opacity-10 dark:opacity-5" />
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-300/30 via-zinc-400/20 to-zinc-500/30 dark:from-zinc-900/60 dark:via-zinc-900/70 dark:to-zinc-950/80" />
       </div>
       <div className="relative z-10 text-center space-y-8 sm:space-y-10 md:space-y-12 px-4 max-w-5xl mx-auto">
-        <motion.h1
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-zinc-800 dark:text-zinc-50 leading-tight tracking-tight"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
+        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-zinc-800 dark:text-zinc-50 leading-tight tracking-tight">
           Supercivilization
-        </motion.h1>
-        <motion.p
-          className="text-3xl sm:text-4xl md:text-5xl font-medium text-zinc-600 dark:text-zinc-200 leading-relaxed max-w-3xl mx-auto"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
+        </h1>
+        <p className="text-3xl sm:text-4xl md:text-5xl font-medium text-zinc-600 dark:text-zinc-200 leading-relaxed max-w-3xl mx-auto">
           Avolve from Degen to Regen
-        </motion.p>
-        <motion.div
-          className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 mt-8 sm:mt-10 md:mt-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
+        </p>
+        <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 mt-8 sm:mt-10 md:mt-12">
           <Button
             size="lg"
             className="bg-zinc-800 hover:bg-zinc-900 text-zinc-50 dark:bg-zinc-50 dark:hover:bg-zinc-200 dark:text-zinc-900 transition-all duration-300 transform hover:scale-105 font-semibold px-8 sm:px-10 py-3 text-lg sm:text-xl rounded-md"
             onClick={handleParticipateClick}
           >
-            Participate
+            Get Started
           </Button>
           <Button
             size="lg"
@@ -70,9 +49,9 @@ export default function Hero() {
             className="bg-zinc-50/80 hover:bg-zinc-100/80 text-zinc-800 dark:bg-zinc-900/50 dark:hover:bg-zinc-800/50 dark:text-zinc-100 border-zinc-300 dark:border-zinc-700 transition-all duration-300 transform hover:scale-105 font-semibold px-8 sm:px-10 py-3 text-lg sm:text-xl rounded-md backdrop-blur-sm"
             onClick={handleContributeClick}
           >
-            Contribute
+            Keep Going
           </Button>
-        </motion.div>
+        </div>
       </div>
       <div onClick={scrollToCards}>
         <ScrollIndicator />

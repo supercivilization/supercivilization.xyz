@@ -1,156 +1,253 @@
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { cn } from "@/lib/utils"
-import {
-  Book,
-  Code2,
-  Database,
-  Palette,
-  Server,
-  ChevronRight,
-  ChevronLeft,
-} from "lucide-react"
-import { useState } from "react"
+"use client"
 
-interface DocumentationSidebarProps {
-  activeTab: string
-  onTabChange: (tab: string) => void
+import { useState } from "react"
+import Link from "next/link"
+import { BookOpen, ChevronDown, Code, FileCode, Home, KeyRound, Lightbulb, Wrench } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarProvider,
+} from "@/components/ui/sidebar"
+
+type Section = "overview" | "architecture" | "auth" | "features" | "setup"
+
+interface OpenSections {
+  overview: boolean
+  architecture: boolean
+  auth: boolean
+  features: boolean
+  setup: boolean
 }
 
-export function DocumentationSidebar({
-  activeTab,
-  onTabChange,
-}: DocumentationSidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false)
+export function DocumentationSidebar() {
+  const [openSections, setOpenSections] = useState<OpenSections>({
+    overview: true,
+    architecture: false,
+    auth: false,
+    features: false,
+    setup: false,
+  })
 
-  const items = [
-    {
-      id: "user-guide",
-      label: "User Guide",
-      icon: Book,
-      sections: [
-        "Getting Started",
-        "Authentication",
-        "Dashboard",
-        "Product Board",
-        "Documentation",
-        "Settings",
-      ],
-    },
-    {
-      id: "api",
-      label: "API Documentation",
-      icon: Code2,
-      sections: [
-        "Authentication",
-        "Users",
-        "Products",
-        "Ideas",
-        "Comments",
-        "Votes",
-      ],
-    },
-    {
-      id: "database",
-      label: "Database Schema",
-      icon: Database,
-      sections: [
-        "Users",
-        "Products",
-        "Ideas",
-        "Comments",
-        "Votes",
-        "Relationships",
-      ],
-    },
-    {
-      id: "design-system",
-      label: "Design System",
-      icon: Palette,
-      sections: [
-        "Colors",
-        "Typography",
-        "Components",
-        "Icons",
-        "Layouts",
-        "Animations",
-      ],
-    },
-    {
-      id: "tech-stack",
-      label: "Tech Stack",
-      icon: Server,
-      sections: [
-        "Frontend",
-        "Backend",
-        "Database",
-        "Authentication",
-        "Deployment",
-        "Testing",
-      ],
-    },
-  ]
+  const toggleSection = (section: Section) => {
+    setOpenSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }))
+  }
 
   return (
-    <div
-      className={cn(
-        "border-r border-zinc-200 dark:border-zinc-700 bg-white/90 dark:bg-zinc-800/90 transition-all duration-300",
-        isCollapsed ? "w-16" : "w-64"
-      )}
-    >
-      <div className="flex h-14 items-center justify-between px-4 border-b border-zinc-200 dark:border-zinc-700">
-        {!isCollapsed && (
-          <h2 className="text-lg font-semibold text-zinc-800 dark:text-zinc-100">
-            Documentation
-          </h2>
-        )}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="ml-auto"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        >
-          {isCollapsed ? (
-            <ChevronRight className="h-4 w-4" />
-          ) : (
-            <ChevronLeft className="h-4 w-4" />
-          )}
-        </Button>
-      </div>
-      <ScrollArea className="h-[calc(100vh-3.5rem)]">
-        <div className="p-2">
-          {items.map((item) => (
-            <div key={item.id} className="mb-4">
-              <Button
-                variant="ghost"
-                className={cn(
-                  "w-full justify-start gap-2",
-                  activeTab === item.id &&
-                    "bg-zinc-100 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100"
-                )}
-                onClick={() => onTabChange(item.id)}
-              >
-                <item.icon className="h-4 w-4" />
-                {!isCollapsed && <span>{item.label}</span>}
-              </Button>
-              {!isCollapsed && activeTab === item.id && (
-                <div className="mt-1 ml-6 space-y-1">
-                  {item.sections.map((section) => (
-                    <Button
-                      key={section}
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
-                    >
-                      {section}
-                    </Button>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      </ScrollArea>
-    </div>
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarHeader>
+          <div className="flex items-center gap-2 px-4 py-2">
+            <BookOpen className="h-5 w-5" />
+            <span className="font-semibold">Documentation</span>
+          </div>
+        </SidebarHeader>
+
+        <SidebarContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/">
+                  <Home className="h-4 w-4" />
+                  <span>Home</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+
+            {/* Overview Section */}
+            <Collapsible open={openSections.overview} onOpenChange={() => toggleSection("overview")}>
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton>
+                    <BookOpen className="h-4 w-4" />
+                    <span>Overview</span>
+                    <ChevronDown className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+              </SidebarMenuItem>
+              <CollapsibleContent>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#about">About Supercivilization</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#principles">Core Principles</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#components">Key Components</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* Architecture Section */}
+            <Collapsible open={openSections.architecture} onOpenChange={() => toggleSection("architecture")}>
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton>
+                    <FileCode className="h-4 w-4" />
+                    <span>Architecture</span>
+                    <ChevronDown className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+              </SidebarMenuItem>
+              <CollapsibleContent>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#tech-stack">Technology Stack</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#project-structure">Project Structure</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#database-schema">Database Schema</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* Authentication Section */}
+            <Collapsible open={openSections.auth} onOpenChange={() => toggleSection("auth")}>
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton>
+                    <KeyRound className="h-4 w-4" />
+                    <span>Authentication</span>
+                    <ChevronDown className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+              </SidebarMenuItem>
+              <CollapsibleContent>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#auth-methods">Authentication Methods</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#registration-flow">Registration Flow</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#protected-routes">Protected Routes</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* Features Section */}
+            <Collapsible open={openSections.features} onOpenChange={() => toggleSection("features")}>
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton>
+                    <Lightbulb className="h-4 w-4" />
+                    <span>Features</span>
+                    <ChevronDown className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+              </SidebarMenuItem>
+              <CollapsibleContent>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#user-management">User Management</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#invitation-system">Invitation System</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#verification-system">Verification System</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#dashboard">Dashboard</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* Setup Section */}
+            <Collapsible open={openSections.setup} onOpenChange={() => toggleSection("setup")}>
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton>
+                    <Wrench className="h-4 w-4" />
+                    <span>Setup & Deployment</span>
+                    <ChevronDown className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+              </SidebarMenuItem>
+              <CollapsibleContent>
+                <SidebarMenuSub>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#prerequisites">Prerequisites</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#env-variables">Environment Variables</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#local-dev">Local Development</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                  <SidebarMenuSubItem>
+                    <SidebarMenuSubButton asChild>
+                      <Link href="#deployment">Deployment</Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </Collapsible>
+          </SidebarMenu>
+        </SidebarContent>
+
+        <SidebarFooter>
+          <div className="px-4 py-2">
+            <Button variant="outline" size="sm" className="w-full">
+              <Code className="mr-2 h-4 w-4" />
+              View on GitHub
+            </Button>
+          </div>
+        </SidebarFooter>
+      </Sidebar>
+    </SidebarProvider>
   )
-} 
+}
+

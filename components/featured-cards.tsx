@@ -1,7 +1,6 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { motion } from "framer-motion"
 
 const cards = [
   {
@@ -37,13 +36,10 @@ export default function FeaturedCards() {
       className="py-20 sm:py-24 md:py-28 px-4 md:px-8 bg-gradient-to-b from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900"
     >
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10">
-        {cards.map((card, index) => (
-          <motion.div
+        {cards.map((card) => (
+          <div
             key={card.title}
             className={`rounded-lg overflow-hidden transition-all duration-300 transform hover:scale-105 hover:z-10`}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: index * 0.2 }}
           >
             <div
               onClick={() => window.open("https://www.superachiever.xyz/", "_blank")}
@@ -66,7 +62,7 @@ export default function FeaturedCards() {
                 {card.cta}
               </Button>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>
