@@ -14,5 +14,10 @@
     "SMTP_PASSWORD": "@smtp_password",
     "NEXT_PUBLIC_APP_URL": "@next_public_app_url",
     "NEXT_PUBLIC_APP_NAME": "@next_public_app_name"
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
   }
 } 
