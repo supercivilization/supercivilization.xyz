@@ -111,6 +111,12 @@ module.exports = {
         "collapsible-down": "collapsible-down 0.2s ease-out",
         "collapsible-up": "collapsible-up 0.2s ease-out",
       },
+      height: {
+        screen: ['100vh /* fallback for Opera, IE and etc. */', '100dvh'],
+      },
+      minHeight: {
+        screen: ['100vh /* fallback for Opera, IE and etc. */', '100dvh'],
+      },
     },
   },
   plugins: [
