@@ -20,6 +20,11 @@ const nextConfig = {
       ignoreDuringBuilds: true
     })
   },
+  // Enable CSS optimization
+  optimizeFonts: true,
+  images: {
+    domains: ['hebbkx1anhila5yf.public.blob.vercel-storage.com'],
+  },
   // Remove experimental features for stability
   swcMinify: true
 }

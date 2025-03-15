@@ -31,7 +31,7 @@ module.exports = {
           secondary: "#10B981", // emerald-500
           tertiary: "#14B8A6", // teal-500
         },
-        background: {
+        bg: {
           light: "#F9FAFB", // gray-50
           lightSecondary: "#F4F4F5", // zinc-100
           dark: "#18181B", // zinc-900
