@@ -4,8 +4,13 @@ import type React from "react"
 import { ThemeProvider } from "@/components/theme-provider"
 import ThemeToggle from "@/components/theme-toggle"
 import { Analytics } from "@vercel/analytics/react"
+import { Toaster } from "@/components/ui/toaster"
+import { cn } from "@/lib/utils"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+})
 
 export const metadata = {
   title: "Supercivilization",
@@ -23,10 +28,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`min-h-screen bg-background font-sans antialiased ${inter.className}`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <body className={cn(
+        "min-h-screen bg-background font-sans antialiased",
+        inter.variable
+      )}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
           <ThemeToggle />
+          <Toaster />
           <Analytics />
         </ThemeProvider>
       </body>
