@@ -1,10 +1,19 @@
 import "./globals.css"
-import type { Metadata } from "next"
+import { Inter } from "next/font/google"
 import type React from "react"
+import { ThemeProvider } from "@/components/theme-provider"
+import ThemeToggle from "@/components/theme-toggle"
+import { Analytics } from "@vercel/analytics/react"
 
-export const metadata: Metadata = {
+const inter = Inter({ subsets: ["latin"] })
+
+export const metadata = {
   title: "Supercivilization",
-  description: "One worldwide drive to Avolve from Degens into Regens.",
+  description: "Avolve from Degen into Regen as a Superachiever with Superacheivers",
+  icons: {
+    icon: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icon%20supercivilization-fnBk5MHqSUdgZKz1BGz9ou1lBkTsHA.svg",
+  },
+    generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -13,9 +22,18 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className="bg-black text-white">{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+          <ThemeToggle />
+          <Analytics />
+        </ThemeProvider>
+      </body>
     </html>
   )
 }
 
+
+
+import './globals.css'

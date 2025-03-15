@@ -1,13 +1,11 @@
-import Hero from "./components/Hero"
-import Features from "./components/Features"
-import CTA from "./components/CTA"
+import Hero from "@/components/hero"
+import FeaturedCards from "@/components/featured-cards"
 
 export default function Home() {
   return (
-    <main className="flex flex-col min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-gradient-to-b from-zinc-50 via-zinc-100 to-zinc-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950">
       <Hero />
-      <Features />
-      <CTA />
+      <FeaturedCards />
     </main>
   )
 }
