@@ -1,4 +1,7 @@
 {
+  "version": 2,
   "framework": "nextjs",
+  "buildCommand": "cd $VERCEL_ROOT_DIRECTORY && pnpm install && pnpm build",
+  "installCommand": "cd $VERCEL_ROOT_DIRECTORY && pnpm install",
   "regions": ["iad1"]
 } 
