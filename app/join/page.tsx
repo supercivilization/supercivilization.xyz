@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { Loader2 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,8 +9,11 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/lib/supabase"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
-export default function JoinSupercivilization() {
+function JoinForm() {
   const { toast } = useToast()
   const searchParams = useSearchParams()
   const inviteCode = searchParams.get("code") || ""
@@ -60,13 +63,7 @@ export default function JoinSupercivilization() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden bg-zinc-50 dark:bg-zinc-900 transition-colors duration-500">
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-10 left-10 w-64 h-64 bg-zinc-200/50 dark:bg-zinc-800/50 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-64 h-64 bg-zinc-300/50 dark:bg-zinc-700/50 rounded-full blur-3xl"></div>
-      </div>
-
+    <>
       {isLoading ? (
         <div className="flex flex-col items-center justify-center p-8">
           <Loader2 className="h-8 w-8 animate-spin mb-4" />
@@ -182,6 +179,27 @@ export default function JoinSupercivilization() {
           </CardContent>
         </Card>
       )}
+    </>
+  )
+}
+
+export default function JoinSupercivilization() {
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden bg-zinc-50 dark:bg-zinc-900 transition-colors duration-500">
+      {/* Decorative elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-10 left-10 w-64 h-64 bg-zinc-200/50 dark:bg-zinc-800/50 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-10 right-10 w-64 h-64 bg-zinc-300/50 dark:bg-zinc-700/50 rounded-full blur-3xl"></div>
+      </div>
+
+      <Suspense fallback={
+        <div className="flex flex-col items-center justify-center p-8">
+          <Loader2 className="h-8 w-8 animate-spin mb-4" />
+          <p className="text-center">Loading...</p>
+        </div>
+      }>
+        <JoinForm />
+      </Suspense>
     </div>
   )
 } 

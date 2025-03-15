@@ -1,14 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
-import { AlertCircle, CheckCircle, Loader2, Mail } from "lucide-react"
+import { AlertCircle, CheckCircle, Loader2 } from "lucide-react"
 import { createClient } from "@supabase/supabase-js"
 
-export default function VerifyEmail() {
+function VerifyEmailContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<"verifying" | "success" | "error">("verifying")
@@ -52,47 +52,65 @@ export default function VerifyEmail() {
   }, [router, searchParams])
 
   return (
-    <div className="container flex items-center justify-center min-h-screen py-12">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Email Verification</CardTitle>
-          <CardDescription>
-            Verifying your email address...
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {status === "verifying" && (
-            <div className="flex items-center justify-center p-8">
-              <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
-            </div>
-          )}
+    <Card className="w-full max-w-md">
+      <CardHeader>
+        <CardTitle>Email Verification</CardTitle>
+        <CardDescription>
+          Verifying your email address...
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {status === "verifying" && (
+          <div className="flex items-center justify-center p-8">
+            <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
+          </div>
+        )}
 
-          {status === "success" && (
-            <Alert>
-              <CheckCircle className="h-4 w-4" />
-              <AlertDescription>
-                Email verified successfully! Redirecting to dashboard...
-              </AlertDescription>
+        {status === "success" && (
+          <Alert>
+            <CheckCircle className="h-4 w-4" />
+            <AlertDescription>
+              Email verified successfully! Redirecting to dashboard...
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {status === "error" && (
+          <div className="space-y-4">
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
             </Alert>
-          )}
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => router.push("/login")}
+            >
+              Back to Login
+            </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
 
-          {status === "error" && (
-            <div className="space-y-4">
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => router.push("/login")}
-              >
-                Back to Login
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+export default function VerifyEmail() {
+  return (
+    <div className="container flex items-center justify-center min-h-screen py-12">
+      <Suspense fallback={
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Email Verification</CardTitle>
+            <CardDescription>Loading...</CardDescription>
+          </CardHeader>
+          <CardContent className="flex items-center justify-center p-8">
+            <Loader2 className="h-8 w-8 animate-spin text-zinc-500" />
+          </CardContent>
+        </Card>
+      }>
+        <VerifyEmailContent />
+      </Suspense>
     </div>
   )
 } 
