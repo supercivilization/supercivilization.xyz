@@ -29,26 +29,17 @@ const nextConfig = {
   swcMinify: true
 }
 
-mergeConfig(nextConfig, userConfig)
-
-function mergeConfig(nextConfig, userConfig) {
-  if (!userConfig) {
-    return
-  }
-
-  for (const key in userConfig) {
-    if (
-      typeof nextConfig[key] === 'object' &&
-      !Array.isArray(nextConfig[key])
-    ) {
+if (userConfig?.default) {
+  Object.keys(userConfig.default).forEach((key) => {
+    if (typeof nextConfig[key] === 'object' && !Array.isArray(nextConfig[key])) {
       nextConfig[key] = {
         ...nextConfig[key],
-        ...userConfig[key],
+        ...userConfig.default[key],
       }
     } else {
-      nextConfig[key] = userConfig[key]
+      nextConfig[key] = userConfig.default[key]
     }
-  }
+  })
 }
 
 export default nextConfig
