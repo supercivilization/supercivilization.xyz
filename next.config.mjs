@@ -21,15 +21,7 @@ const nextConfig = {
     })
   },
   // Remove experimental features for stability
-  swcMinify: true,
-  // Ensure CSS modules are processed
-  webpack: (config) => {
-    config.module.rules.push({
-      test: /\.css$/,
-      use: ['style-loader', 'css-loader', 'postcss-loader'],
-    })
-    return config
-  }
+  swcMinify: true
 }
 
 mergeConfig(nextConfig, userConfig)
