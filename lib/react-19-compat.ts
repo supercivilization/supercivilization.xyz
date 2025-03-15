@@ -1,4 +1,4 @@
-import type React from "react"
+import React from "react"
 // This file provides compatibility helpers for React 19 features
 
 import { use as reactUse } from "react"
@@ -21,8 +21,8 @@ export async function withAsyncData<T, P>(
   Component: React.ComponentType<P & { data: T }>,
   dataFetcher: () => Promise<T>,
 ): Promise<React.ComponentType<P>> {
-  const data = await dataFetcher()
-
-  return (props: P) => <Component {...props} data={data} />
+  const fetchedData = await dataFetcher()
+  const WrappedComponent = (props: P) => React.createElement(Component, { ...props, data: fetchedData })
+  return WrappedComponent
 }
 

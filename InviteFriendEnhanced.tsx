@@ -13,6 +13,19 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 
+interface RawInvite {
+  id: string
+  code: string
+  created_at: string
+  expires_at: string
+  is_used: boolean
+  invitee: InviteeData[] | InviteeData | null
+}
+
+interface InviteeData {
+  name: string
+}
+
 interface Invite {
   id: string
   code: string
@@ -20,11 +33,6 @@ interface Invite {
   expires_at: string
   is_used: boolean
   invitee_name?: string | null
-}
-
-// Define the shape of the invitee data from Supabase
-interface InviteeData {
-  name: string
 }
 
 export default function InviteFriendEnhanced() {
@@ -66,7 +74,7 @@ export default function InviteFriendEnhanced() {
 
         // Format the invites data
         const formattedInvites = invitesData
-          ? invitesData.map((invite) => {
+          ? invitesData.map((invite: RawInvite) => {
               // Handle the case where invitee could be null, an object, or an array
               let inviteeName = null
 

@@ -42,7 +42,7 @@ export default function MyGeniusSignupForm({ inviteCode = "", onSuccess }: MyGen
 
     try {
       // 1. Sign up the user with Supabase Auth
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {

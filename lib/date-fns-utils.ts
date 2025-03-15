@@ -30,7 +30,7 @@ export function formatTimeDistance(date: Date | string | number, baseDate: Date 
 
 // Format a date for display in the UI
 export function formatDisplayDate(date: Date | string | number): string {
-  const dateObj = typeof date === "string" ? parseISO(date) : date
+  const dateObj = typeof date === "string" ? parseISO(date) : typeof date === "number" ? new Date(date) : date
 
   if (isToday(dateObj)) {
     return `Today at ${format(dateObj, "p")}`

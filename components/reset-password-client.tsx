@@ -3,7 +3,6 @@
 import type React from "react"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,7 +14,6 @@ import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/lib/supabase"
 
 export default function ResetPasswordClient() {
-  const router = useRouter()
   const { toast } = useToast()
   const [email, setEmail] = useState("")
   const [isLoading, setIsLoading] = useState(false)
