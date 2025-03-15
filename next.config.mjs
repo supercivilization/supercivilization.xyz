@@ -9,16 +9,19 @@ try {
 const nextConfig = {
   output: 'standalone',
   typescript: {
-    ignoreBuildErrors: true
+    // Only ignore ts errors in production
+    ...(process.env.NODE_ENV === 'production' && {
+      ignoreBuildErrors: true
+    })
   },
   eslint: {
-    ignoreDuringBuilds: true
+    // Only ignore eslint errors in production
+    ...(process.env.NODE_ENV === 'production' && {
+      ignoreDuringBuilds: true
+    })
   },
-  experimental: {
-    webpackBuildWorker: true,
-    parallelServerCompiles: true,
-    parallelServerBuildTraces: true
-  }
+  // Remove experimental features for stability
+  swcMinify: true
 }
 
 mergeConfig(nextConfig, userConfig)
