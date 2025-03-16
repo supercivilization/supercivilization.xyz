@@ -1,5 +1,6 @@
--- Drop existing function if it exists
+-- Drop existing functions if they exist
 DROP FUNCTION IF EXISTS public.generate_invite;
+DROP FUNCTION IF EXISTS public.validate_invite_code;
 
 -- Create function to generate invite codes
 CREATE OR REPLACE FUNCTION public.generate_invite(
