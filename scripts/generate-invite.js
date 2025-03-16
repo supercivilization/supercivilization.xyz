@@ -48,7 +48,7 @@ async function generateInviteCode() {
 
     console.log('Attempting to create invite using RPC...')
     const { data: invite, error: inviteError } = await supabase
-      .rpc('generate_invite', {
+      .rpc('create_invite', {
         p_inviter_id: adminUser.id,
         p_code: code,
         p_expires_at: expiryDate.toISOString()

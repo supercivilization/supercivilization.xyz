@@ -1,9 +1,10 @@
 -- Drop existing functions if they exist
 DROP FUNCTION IF EXISTS public.generate_invite;
+DROP FUNCTION IF EXISTS public.create_invite;
 DROP FUNCTION IF EXISTS public.validate_invite_code;
 
 -- Create function to generate invite codes
-CREATE OR REPLACE FUNCTION public.generate_invite(
+CREATE OR REPLACE FUNCTION public.create_invite(
     params JSONB
 )
 RETURNS TABLE (
@@ -59,8 +60,8 @@ END;
 $$;
 
 -- Grant execute permission to authenticated users and service role
-GRANT EXECUTE ON FUNCTION public.generate_invite TO authenticated;
-GRANT EXECUTE ON FUNCTION public.generate_invite TO service_role;
+GRANT EXECUTE ON FUNCTION public.create_invite TO authenticated;
+GRANT EXECUTE ON FUNCTION public.create_invite TO service_role;
 
 -- Create function to validate invite codes
 CREATE OR REPLACE FUNCTION public.validate_invite_code(p_code TEXT)
