@@ -16,7 +16,7 @@ CREATE TABLE public.invites (
 -- Enable RLS
 ALTER TABLE public.invites ENABLE ROW LEVEL SECURITY;
 
--- Grant access to authenticated users
+-- Grant access to authenticated users and service role
 GRANT ALL ON public.invites TO authenticated;
 GRANT ALL ON public.invites TO service_role;
 
@@ -29,4 +29,10 @@ CREATE POLICY "Enable insert for authenticated users" ON public.invites
 
 CREATE POLICY "Enable update for invite creator" ON public.invites
     FOR UPDATE USING (auth.uid() = inviter_id)
-    WITH CHECK (auth.uid() = inviter_id); 
+    WITH CHECK (auth.uid() = inviter_id);
+
+-- Add service role bypass policy
+CREATE POLICY "Service role bypass" ON public.invites
+    FOR ALL
+    USING (current_user = 'service_role')
+    WITH CHECK (current_user = 'service_role'); 
