@@ -35,48 +35,79 @@ export default function JoinForm() {
   // Validate invite code on component mount
   useEffect(() => {
     if (!inviteCode) {
+      console.log("No invite code provided")
       setIsValidatingCode(false)
       return
     }
 
     // Special handling for admin code
     if (inviteCode === "ADMIN2025") {
+      console.log("Admin code detected")
       setIsValidCode(true)
       setIsValidatingCode(false)
       return
     }
 
     const validateInviteCode = async () => {
+      console.log("Starting invite code validation for:", inviteCode)
       try {
+        console.log("Fetching invite data from Supabase...")
         const { data, error } = await supabase
           .from("invites")
           .select("expires_at, is_used")
           .eq("code", inviteCode)
           .single()
 
+        console.log("Supabase response:", { data, error })
+
         if (error) {
           console.error("Error validating invite code:", error)
+          setError("Invalid invite code")
           setIsValidCode(false)
+          setIsValidatingCode(false)
+          return
+        }
+
+        if (!data) {
+          console.log("No invite data found")
+          setError("Invalid invite code")
+          setIsValidCode(false)
+          setIsValidatingCode(false)
           return
         }
 
         // Check if invite is expired or used
-        const isExpired = new Date(data.expires_at) < new Date()
+        const expiryDate = new Date(data.expires_at)
+        const now = new Date()
+        const isExpired = expiryDate < now
         const isUsed = data.is_used
 
+        console.log("Invite validation:", {
+          expiryDate,
+          now,
+          isExpired,
+          isUsed
+        })
+
         if (isExpired) {
+          console.log("Invite code expired")
           setError("This invite code has expired")
           setIsValidCode(false)
         } else if (isUsed) {
+          console.log("Invite code already used")
           setError("This invite code has already been used")
           setIsValidCode(false)
         } else {
+          console.log("Invite code valid")
           setIsValidCode(true)
+          setError("")
         }
       } catch (err) {
-        console.error("Error validating invite code:", err)
+        console.error("Unexpected error during validation:", err)
+        setError("Error validating invite code")
         setIsValidCode(false)
       } finally {
+        console.log("Validation complete, setting isValidatingCode to false")
         setIsValidatingCode(false)
       }
     }
