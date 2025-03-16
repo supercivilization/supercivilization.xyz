@@ -59,9 +59,9 @@ export default function JoinForm() {
       try {
         console.log("Fetching invite data from Supabase...")
         const { data, error } = await supabase
-          .from("invites")
-          .select("expires_at, is_used")
-          .eq("code", inviteCode)
+          .rpc('validate_invite_code', {
+            code_to_validate: inviteCode
+          })
           .single()
 
         console.log("Supabase response:", { data, error })
@@ -74,9 +74,9 @@ export default function JoinForm() {
           return
         }
 
-        if (!data) {
-          console.log("No invite data found")
-          setError("Invalid invite code")
+        if (!data || !data.is_valid) {
+          console.log("Invalid invite code")
+          setError(data?.error_message || "Invalid invite code")
           setIsValidCode(false)
           setIsValidatingCode(false)
           return
