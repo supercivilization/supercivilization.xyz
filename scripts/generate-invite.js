@@ -46,90 +46,28 @@ async function generateInviteCode() {
     const expiryDate = new Date()
     expiryDate.setFullYear(expiryDate.getFullYear() + 1)
 
-    const invite = {
-      code,
-      inviter_id: adminUser.id,
-      invitee_id: null,
-      is_used: false,
-      expires_at: expiryDate.toISOString()
-    }
-
-    console.log('Attempting to create invite:', invite)
-
-    // First verify we can access the table
-    console.log('Testing table access...')
-    const { data: testData, error: testError } = await supabase
-      .from('invites')
-      .select('*')
-      .limit(1)
-
-    console.log('Test query result:', {
-      data: testData,
-      error: testError,
-      hasData: !!testData,
-      errorMessage: testError?.message
-    })
-
-    // Check database structure
-    console.log('Checking database structure...')
-    const { data: tables, error: tableError } = await supabase
-      .from('pg_tables')
-      .select('*')
-      .eq('schemaname', 'public')
-
-    if (tableError) {
-      console.log('Error checking tables:', tableError)
-    } else {
-      console.log('Available tables:', tables)
-    }
-
-    // Check database connection
-    console.log('Checking database connection...')
-    const { data: schemaData, error: schemaError } = await supabase
-      .rpc('get_schema_version')
-      .single()
-
-    if (schemaError) {
-      console.log('Error checking schema:', schemaError)
-      // Try a simple query to check if we can access the database at all
-      const { data: testData, error: testError } = await supabase
-        .from('users')
-        .select('id')
-        .limit(1)
-      
-      if (testError) {
-        console.log('Error accessing users table:', testError)
-      } else {
-        console.log('Successfully accessed users table:', testData)
-      }
-    } else {
-      console.log('Schema version:', schemaData)
-    }
-
-    // Try direct SQL query
-    console.log('Attempting direct SQL query...')
-    const { data: sqlData, error: sqlError } = await supabase
-      .from('invites')
-      .insert({
-        code: code,
-        inviter_id: adminUser.id,
-        expires_at: expiryDate.toISOString(),
-        created_at: new Date().toISOString()
+    console.log('Attempting to create invite using RPC...')
+    const { data: invite, error: inviteError } = await supabase
+      .rpc('generate_invite', {
+        p_inviter_id: adminUser.id,
+        p_code: code,
+        p_expires_at: expiryDate.toISOString()
       })
-      .select()
-      .single()
 
-    if (sqlError) {
-      console.error('SQL Error:', sqlError)
-    } else {
-      console.log('SQL Query result:', sqlData)
+    if (inviteError) {
+      console.error('Error creating invite:', inviteError)
+      throw inviteError
+    }
+
+    if (!invite) {
+      throw new Error('No data returned from invite creation')
     }
 
     console.log('Successfully generated invite code:')
     console.log('Code:', code)
     console.log('Expires at:', expiryDate.toLocaleString())
     console.log('\nUse this URL to sign up:')
-    console.log(`http://localhost:3000/join?code=${code}`)
+    console.log(`https://www.supercivilization.xyz/join?code=${code}`)
 
   } catch (error) {
     console.error('Error:', error)
