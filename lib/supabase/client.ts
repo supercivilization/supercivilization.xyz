@@ -10,9 +10,29 @@ export function getSupabaseClient() {
   }
 
   if (!clientInstance) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.error("Supabase environment variables are not set:", {
+        hasUrl: !!supabaseUrl,
+        hasKey: !!supabaseAnonKey
+      })
+      throw new Error("Supabase configuration is missing")
+    }
+
     clientInstance = createBrowserClient<Database>(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      supabaseUrl,
+      supabaseAnonKey,
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+        },
+        db: {
+          schema: 'public'
+        }
+      }
     )
   }
 
