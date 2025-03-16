@@ -24,7 +24,23 @@ DECLARE
     p_code TEXT = params->>'p_code';
     p_expires_at TIMESTAMPTZ = (params->>'p_expires_at')::TIMESTAMPTZ;
     p_inviter_id UUID = (params->>'p_inviter_id')::UUID;
+    v_table_exists BOOLEAN;
 BEGIN
+    -- Check if table exists
+    SELECT EXISTS (
+        SELECT FROM pg_tables
+        WHERE schemaname = 'public'
+        AND tablename = 'invites'
+    ) INTO v_table_exists;
+
+    IF NOT v_table_exists THEN
+        RAISE EXCEPTION 'Table "invites" does not exist in schema "public"';
+    END IF;
+
+    -- Log parameters for debugging
+    RAISE NOTICE 'Creating invite with code: %, expires_at: %, inviter_id: %', 
+        p_code, p_expires_at, p_inviter_id;
+
     -- Validate inputs
     IF p_inviter_id IS NULL THEN
         RAISE EXCEPTION 'inviter_id cannot be null';
@@ -56,6 +72,9 @@ BEGIN
         p_expires_at
     )
     RETURNING *;
+
+    -- Log success
+    RAISE NOTICE 'Successfully created invite with code: %', p_code;
 END;
 $$;
 
