@@ -40,21 +40,25 @@ export default function JoinForm() {
 
   // Validate invite code on component mount
   useEffect(() => {
-    if (!inviteCode) {
-      console.log("No invite code provided")
-      setIsValidatingCode(false)
-      return
-    }
-
-    // Special handling for admin code
-    if (inviteCode === "ADMIN2025") {
-      console.log("Admin code detected")
-      setIsValidCode(true)
-      setIsValidatingCode(false)
-      return
-    }
+    let isMounted = true
 
     const validateInviteCode = async () => {
+      if (!inviteCode) {
+        console.log("No invite code provided")
+        setIsValidatingCode(false)
+        return
+      }
+
+      // Special handling for admin code
+      if (inviteCode === "ADMIN2025") {
+        console.log("Admin code detected")
+        if (isMounted) {
+          setIsValidCode(true)
+          setIsValidatingCode(false)
+        }
+        return
+      }
+
       console.log("Starting invite code validation for:", inviteCode)
       try {
         console.log("Fetching invite data from API...")
@@ -63,11 +67,12 @@ export default function JoinForm() {
 
         console.log("API response:", data)
 
+        if (!isMounted) return
+
         if (!response.ok) {
           console.error("Error validating invite code:", data.error)
           setError(data.error || "Invalid invite code")
           setIsValidCode(false)
-          setIsValidatingCode(false)
           return
         }
 
@@ -75,7 +80,6 @@ export default function JoinForm() {
           console.log("Invalid invite code:", data.error)
           setError(data.error || "Invalid invite code")
           setIsValidCode(false)
-          setIsValidatingCode(false)
           return
         }
 
@@ -84,15 +88,23 @@ export default function JoinForm() {
         setError("")
       } catch (err) {
         console.error("Unexpected error during validation:", err)
-        setError("Error validating invite code")
-        setIsValidCode(false)
+        if (isMounted) {
+          setError("Error validating invite code")
+          setIsValidCode(false)
+        }
       } finally {
-        console.log("Validation complete, setting isValidatingCode to false")
-        setIsValidatingCode(false)
+        if (isMounted) {
+          console.log("Validation complete, setting isValidatingCode to false")
+          setIsValidatingCode(false)
+        }
       }
     }
 
     validateInviteCode()
+
+    return () => {
+      isMounted = false
+    }
   }, [inviteCode])
 
   // Rest of the component remains the same...

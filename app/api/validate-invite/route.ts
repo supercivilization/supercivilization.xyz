@@ -6,7 +6,10 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const code = searchParams.get("code")
 
+    console.log("Validating invite code:", code)
+
     if (!code) {
+      console.log("No code provided")
       return NextResponse.json(
         { valid: false, error: "Invite code is required" },
         { status: 400 }
@@ -15,9 +18,23 @@ export async function GET(request: Request) {
 
     const supabase = getActionSupabaseClient()
 
+    // First verify the table exists
+    const { data: tableExists, error: tableError } = await supabase
+      .from("information_schema.tables")
+      .select("table_name")
+      .eq("table_name", "invites")
+      .single()
+
+    if (tableError) {
+      console.error("Error checking table:", tableError)
+    }
+
+    console.log("Table exists check:", tableExists)
+
+    // Check the invite
     const { data, error } = await supabase
       .from("invites")
-      .select("expires_at, is_used")
+      .select("*")
       .eq("code", code)
       .single()
 
@@ -30,11 +47,14 @@ export async function GET(request: Request) {
     }
 
     if (!data) {
+      console.log("No invite found for code:", code)
       return NextResponse.json(
         { valid: false, error: "Invalid invite code" },
         { status: 400 }
       )
     }
+
+    console.log("Found invite:", data)
 
     const expiryDate = new Date(data.expires_at)
     const now = new Date()
@@ -42,6 +62,7 @@ export async function GET(request: Request) {
     const isUsed = data.is_used
 
     if (isExpired) {
+      console.log("Invite expired. Expiry:", expiryDate, "Now:", now)
       return NextResponse.json(
         { valid: false, error: "This invite code has expired" },
         { status: 400 }
@@ -49,12 +70,14 @@ export async function GET(request: Request) {
     }
 
     if (isUsed) {
+      console.log("Invite already used")
       return NextResponse.json(
         { valid: false, error: "This invite code has already been used" },
         { status: 400 }
       )
     }
 
+    console.log("Invite is valid")
     return NextResponse.json({
       valid: true,
       expires_at: data.expires_at,
