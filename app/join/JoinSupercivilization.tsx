@@ -57,7 +57,7 @@ const JoinSupercivilization = () => {
       }
 
       // Use invite.inviter_id directly in the URL without creating a separate variable
-      router.push(`/signup?inviteCode=${inviteCode}&inviterId=${invite.inviter_id}`)
+      router.push(`/join?code=${inviteCode}`)
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred")
       setIsLoading(false)
