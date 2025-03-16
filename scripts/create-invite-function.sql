@@ -17,7 +17,7 @@ RETURNS TABLE (
     expires_at TIMESTAMPTZ,
     used_at TIMESTAMPTZ
 ) SECURITY DEFINER
-SET search_path = public
+SET search_path = public, pg_temp
 LANGUAGE plpgsql
 AS $$
 DECLARE
@@ -28,9 +28,9 @@ DECLARE
 BEGIN
     -- Check if table exists
     SELECT EXISTS (
-        SELECT FROM pg_tables
-        WHERE schemaname = 'public'
-        AND tablename = 'invites'
+        SELECT FROM information_schema.tables 
+        WHERE table_schema = 'public' 
+        AND table_name = 'invites'
     ) INTO v_table_exists;
 
     IF NOT v_table_exists THEN
@@ -75,6 +75,13 @@ BEGIN
 
     -- Log success
     RAISE NOTICE 'Successfully created invite with code: %', p_code;
+EXCEPTION
+    WHEN undefined_table THEN
+        RAISE EXCEPTION 'Table access error: % (SQLSTATE: %)', SQLERRM, SQLSTATE;
+    WHEN insufficient_privilege THEN
+        RAISE EXCEPTION 'Permission error: % (SQLSTATE: %)', SQLERRM, SQLSTATE;
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'Unexpected error: % (SQLSTATE: %)', SQLERRM, SQLSTATE;
 END;
 $$;
 
@@ -88,7 +95,7 @@ RETURNS TABLE (
     is_valid BOOLEAN,
     error_message TEXT
 ) SECURITY DEFINER
-SET search_path = public
+SET search_path = public, pg_temp
 LANGUAGE plpgsql
 AS $$
 DECLARE
