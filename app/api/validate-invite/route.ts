@@ -7,6 +7,8 @@ export async function GET(request: Request) {
     const code = searchParams.get("code")
 
     console.log("Validating invite code:", code)
+    console.log("Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
+    console.log("Service Role Key available:", !!process.env.SUPABASE_SERVICE_ROLE_KEY)
 
     if (!code) {
       console.log("No code provided")
@@ -32,6 +34,7 @@ export async function GET(request: Request) {
     console.log("Table exists check:", tableExists)
 
     // Check the invite
+    console.log("Attempting to query invites table...")
     const { data, error } = await supabase
       .from("invites")
       .select("*")
@@ -41,7 +44,7 @@ export async function GET(request: Request) {
     if (error) {
       console.error("Error validating invite code:", error)
       return NextResponse.json(
-        { valid: false, error: "Invalid invite code" },
+        { valid: false, error: "Invalid invite code", details: error.message },
         { status: 400 }
       )
     }
@@ -60,6 +63,12 @@ export async function GET(request: Request) {
     const now = new Date()
     const isExpired = expiryDate < now
     const isUsed = data.is_used
+
+    console.log("Expiry check:", {
+      expiryDate: expiryDate.toISOString(),
+      now: now.toISOString(),
+      isExpired
+    })
 
     if (isExpired) {
       console.log("Invite expired. Expiry:", expiryDate, "Now:", now)
@@ -83,10 +92,10 @@ export async function GET(request: Request) {
       expires_at: data.expires_at,
       is_used: data.is_used
     })
-  } catch (err) {
+  } catch (err: any) {
     console.error("Unexpected error during invite validation:", err)
     return NextResponse.json(
-      { valid: false, error: "Error validating invite code" },
+      { valid: false, error: "Error validating invite code", details: err?.message || "Unknown error" },
       { status: 500 }
     )
   }
