@@ -4,9 +4,7 @@ DROP FUNCTION IF EXISTS public.validate_invite_code;
 
 -- Create function to generate invite codes
 CREATE OR REPLACE FUNCTION public.generate_invite(
-    p_code TEXT,
-    p_expires_at TIMESTAMPTZ,
-    p_inviter_id UUID
+    params JSONB
 )
 RETURNS TABLE (
     id UUID,
@@ -21,6 +19,10 @@ RETURNS TABLE (
 SET search_path = public
 LANGUAGE plpgsql
 AS $$
+DECLARE
+    p_code TEXT = params->>'p_code';
+    p_expires_at TIMESTAMPTZ = (params->>'p_expires_at')::TIMESTAMPTZ;
+    p_inviter_id UUID = (params->>'p_inviter_id')::UUID;
 BEGIN
     -- Validate inputs
     IF p_inviter_id IS NULL THEN
