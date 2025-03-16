@@ -4,9 +4,9 @@ DROP FUNCTION IF EXISTS public.validate_invite_code;
 
 -- Create function to generate invite codes
 CREATE OR REPLACE FUNCTION public.generate_invite(
-    p_inviter_id UUID,
     p_code TEXT,
-    p_expires_at TIMESTAMPTZ
+    p_expires_at TIMESTAMPTZ,
+    p_inviter_id UUID
 )
 RETURNS TABLE (
     id UUID,
