@@ -32,6 +32,12 @@ export default function JoinForm() {
   const [isValidatingCode, setIsValidatingCode] = useState(true)
   const [isValidCode, setIsValidCode] = useState(true)
 
+  // Add debug logging for Supabase configuration
+  useEffect(() => {
+    console.log("Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
+    console.log("Anon key available:", !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+  }, [])
+
   // Validate invite code on component mount
   useEffect(() => {
     if (!inviteCode) {
@@ -62,7 +68,7 @@ export default function JoinForm() {
 
         if (error) {
           console.error("Error validating invite code:", error)
-          setError("Invalid invite code")
+          setError(error.message || "Invalid invite code")
           setIsValidCode(false)
           setIsValidatingCode(false)
           return
