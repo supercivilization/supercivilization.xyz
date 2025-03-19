@@ -4,19 +4,24 @@ import type React from "react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { createBrowserClient } from "@supabase/ssr"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/components/ui/use-toast"
 
 const JoinSupercivilization = () => {
+  const router = useRouter()
+  const supabase = createClientComponentClient()
+  const { toast } = useToast()
   const [inviteCode, setInviteCode] = useState("")
   const [showConsent, setShowConsent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  // Removed inviterId state variable completely
-  const router = useRouter()
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+  const [showRequestForm, setShowRequestForm] = useState(false)
+  const [requestEmail, setRequestEmail] = useState("")
+  const [requestMessage, setRequestMessage] = useState("")
 
   const handleInviteCodeSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,7 +33,6 @@ const JoinSupercivilization = () => {
     setError(null)
 
     try {
-      // Replace the validateInviteCode utility function call with the direct validation code
       const { data: invite, error: inviteError } = await supabase
         .from("invites")
         .select("inviter_id, expires_at, is_used")
@@ -56,7 +60,6 @@ const JoinSupercivilization = () => {
         return
       }
 
-      // Use invite.inviter_id directly in the URL without creating a separate variable
       router.push(`/join?code=${inviteCode}`)
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred")
@@ -66,51 +69,125 @@ const JoinSupercivilization = () => {
     }
   }
 
+  const handleRequestInvite = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const { error } = await supabase
+        .from("invite_requests")
+        .insert([
+          {
+            email: requestEmail,
+            message: requestMessage,
+            status: "pending",
+          },
+        ])
+
+      if (error) throw error
+
+      toast({
+        title: "Request submitted",
+        description: "We'll review your request and get back to you soon.",
+      })
+      setShowRequestForm(false)
+      setRequestEmail("")
+      setRequestMessage("")
+    } catch (err: any) {
+      console.error("Request error:", err)
+      setError(err.message || "Failed to submit request")
+      toast({
+        title: "Error",
+        description: "Failed to submit request. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-semibold mb-6">Join Supercivilization</h1>
-      {!showConsent ? (
-        <form onSubmit={handleInviteCodeSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="inviteCode" className="block text-gray-700 text-sm font-bold mb-2">
-              Invite Code:
-            </label>
-            <input
-              type="text"
-              id="inviteCode"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={inviteCode}
-              onChange={(e) => setInviteCode(e.target.value)}
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Submit Invite Code
-          </button>
-        </form>
-      ) : (
-        <div className="space-y-4">
-          <p>By proceeding, you agree to join the Supercivilization. Do you consent to continue?</p>
-          {error && <p className="text-red-500">{error}</p>}
-          <div className="flex justify-center space-x-4">
-            <button
-              onClick={() => setShowConsent(false)}
-              className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleConsent}
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              disabled={isLoading}
-            >
-              {isLoading ? "Loading..." : "I Consent"}
-            </button>
-          </div>
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold tracking-tight">Join Supercivilization</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Enter your invite code to get started
+          </p>
         </div>
-      )}
+
+        <div className="space-y-6">
+          <form onSubmit={handleInviteCodeSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="inviteCode">Invite Code</Label>
+              <Input
+                id="inviteCode"
+                type="text"
+                value={inviteCode}
+                onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                placeholder="Enter your invite code"
+                className="w-full"
+                disabled={isLoading}
+              />
+              <p className="text-xs text-muted-foreground">
+                Don't have an invite code?{' '}
+                <button
+                  type="button"
+                  onClick={() => setShowRequestForm(true)}
+                  className="text-primary hover:underline"
+                >
+                  Request one
+                </button>
+              </p>
+            </div>
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Validating..." : "Continue"}
+            </Button>
+          </form>
+
+          {showRequestForm && (
+            <div className="mt-8 p-4 border rounded-lg">
+              <h2 className="text-lg font-semibold mb-4">Request an Invite</h2>
+              <form onSubmit={handleRequestInvite} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={requestEmail}
+                    onChange={(e) => setRequestEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="message">Message (Optional)</Label>
+                  <Textarea
+                    id="message"
+                    value={requestMessage}
+                    onChange={(e) => setRequestMessage(e.target.value)}
+                    placeholder="Tell us why you'd like to join"
+                    className="min-h-[100px]"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button type="submit" className="flex-1">
+                    Submit Request
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setShowRequestForm(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

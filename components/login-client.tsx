@@ -1,8 +1,7 @@
 "use client"
 
 import type React from "react"
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -12,22 +11,129 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, AlertCircle } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import { supabase } from "@/lib/supabase"
+import { createBrowserClient } from "@supabase/ssr"
 
 export default function LoginClient() {
   const router = useRouter()
   const { toast } = useToast()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [rememberMe, setRememberMe] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isLocked, setIsLocked] = useState(false)
+  const [lockoutEnd, setLockoutEnd] = useState<Date | null>(null)
+  const [showPassword, setShowPassword] = useState(false)
+  const [isResending, setIsResending] = useState(false)
+  const [unverifiedEmail, setUnverifiedEmail] = useState<string | null>(null)
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+
+  // Check for existing session
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.user) {
+        // Check if email is verified
+        if (!session.user.email_confirmed_at) {
+          setUnverifiedEmail(session.user.email!)
+          toast({
+            title: "Email not verified",
+            description: "Please verify your email before logging in.",
+            variant: "destructive",
+          })
+          return
+        }
+        router.push("/dashboard")
+      }
+    }
+    checkSession()
+  }, [router, toast])
+
+  // Handle lockout timer
+  useEffect(() => {
+    if (lockoutEnd) {
+      const timer = setInterval(() => {
+        const now = new Date()
+        if (now >= lockoutEnd) {
+          setIsLocked(false)
+          setLockoutEnd(null)
+        }
+      }, 1000)
+      return () => clearInterval(timer)
+    }
+  }, [lockoutEnd])
+
+  const handleResendVerification = async () => {
+    if (!unverifiedEmail) return
+
+    setIsResending(true)
     setError(null)
 
     try {
+      const response = await fetch("/api/resend-verification", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: unverifiedEmail }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to resend verification email")
+      }
+
+      toast({
+        title: "Verification email sent",
+        description: "Please check your email to verify your account.",
+      })
+      setUnverifiedEmail(null)
+    } catch (err: any) {
+      console.error("Resend verification error:", err)
+      setError(err.message || "Failed to resend verification email")
+      toast({
+        title: "Error",
+        description: "Failed to resend verification email. Please try again.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsResending(false)
+    }
+  }
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (isLocked) {
+      const remainingTime = Math.ceil((lockoutEnd!.getTime() - Date.now()) / 1000)
+      setError(`Too many attempts. Please try again in ${remainingTime} seconds.`)
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+    setUnverifiedEmail(null)
+
+    try {
+      // Check rate limit first
+      const rateLimitResponse = await fetch("/api/rate-limit", {
+        method: "POST",
+      })
+      const rateLimitData = await rateLimitResponse.json()
+
+      if (rateLimitData.locked) {
+        setError(rateLimitData.message)
+        const lockoutTime = new Date(Date.now() + rateLimitData.remainingTime * 1000)
+        setLockoutEnd(lockoutTime)
+        setIsLocked(true)
+        return
+      }
+
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -36,17 +142,47 @@ export default function LoginClient() {
       if (signInError) throw signInError
 
       if (data.user) {
+        // Check if email is verified
+        if (!data.user.email_confirmed_at) {
+          setUnverifiedEmail(email)
+          toast({
+            title: "Email not verified",
+            description: "Please verify your email before logging in.",
+            variant: "destructive",
+          })
+          return
+        }
+
         toast({
           title: "Login successful",
           description: "Welcome back to Supercivilization",
         })
 
-        // Use router.push instead of window.location for better navigation
-        router.push("/invite")
+        router.push("/dashboard")
       }
     } catch (err: any) {
       console.error("Login error:", err)
-      setError(err.message || "Invalid email or password")
+      
+      // Handle rate limiting
+      if (err.message?.includes("rate limit")) {
+        setError("Too many attempts. Please try again later.")
+        return
+      }
+
+      // Handle email verification
+      if (err.message?.includes("Email not confirmed")) {
+        setUnverifiedEmail(email)
+        setError("Please verify your email before logging in.")
+        return
+      }
+
+      // Handle invalid credentials
+      if (err.message?.includes("Invalid login credentials")) {
+        setError("Invalid email or password")
+        return
+      }
+
+      setError("An unexpected error occurred. Please try again.")
 
       toast({
         title: "Login failed",
@@ -92,6 +228,23 @@ export default function LoginClient() {
               </Alert>
             )}
 
+            {unverifiedEmail && (
+              <Alert variant="default">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
+                  Your email is not verified.{" "}
+                  <button
+                    type="button"
+                    onClick={handleResendVerification}
+                    disabled={isResending}
+                    className="text-primary hover:underline font-medium"
+                  >
+                    {isResending ? "Sending..." : "Resend verification email"}
+                  </button>
+                </AlertDescription>
+              </Alert>
+            )}
+
             <div className="space-y-2 group">
               <Label
                 htmlFor="email"
@@ -106,7 +259,7 @@ export default function LoginClient() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
                 required
-                disabled={isLoading}
+                disabled={isLoading || isLocked}
                 className="bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 
               hover:border-zinc-400 dark:hover:border-zinc-600
               focus:border-zinc-500 dark:focus:border-zinc-500
@@ -129,19 +282,46 @@ export default function LoginClient() {
                   Forgot password?
                 </Link>
               </div>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                disabled={isLoading}
-                className="bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 
-              hover:border-zinc-400 dark:hover:border-zinc-600
-              focus:border-zinc-500 dark:focus:border-zinc-500
-              transition-all duration-200 shadow-sm"
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  disabled={isLoading || isLocked}
+                  className="bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 
+                hover:border-zinc-400 dark:hover:border-zinc-600
+                focus:border-zinc-500 dark:focus:border-zinc-500
+                transition-all duration-200 shadow-sm"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Password must be at least 8 characters long and include uppercase, lowercase, numbers, and special characters
+              </p>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="rememberMe"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                />
+                <Label htmlFor="rememberMe" className="text-sm">
+                  Remember me
+                </Label>
+              </div>
             </div>
 
             <Button
@@ -150,7 +330,7 @@ export default function LoginClient() {
             text-white font-medium py-2 transition-all duration-300 shadow-md hover:shadow-lg
             hover:shadow-zinc-300/20 dark:hover:shadow-zinc-700/20
             focus:ring-2 focus:ring-zinc-500/50 dark:focus:ring-zinc-400/50 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-zinc-900"
-              disabled={isLoading}
+              disabled={isLoading || isLocked}
             >
               {isLoading ? (
                 <>

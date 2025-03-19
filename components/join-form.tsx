@@ -1,12 +1,9 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
-import MyGeniusSignupForm from "@/components/MyGeniusSignupForm"
-import ConsentPopup from "@/components/ConsentPopup"
 import { getSupabaseClient } from "@/lib/supabase"
 import { useToast } from "@/hooks/use-toast"
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -32,12 +29,6 @@ export default function JoinForm() {
   const [isValidatingCode, setIsValidatingCode] = useState(true)
   const [isValidCode, setIsValidCode] = useState(true)
 
-  // Add debug logging for Supabase configuration
-  useEffect(() => {
-    console.log("Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
-    console.log("Anon key available:", !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
-  }, [])
-
   // Validate invite code on component mount
   useEffect(() => {
     let isMounted = true
@@ -49,52 +40,33 @@ export default function JoinForm() {
         return
       }
 
-      // Special handling for admin code
-      if (inviteCode === "ADMIN2025") {
-        console.log("Admin code detected")
-        if (isMounted) {
-          setIsValidCode(true)
-          setIsValidatingCode(false)
-        }
-        return
-      }
-
-      console.log("Starting invite code validation for:", inviteCode)
       try {
-        console.log("Fetching invite data from API...")
         const response = await fetch(`/api/validate-invite?code=${encodeURIComponent(inviteCode)}`)
         const data = await response.json()
-
-        console.log("API response:", data)
 
         if (!isMounted) return
 
         if (!response.ok) {
-          console.error("Error validating invite code:", data.error)
           setError(data.error || "Invalid invite code")
           setIsValidCode(false)
           return
         }
 
         if (!data.valid) {
-          console.log("Invalid invite code:", data.error)
           setError(data.error || "Invalid invite code")
           setIsValidCode(false)
           return
         }
 
-        console.log("Invite code valid")
         setIsValidCode(true)
         setError("")
       } catch (err) {
-        console.error("Unexpected error during validation:", err)
         if (isMounted) {
           setError("Error validating invite code")
           setIsValidCode(false)
         }
       } finally {
         if (isMounted) {
-          console.log("Validation complete, setting isValidatingCode to false")
           setIsValidatingCode(false)
         }
       }
@@ -107,7 +79,6 @@ export default function JoinForm() {
     }
   }, [inviteCode])
 
-  // Rest of the component remains the same...
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
@@ -126,8 +97,19 @@ export default function JoinForm() {
     }
 
     // Password validation
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters")
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters")
+      return
+    }
+
+    // Password strength validation
+    const hasUpperCase = /[A-Z]/.test(password)
+    const hasLowerCase = /[a-z]/.test(password)
+    const hasNumbers = /\d/.test(password)
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password)
+
+    if (!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChar) {
+      setError("Password must contain uppercase, lowercase, numbers, and special characters")
       return
     }
 
@@ -141,143 +123,62 @@ export default function JoinForm() {
     setError("")
 
     try {
-      // Special handling for admin code
-      const isAdminCode = inviteCode === "ADMIN2025"
+      // Get invite details first
+      const { data: invite, error: inviteError } = await supabase
+        .from("invites")
+        .select("inviter_id")
+        .eq("code", inviteCode)
+        .single()
 
-      // For admin code, bypass all checks and directly create the user
-      if (isAdminCode) {
-        try {
-          // Register user with Supabase directly
-          const { data: authData, error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-              data: {
-                name,
-                invite_code: inviteCode,
-                consent_given: true,
-                consent_date: new Date().toISOString(),
-                invited_by: "333e8400-e29b-41d4-a716-446655440333", // Hardcoded admin ID
-              },
-            },
-          })
-
-          if (error) throw error
-
-          if (!authData || !authData.user) {
-            throw new Error("Failed to create account")
-          }
-
-          // Success - no need to update invite for admin code
-          toast({
-            title: "Account created!",
-            description: "Please check your email to confirm your account.",
-          })
-
-          setSubmitted(true)
-          return
-        } catch (adminError: any) {
-          console.error("Admin signup error:", adminError)
-          throw new Error(adminError.message || "Failed to create account")
-        }
-      }
-
-      // For regular invite codes, proceed with validation
-      let inviterId = null
-
-      // Validate the invite code
-      try {
-        const { data: invite, error: inviteError } = await supabase
-          .from("invites")
-          .select("inviter_id, expires_at, is_used")
-          .eq("code", inviteCode)
-          .single()
-
-        if (inviteError) {
-          console.error("Database error checking invite:", inviteError)
-          throw new Error("Invalid invite code")
-        }
-
-        if (!invite) {
-          throw new Error("Invalid invite code")
-        }
-
-        if (invite.is_used) {
-          throw new Error("Invite code has already been used")
-        }
-
-        if (new Date(invite.expires_at) < new Date()) {
-          throw new Error("Invite code has expired")
-        }
-
-        inviterId = invite.inviter_id
-      } catch (err) {
-        console.error("Error processing invite code:", err)
-        throw new Error("Error validating invite code. Please try again.")
+      if (inviteError) {
+        throw new Error("Error validating invite code")
       }
 
       // Register user with Supabase
-      try {
-        const { data: authData, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              name,
-              invite_code: inviteCode,
-              consent_given: true,
-              consent_date: new Date().toISOString(),
-              invited_by: inviterId,
-            },
+      const { data: authData, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name,
+            invite_code: inviteCode,
+            consent_given: true,
+            consent_date: new Date().toISOString(),
+            invited_by: invite.inviter_id,
           },
-        })
+        },
+      })
 
-        if (error) throw error
+      if (error) throw error
 
-        if (!authData || !authData.user) {
-          throw new Error("Failed to create account")
-        }
-
-        // Mark invite as used
-        try {
-          const { error: updateError } = await supabase
-            .from("invites")
-            .update({
-              invitee_id: authData.user.id,
-              is_used: true,
-            })
-            .eq("code", inviteCode)
-
-          if (updateError) {
-            console.error("Error updating invite:", updateError)
-            // Continue anyway since the user was created successfully
-          }
-        } catch (updateErr) {
-          console.error("Error updating invite status:", updateErr)
-          // Continue anyway since the user was created successfully
-        }
-
-        // Show success message
-        toast({
-          title: "Account created!",
-          description: "Please check your email to confirm your account.",
-        })
-
-        // Update UI state
-        setSubmitted(true)
-      } catch (authErr: any) {
-        console.error("Error during authentication:", authErr)
-        throw new Error(authErr.message || "Failed to create account")
+      if (!authData || !authData.user) {
+        throw new Error("Failed to create account")
       }
-    } catch (error: any) {
-      const errorMessage = error.message || "Something went wrong. Please try again."
-      setError(errorMessage)
+
+      // Mark invite as used
+      const { error: updateError } = await supabase
+        .from("invites")
+        .update({
+          invitee_id: authData.user.id,
+          is_used: true,
+          used_at: new Date().toISOString(),
+        })
+        .eq("code", inviteCode)
+
+      if (updateError) {
+        console.error("Error updating invite:", updateError)
+        // Don't throw here, as the user is already created
+      }
 
       toast({
-        title: "Error creating account",
-        description: errorMessage,
-        variant: "destructive",
+        title: "Account created!",
+        description: "Please check your email to confirm your account.",
       })
+
+      setSubmitted(true)
+    } catch (err: any) {
+      console.error("Signup error:", err)
+      setError(err.message || "Failed to create account")
     } finally {
       setIsLoading(false)
     }
@@ -382,7 +283,7 @@ export default function JoinForm() {
       {/* Rest of the content */}
       <div className="text-center mb-6 z-10">
         <h1 className="text-2xl font-bold text-zinc-800 dark:text-zinc-100">Join Supercivilization</h1>
-        <p className="text-zinc-600 dark:text-zinc-400 mt-2">Create your MyGenius.ID</p>
+        <p className="text-zinc-600 dark:text-zinc-400 mt-2">Create your account</p>
       </div>
 
       {isLoading ? (
@@ -392,25 +293,73 @@ export default function JoinForm() {
         </div>
       ) : !submitted ? (
         <div className="w-full max-w-md z-10">
-          <MyGeniusSignupForm
-            inviteCode={inviteCode}
-            onSubmit={handleSubmit}
-            email={email}
-            setEmail={setEmail}
-            name={name}
-            setName={setName}
-            password={password}
-            setPassword={setPassword}
-            className="backdrop-blur-sm bg-white/90 dark:bg-zinc-800/90 
-              border border-zinc-200 dark:border-zinc-700 shadow-xl
-              transition-all duration-300 hover:shadow-zinc-300/20 dark:hover:shadow-zinc-700/20"
-          />
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your name"
+                required
+                disabled={isLoading}
+                className="bg-white dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700"
+              />
+            </div>
 
-          {error && (
-            <Alert variant="destructive" className="mt-4">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@example.com"
+                required
+                disabled={isLoading}
+                className="bg-white dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                disabled={isLoading}
+                className="bg-white dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700"
+              />
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                Must be at least 8 characters with uppercase, lowercase, numbers, and special characters
+              </p>
+            </div>
+
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <Button
+              type="submit"
+              className="w-full bg-zinc-800 hover:bg-zinc-900 dark:bg-zinc-700 dark:hover:bg-zinc-600"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating account...
+                </>
+              ) : (
+                "Create Account"
+              )}
+            </Button>
+          </form>
         </div>
       ) : (
         <div
@@ -419,12 +368,45 @@ export default function JoinForm() {
                       border border-zinc-200 dark:border-zinc-700"
         >
           <h2 className="text-xl font-semibold mb-4 text-zinc-800 dark:text-zinc-100">Account created!</h2>
-          <p className="mb-4 text-zinc-700 dark:text-zinc-300">Awaiting verification from two Superachievers.</p>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Please check your email to confirm your account.</p>
+          <p className="mb-4 text-zinc-700 dark:text-zinc-300">Please check your email to confirm your account.</p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            After confirming your email, you can log in to access your account.
+          </p>
         </div>
       )}
 
-      {showConsent && <ConsentPopup onAgree={handleConsent} />}
+      {showConsent && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-zinc-800 p-6 rounded-lg max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold mb-4">Consent Required</h3>
+            <p className="mb-4">
+              By creating an account, you agree to join the Supercivilization and abide by its rules and guidelines.
+            </p>
+            <div className="flex justify-end space-x-4">
+              <Button
+                variant="outline"
+                onClick={() => setShowConsent(false)}
+                disabled={isLoading}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleConsent}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Creating account...
+                  </>
+                ) : (
+                  "I Agree"
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
