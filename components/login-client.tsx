@@ -55,17 +55,22 @@ export default function LoginClient() {
 
   // Handle lockout timer
   useEffect(() => {
+    let timer: NodeJS.Timeout | undefined
+
     if (lockoutEnd) {
-      const timer = setInterval(() => {
+      timer = setInterval(() => {
         const now = new Date()
         if (now >= lockoutEnd) {
           setIsLocked(false)
           setLockoutEnd(null)
         }
       }, 1000)
+    }
 
-      // Add cleanup function
-      return () => clearInterval(timer)
+    return () => {
+      if (timer) {
+        clearInterval(timer)
+      }
     }
   }, [lockoutEnd])
 
