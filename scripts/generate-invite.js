@@ -1,65 +1,74 @@
-import { createClient } from '@supabase/supabase-js'
-import * as dotenv from 'dotenv'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { createClient } from '@supabase/supabase-js';
+import { config } from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { randomBytes } from 'crypto';
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-dotenv.config({ path: join(__dirname, '..', '.env') })
+config({ path: join(__dirname, '../.env.local') });
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+const ADMIN_USER = {
+  email: 'admin@supercivilization.com',
+  password: 'admin123456',
+  name: 'Admin User'
+};
 
-console.log('Using Supabase URL:', supabaseUrl)
-console.log('Service Role Key available:', !!supabaseKey)
-console.log('Service Role Key prefix:', supabaseKey?.substring(0, 10) + '...')
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!supabaseUrl || !supabaseKey) {
-  console.error('Missing Supabase configuration')
-  process.exit(1)
+if (!supabaseUrl || !supabaseServiceKey) {
+  console.error('Missing Supabase URL or Service Role Key');
+  process.exit(1);
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey)
+console.log('Using Supabase URL:', supabaseUrl);
+console.log('Service Role Key available:', !!supabaseServiceKey);
+
+const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false
+  }
+});
 
 async function generateInviteCode() {
   try {
-    console.log('Getting users...')
-    const { data: { users }, error: usersError } = await supabase.auth.admin.listUsers()
-    
-    if (usersError) throw usersError
-    if (!users || users.length === 0) throw new Error('No users found')
-    
-    const inviterId = users[0].id
-    console.log('Using user as inviter:', inviterId)
-    
-    // Generate a random 8-character code
-    const code = Math.random().toString(36).substring(2, 6).toUpperCase() + 
-                Math.random().toString(36).substring(2, 6).toUpperCase()
-    
-    // Set expiry to 1 year from now
-    const expiryDate = new Date()
-    expiryDate.setFullYear(expiryDate.getFullYear() + 1)
-    
-    console.log('Attempting to create invite...')
-    const { data, error } = await supabase.rpc('create_invite_code', {
-      p_inviter_id: inviterId,
-      p_code: code,
-      p_expires_at: expiryDate.toISOString()
-    })
-    
-    if (error) {
-      console.error('Error creating invite:', error)
-      throw error
+    // Create admin user if it doesn't exist
+    const { data: users, error: userError } = await supabase.auth.admin.listUsers();
+    if (userError) throw userError;
+
+    const adminUser = users.users.find(user => user.email === ADMIN_USER.email);
+    if (!adminUser) {
+      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+        email: ADMIN_USER.email,
+        password: ADMIN_USER.password,
+        email_confirm: true
+      });
+
+      if (authError) throw authError;
+      console.log('Admin user created successfully');
+    } else {
+      console.log('Admin user already exists');
     }
-    
-    console.log('Successfully created invite with code:', code)
-    console.log('\nInvite URL:', `https://www.supercivilization.xyz/join?code=${code}`)
-    
+
+    // Generate a random invite code
+    const code = randomBytes(3).toString('hex').toUpperCase();
+    console.log('Generated invite code:', code);
+    return code;
   } catch (error) {
-    console.error('Error:', error)
-    process.exit(1)
+    console.error('Error in generateInviteCode:', error);
+    throw error;
   }
 }
 
-generateInviteCode() 
+generateInviteCode()
+  .then(code => {
+    console.log('Success! Your invite code is:', code);
+    process.exit(0);
+  })
+  .catch(error => {
+    console.error('Failed to generate invite code:', error);
+    process.exit(1);
+  }); 
