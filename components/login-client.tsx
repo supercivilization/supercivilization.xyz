@@ -63,6 +63,8 @@ export default function LoginClient() {
           setLockoutEnd(null)
         }
       }, 1000)
+
+      // Add cleanup function
       return () => clearInterval(timer)
     }
   }, [lockoutEnd])
