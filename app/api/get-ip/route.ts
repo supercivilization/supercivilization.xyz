@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 
 export async function GET() {
-  const headersList = headers()
+  const headersList = await headers()
   const forwardedFor = headersList.get("x-forwarded-for")
   const realIp = headersList.get("x-real-ip")
   
