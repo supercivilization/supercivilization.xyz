@@ -24,7 +24,8 @@ export function AuthOptions() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
 
-  const handleMagicLinkLogin = async () => {
+  const handleMagicLinkLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
     if (!email) {
       setError("Email is required for magic link login")
       return
@@ -95,6 +96,14 @@ export function AuthOptions() {
     }
   }
 
+  const handleSubmit = (e: React.FormEvent) => {
+    if (authMethod === "magic-link") {
+      handleMagicLinkLogin(e)
+    } else {
+      handlePasswordLogin(e)
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex space-x-4">
@@ -123,7 +132,7 @@ export function AuthOptions() {
         </Alert>
       )}
 
-      <form onSubmit={handlePasswordLogin} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <Input
