@@ -1,73 +1,81 @@
-import { NextResponse } from "next/server"
 import { headers } from "next/headers"
-import { Redis } from "@upstash/redis"
+import { NextResponse } from "next/server"
 
-// Initialize Redis client
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || "",
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
-})
+// In-memory store for rate limiting (consider using Redis in production)
+const rateLimit = new Map<string, { count: number; resetTime: number }>()
 
-// Rate limiting configuration
-const RATE_LIMIT_WINDOW = 60 // 1 minute in seconds
-const MAX_ATTEMPTS = 5 // 5 attempts per minute
-const LOCKOUT_DURATION = 300 // 5 minutes in seconds
-
-async function checkRateLimit(ip: string): Promise<{ isLocked: boolean; remainingTime?: number }> {
-  const key = `login_attempts:${ip}`
-  const lockoutKey = `login_lockout:${ip}`
-
-  // Check if IP is locked out
-  const lockoutTime = await redis.get(lockoutKey)
-  if (lockoutTime) {
-    const remainingTime = Number(lockoutTime) - Math.floor(Date.now() / 1000)
-    if (remainingTime > 0) {
-      return { isLocked: true, remainingTime }
-    }
-    // Lockout expired, remove it
-    await redis.del(lockoutKey)
-  }
-
-  // Get current attempts
-  const attempts = await redis.incr(key)
-  if (attempts === 1) {
-    await redis.expire(key, RATE_LIMIT_WINDOW)
-  }
-
-  // Check if attempts exceeded limit
-  if (attempts > MAX_ATTEMPTS) {
-    // Set lockout
-    const lockoutExpiry = Math.floor(Date.now() / 1000) + LOCKOUT_DURATION
-    await redis.set(lockoutKey, lockoutExpiry, { ex: LOCKOUT_DURATION })
-    return { isLocked: true, remainingTime: LOCKOUT_DURATION }
-  }
-
-  return { isLocked: false }
+const RATE_LIMIT = {
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
 }
 
-export async function POST(request: Request) {
+async function checkRateLimit(ip: string) {
+  const now = Date.now()
+
+  // Clean up expired rate limit entries
+  for (const [key, value] of rateLimit.entries()) {
+    if (value.resetTime < now) {
+      rateLimit.delete(key)
+    }
+  }
+
+  // Check rate limit
+  const rateLimitData = rateLimit.get(ip)
+
+  if (rateLimitData) {
+    if (now > rateLimitData.resetTime) {
+      rateLimit.set(ip, { count: 1, resetTime: now + RATE_LIMIT.windowMs })
+    } else if (rateLimitData.count >= RATE_LIMIT.max) {
+      return { isLimited: true }
+    } else {
+      rateLimitData.count++
+    }
+  } else {
+    rateLimit.set(ip, { count: 1, resetTime: now + RATE_LIMIT.windowMs })
+  }
+
+  return { isLimited: false }
+}
+
+export async function GET() {
   try {
     const headersList = await headers()
     const ip = headersList.get("x-forwarded-for") || "unknown"
+    const { isLimited } = await checkRateLimit(ip)
 
-    const { isLocked, remainingTime } = await checkRateLimit(ip)
-
-    if (isLocked) {
+    if (isLimited) {
       return NextResponse.json(
-        { 
-          locked: true, 
-          message: `Too many attempts. Please try again in ${remainingTime} seconds.`,
-          remainingTime 
-        },
+        { error: "Too many requests" },
         { status: 429 }
       )
     }
 
-    return NextResponse.json({ locked: false })
-  } catch (err: any) {
-    console.error("Rate limit error:", err)
+    return NextResponse.json({ success: true })
+  } catch (error) {
     return NextResponse.json(
-      { locked: false, error: "Error checking rate limit" },
+      { error: "Internal server error" },
+      { status: 500 }
+    )
+  }
+}
+
+export async function POST() {
+  try {
+    const headersList = await headers()
+    const ip = headersList.get("x-forwarded-for") || "unknown"
+    const { isLimited } = await checkRateLimit(ip)
+
+    if (isLimited) {
+      return NextResponse.json(
+        { error: "Too many requests" },
+        { status: 429 }
+      )
+    }
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Internal server error" },
       { status: 500 }
     )
   }
