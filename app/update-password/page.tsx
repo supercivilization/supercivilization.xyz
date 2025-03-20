@@ -1,148 +1,124 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, AlertCircle } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
 import { createBrowserClient } from "@supabase/ssr"
-import { useRouter } from "next/navigation"
-import { defaultMetadata } from "../config"
-import type { Metadata } from "next"
 import { validatePassword, getPasswordRequirementsText } from "@/lib/password-utils"
 
-export const metadata: Metadata = {
-  title: "Update Password | " + defaultMetadata.title,
-  description: "Update your Supercivilization account password.",
-}
-
-// Next.js 15 requires explicit dynamic setting
-export const dynamic = "force-dynamic"
-
-// Next.js 15 requires explicit revalidate setting
-export const revalidate = 0
-
 export default function UpdatePasswordPage() {
-  const [password, setPassword] = useState("")
+  const [currentPassword, setCurrentPassword] = useState("")
+  const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { toast } = useToast()
+  const [success, setSuccess] = useState(false)
   const router = useRouter()
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
-
-  const handleUpdatePassword = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!password || !confirmPassword) {
-      setError("Both password fields are required")
-      return
-    }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match")
-      return
-    }
-
-    const validation = validatePassword(password)
-    if (!validation.isValid) {
-      setError(validation.errors[0])
-      return
-    }
-
     setIsLoading(true)
     setError(null)
 
     try {
-      const { error } = await supabase.auth.updateUser({
-        password: password,
+      // Validate passwords
+      if (!validatePassword(newPassword)) {
+        setError(getPasswordRequirementsText())
+        return
+      }
+
+      if (newPassword !== confirmPassword) {
+        setError("New passwords do not match")
+        return
+      }
+
+      const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
+
+      // Update password
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword
       })
 
-      if (error) throw error
+      if (updateError) {
+        throw updateError
+      }
 
-      toast({
-        title: "Password updated",
-        description: "Your password has been successfully updated.",
-      })
-
-      router.push("/dashboard")
-    } catch (err: any) {
-      console.error("Update password error:", err)
-      setError(err.message || "Failed to update password")
-      toast({
-        title: "Error",
-        description: "Failed to update password. Please try again.",
-        variant: "destructive",
-      })
+      setSuccess(true)
+      setTimeout(() => {
+        router.push("/dashboard")
+      }, 2000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update password")
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-8">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold tracking-tight">Update Password</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Enter your new password below
+    <div className="container max-w-md mx-auto py-8">
+      <h1 className="text-2xl font-bold mb-6">Update Password</h1>
+      
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="currentPassword">Current Password</Label>
+          <Input
+            id="currentPassword"
+            type="password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="newPassword">New Password</Label>
+          <Input
+            id="newPassword"
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+          />
+          <p className="text-sm text-muted-foreground">
+            {getPasswordRequirementsText()}
           </p>
         </div>
 
-        <form onSubmit={handleUpdatePassword} className="space-y-4">
-          {error && (
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
+        <div className="space-y-2">
+          <Label htmlFor="confirmPassword">Confirm New Password</Label>
+          <Input
+            id="confirmPassword"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password">New Password</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              disabled={isLoading}
-            />
-            <p className="text-xs text-muted-foreground">
-              {getPasswordRequirementsText()}
-            </p>
-          </div>
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm New Password</Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              disabled={isLoading}
-            />
-          </div>
+        {success && (
+          <Alert>
+            <AlertDescription>
+              Password updated successfully! Redirecting to dashboard...
+            </AlertDescription>
+          </Alert>
+        )}
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Updating password...
-              </>
-            ) : (
-              "Update Password"
-            )}
-          </Button>
-        </form>
-      </div>
+        <Button type="submit" disabled={isLoading} className="w-full">
+          {isLoading ? "Updating..." : "Update Password"}
+        </Button>
+      </form>
     </div>
   )
 }
