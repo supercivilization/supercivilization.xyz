@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { CheckCircle, XCircle, Users, Shield, Target } from "lucide-react"
 import { generateSignature } from "@/lib/signature"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 
 const PRIME_LAW = {
