@@ -2,7 +2,6 @@ import { createClient } from '@supabase/supabase-js';
 import { config } from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { randomBytes } from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -53,8 +52,16 @@ async function generateInviteCode() {
       console.log('Admin user already exists');
     }
 
-    // Generate a random invite code
-    const code = randomBytes(3).toString('hex').toUpperCase();
+    // Generate invite code using the database function
+    const { data: code, error } = await supabase.rpc('create_invite', {
+      p_inviter_id: adminUser.id
+    });
+
+    if (error) {
+      console.error('Invite generation error:', error);
+      throw error;
+    }
+
     console.log('Generated invite code:', code);
     return code;
   } catch (error) {

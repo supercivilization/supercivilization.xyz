@@ -4,10 +4,15 @@ import { NextResponse } from "next/server"
 import type { CookieOptions } from "@supabase/ssr"
 
 export async function GET(request: Request) {
-  const requestUrl = new URL(request.url)
-  const code = requestUrl.searchParams.get("code")
+  try {
+    const requestUrl = new URL(request.url)
+    const code = requestUrl.searchParams.get("code")
 
-  if (code) {
+    if (!code) {
+      console.error("Reset password: No code parameter provided")
+      return NextResponse.redirect(`${requestUrl.origin}/auth/auth-code-error?error=missing_code`)
+    }
+
     const cookieStore = await cookies()
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -28,11 +33,17 @@ export async function GET(request: Request) {
     )
 
     const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
-      return NextResponse.redirect(new URL("/update-password", requestUrl.origin))
+    
+    if (error) {
+      console.error("Reset password exchange error:", error.message)
+      return NextResponse.redirect(`${requestUrl.origin}/auth/auth-code-error?error=${encodeURIComponent(error.message)}`)
     }
-  }
 
-  // Return the user to an error page with instructions
-  return NextResponse.redirect(new URL("/auth/auth-code-error", requestUrl.origin))
+    // Successfully authenticated, redirect to update password page
+    console.log("Reset password code exchange successful, redirecting to update password")
+    return NextResponse.redirect(new URL("/update-password", requestUrl.origin))
+  } catch (err) {
+    console.error("Unexpected error in reset password flow:", err)
+    return NextResponse.redirect(new URL("/auth/auth-code-error?error=unexpected", request.url))
+  }
 } 

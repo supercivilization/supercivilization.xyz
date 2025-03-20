@@ -17,6 +17,7 @@ export function AuthOptions() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [authMethod, setAuthMethod] = useState<AuthMethod>("password")
+  const [magicLinkSent, setMagicLinkSent] = useState(false)
   const { toast } = useToast()
 
   const supabase = createBrowserClient(
@@ -38,12 +39,14 @@ export function AuthOptions() {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          shouldCreateUser: true
         }
       })
 
       if (error) throw error
 
+      setMagicLinkSent(true)
       toast({
         title: "Magic link sent",
         description: "Please check your email for the login link.",
@@ -96,6 +99,14 @@ export function AuthOptions() {
     }
   }
 
+  const handleForgotPassword = () => {
+    window.location.href = "/reset-password"
+  }
+
+  const resetMagicLink = () => {
+    setMagicLinkSent(false)
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     if (authMethod === "magic-link") {
       handleMagicLinkLogin(e)
@@ -132,48 +143,71 @@ export function AuthOptions() {
         </Alert>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="name@example.com"
-            required
-            disabled={isLoading}
-          />
+      {authMethod === "magic-link" && magicLinkSent ? (
+        <div className="space-y-4">
+          <Alert className="bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300">
+            <AlertDescription>
+              Magic link sent! Check your email inbox for the login link.
+            </AlertDescription>
+          </Alert>
+          <Button variant="outline" onClick={resetMagicLink} className="w-full">
+            Send another link
+          </Button>
         </div>
-
-        {authMethod === "password" && (
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="name@example.com"
               required
               disabled={isLoading}
             />
           </div>
-        )}
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? (
-            <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              {authMethod === "magic-link" ? "Sending..." : "Signing in..."}
-            </>
-          ) : (
-            authMethod === "magic-link" ? "Send Magic Link" : "Sign in"
+          {authMethod === "password" && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">Password</Label>
+                <Button 
+                  type="button" 
+                  variant="link" 
+                  onClick={handleForgotPassword}
+                  className="px-0 font-normal text-xs"
+                >
+                  Forgot password?
+                </Button>
+              </div>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                disabled={isLoading}
+              />
+            </div>
           )}
-        </Button>
-      </form>
 
-      {authMethod === "magic-link" && (
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                {authMethod === "magic-link" ? "Sending..." : "Signing in..."}
+              </>
+            ) : (
+              authMethod === "magic-link" ? "Send Magic Link" : "Sign in"
+            )}
+          </Button>
+        </form>
+      )}
+
+      {authMethod === "magic-link" && !magicLinkSent && (
         <div className="text-sm text-muted-foreground text-center">
           <p>We'll send you a secure link to sign in instantly</p>
         </div>
