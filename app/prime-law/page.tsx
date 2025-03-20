@@ -97,7 +97,6 @@ export default function PrimeLawPage() {
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showFeedback, setShowFeedback] = useState(false)
-  const [currentSection, setCurrentSection] = useState("preamble")
   const [stats, setStats] = useState({
     totalAgreements: 0,
     averageScore: 0,
