@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { randomBytes } from 'crypto';
+import { checkInviteRateLimit } from '../lib/rate-limiting';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -32,18 +33,31 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 
 async function generateInviteCode() {
   try {
-    // First verify we can access the database
-    const { data: testData, error: testError } = await supabase
-      .from('invites')
-      .select('code')
-      .limit(1);
-
-    if (testError) {
-      console.error('Database access test failed:', testError);
-      throw testError;
+    // Get the current user's ID
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    if (userError) {
+      console.error('Error getting user:', userError);
+      throw userError;
     }
 
-    console.log('Database access test succeeded');
+    if (!user) {
+      throw new Error('No authenticated user found');
+    }
+
+    // Check rate limit
+    const { success, remaining, reset, error: rateError } = await checkInviteRateLimit(user.id);
+    
+    if (rateError) {
+      console.error('Rate limit check failed:', rateError);
+      throw new Error('Failed to check rate limit');
+    }
+
+    if (!success) {
+      console.error(`Rate limit exceeded. Try again after ${new Date(reset).toLocaleString()}`);
+      console.log(`You have ${remaining} invites remaining for this period.`);
+      throw new Error('Rate limit exceeded');
+    }
     
     // Generate a random invite code
     const code = 'INV' + randomBytes(3).toString('hex').toUpperCase();
@@ -53,7 +67,10 @@ async function generateInviteCode() {
     console.log('Attempting to insert invite...');
     const { data, error } = await supabase
       .from('invites')
-      .insert([{ code }])
+      .insert([{ 
+        code,
+        inviter_id: user.id
+      }])
       .select()
       .single();
 
@@ -69,6 +86,7 @@ async function generateInviteCode() {
     console.log('Invite stored successfully:', data);
     console.log('Your invite code is:', code);
     console.log('Note: This code will expire in 1 year');
+    console.log(`You have ${remaining - 1} invites remaining for this period.`);
     return code;
   } catch (error) {
     console.error('Failed to generate invite code:', error);

@@ -12,7 +12,7 @@ import { generateInviteCode } from "@/actions/user-actions"
 import { useToast } from "@/hooks/use-toast"
 import { ArrowLeft, Copy, Check, Clock, Loader2, RefreshCw } from "lucide-react"
 import { useEffect } from "react"
-import { getSupabaseClient } from "@/lib/supabase/client"
+import { createSupabaseClient } from "@/lib/supabase/client"
 
 interface Invite {
   id: string
@@ -47,7 +47,7 @@ export default function InviteClient() {
     setError(null)
 
     try {
-      const supabase = getSupabaseClient()
+      const supabase = createSupabaseClient()
 
       // Fetch invites
       const { data, error: invitesError } = await supabase

@@ -1,19 +1,19 @@
-import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
-import { NextResponse } from "next/server"
+import { createServerClient } from '@supabase/ssr'
+import { type EmailOtpType } from '@supabase/supabase-js'
+import { cookies } from 'next/headers'
+import { NextResponse, type NextRequest } from 'next/server'
+import type { Database } from '@/types/supabase-types'
+import { RequestCookies } from 'next/dist/server/web/spec-extension/cookies'
 
-export async function GET(request: Request) {
-  try {
-    const requestUrl = new URL(request.url)
-    const code = requestUrl.searchParams.get("code")
-
-    if (!code) {
-      console.error("Auth callback: No code parameter provided")
-      return NextResponse.redirect(`${requestUrl.origin}/auth/auth-code-error?error=missing_code`)
-    }
-
-    const cookieStore = await cookies()
-    const supabase = createServerClient(
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url)
+  const token_hash = searchParams.get('token_hash')
+  const type = searchParams.get('type') as EmailOtpType | null
+  const next = searchParams.get('next') ?? '/'
+  
+  if (token_hash && type) {
+    const cookieStore = cookies() as unknown as RequestCookies
+    const supabase = createServerClient<Database>(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
@@ -30,19 +30,17 @@ export async function GET(request: Request) {
         },
       }
     )
-
-    const { error, data } = await supabase.auth.exchangeCodeForSession(code)
     
-    if (error) {
-      console.error("Auth callback error:", error.message)
-      return NextResponse.redirect(`${requestUrl.origin}/auth/auth-code-error?error=${encodeURIComponent(error.message)}`)
+    const { error } = await supabase.auth.verifyOtp({
+      type,
+      token_hash,
+    })
+    
+    if (!error) {
+      return NextResponse.redirect(new URL(next, request.url))
     }
-
-    // Successfully authenticated
-    console.log("Auth callback successful, redirecting to dashboard")
-    return NextResponse.redirect(`${requestUrl.origin}/dashboard`)
-  } catch (err) {
-    console.error("Unexpected error in auth callback:", err)
-    return NextResponse.redirect(new URL("/auth/auth-code-error?error=unexpected", request.url))
   }
+
+  // Return the user to an error page with some instructions
+  return NextResponse.redirect(new URL('/auth/auth-code-error', request.url))
 } 
