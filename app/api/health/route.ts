@@ -25,7 +25,7 @@ export async function GET() {
     )
 
     // Simple query to check database connection
-    const { data, error } = await supabase.from('user_profiles').select('count').limit(1)
+    const { error } = await supabase.from('user_profiles').select('count').limit(1)
 
     if (error) {
       throw error
