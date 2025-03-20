@@ -13,7 +13,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { CheckCircle, XCircle, Users, Shield, Target } from "lucide-react"
 import { generateSignature } from "@/lib/signature"
 import { motion } from "framer-motion"
-import { useInView } from "react-intersection-observer"
 
 const PRIME_LAW = {
   preamble: [
