@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, AlertCircle, Fingerprint, Mail, Key } from "lucide-react"
+import { Loader2, AlertCircle, Mail, Key } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { createBrowserClient } from "@supabase/ssr"
 
-type AuthMethod = "password" | "webauthn" | "magic-link"
+type AuthMethod = "password" | "magic-link"
 
 export function AuthOptions() {
   const [email, setEmail] = useState("")
@@ -23,70 +23,6 @@ export function AuthOptions() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
-
-  const handleWebAuthnLogin = async () => {
-    if (!email) {
-      setError("Email is required for WebAuthn login")
-      return
-    }
-
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      // Check if WebAuthn is available
-      if (!window.PublicKeyCredential) {
-        throw new Error("WebAuthn is not supported in your browser")
-      }
-
-      // Check if biometrics are available
-      const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
-      if (!available) {
-        throw new Error("Biometric authentication is not available")
-      }
-
-      // Get challenge from server
-      const { data: challenge, error: challengeError } = await supabase.auth.getSession()
-      if (challengeError) throw challengeError
-
-      // Create credential
-      const credential = await navigator.credentials.get({
-        publicKey: {
-          challenge: new Uint8Array(32),
-          rpId: window.location.hostname,
-          allowCredentials: [],
-          userVerification: "preferred"
-        }
-      })
-
-      if (!credential) {
-        throw new Error("No credential received")
-      }
-
-      // Verify credential with server
-      const { error: verifyError } = await supabase.auth.signInWithPassword({
-        email,
-        password: credential.id // Use credential ID as password
-      })
-
-      if (verifyError) throw verifyError
-
-      toast({
-        title: "Login successful",
-        description: "Welcome back!",
-      })
-    } catch (err: any) {
-      console.error("WebAuthn error:", err)
-      setError(err.message || "Failed to authenticate with WebAuthn")
-      toast({
-        title: "Authentication failed",
-        description: err.message || "Please try again",
-        variant: "destructive",
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
   const handleMagicLinkLogin = async () => {
     if (!email) {
@@ -171,14 +107,6 @@ export function AuthOptions() {
           Password
         </Button>
         <Button
-          variant={authMethod === "webauthn" ? "default" : "outline"}
-          onClick={() => setAuthMethod("webauthn")}
-          className="flex-1"
-        >
-          <Fingerprint className="w-4 h-4 mr-2" />
-          Biometric
-        </Button>
-        <Button
           variant={authMethod === "magic-link" ? "default" : "outline"}
           onClick={() => setAuthMethod("magic-link")}
           className="flex-1"
@@ -235,12 +163,6 @@ export function AuthOptions() {
           )}
         </Button>
       </form>
-
-      {authMethod === "webauthn" && (
-        <div className="text-sm text-muted-foreground text-center">
-          <p>Use your device's biometric authentication (fingerprint, face ID, etc.)</p>
-        </div>
-      )}
 
       {authMethod === "magic-link" && (
         <div className="text-sm text-muted-foreground text-center">
