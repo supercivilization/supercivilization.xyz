@@ -143,16 +143,21 @@ export default function JoinForm() {
         throw new Error(validationData.error || "Invalid invite code")
       }
 
-      // Get invite details
+      // Get invite details and lock the invite
       const { data: invite, error: inviteError } = await supabase
         .from("invites")
-        .select("inviter_id, expires_at")
+        .select("inviter_id, expires_at, is_used")
         .eq("code", inviteCode)
+        .eq("is_used", false)  // Ensure it's still unused
         .single()
 
       if (inviteError) {
         console.error("Invite validation error:", inviteError)
         throw new Error("Error validating invite code")
+      }
+
+      if (!invite) {
+        throw new Error("This invite code has already been used")
       }
 
       // Double check expiration
@@ -189,7 +194,7 @@ export default function JoinForm() {
         throw new Error("Failed to create account")
       }
 
-      // Mark invite as used
+      // Mark invite as used with a final check
       const { error: updateError } = await supabase
         .from("invites")
         .update({
@@ -198,6 +203,7 @@ export default function JoinForm() {
           used_at: new Date().toISOString(),
         })
         .eq("code", inviteCode)
+        .eq("is_used", false)  // Final check to ensure it's still unused
 
       if (updateError) {
         console.error("Error updating invite:", updateError)
