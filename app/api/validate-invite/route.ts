@@ -5,7 +5,6 @@ import { getActionSupabaseClient } from "@/lib/supabase/server"
 export async function GET(request: Request) {
   try {
     const headersList = await headers()
-    const ip = headersList.get("x-forwarded-for") || "unknown"
 
     // Get the code from the URL
     const url = new URL(request.url)
