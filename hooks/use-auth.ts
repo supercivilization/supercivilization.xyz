@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { createSupabaseClient } from "@/lib/supabase/client"
-import type { Profile } from "@/types/database"
+import type { Profile, UserRole } from "@/types/database"
 
 export function useAuth() {
   const router = useRouter()
@@ -38,7 +38,21 @@ export function useAuth() {
           throw new Error(profileError?.message || "Profile not found")
         }
 
-        setUser(profile as Profile)
+        // Ensure the profile data matches our Profile type with proper type assertions
+        const typedProfile: Profile = {
+          id: String(profile.id),
+          user_id: String(profile.user_id),
+          name: String(profile.name),
+          email: String(profile.email),
+          avatar_url: profile.avatar_url ? String(profile.avatar_url) : undefined,
+          role: profile.role as UserRole,
+          reputation: Number(profile.reputation),
+          status: profile.status as "pending" | "active" | "suspended" | "banned",
+          created_at: String(profile.created_at),
+          updated_at: String(profile.updated_at)
+        }
+
+        setUser(typedProfile)
       } catch (err) {
         console.error("Auth error:", err)
         setError(err instanceof Error ? err : new Error("Authentication failed"))
