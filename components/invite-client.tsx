@@ -23,9 +23,15 @@ interface Invite {
   invitee_id?: string
 }
 
+interface InviteWithProfile extends Invite {
+  invitee?: {
+    name: string
+  }
+}
+
 export default function InviteClient() {
   const { toast } = useToast()
-  const [invites, setInvites] = useState<Invite[]>([])
+  const [invites, setInvites] = useState<InviteWithProfile[]>([])
   const [expiryTime, setExpiryTime] = useState<string>("24")
   const [isLoading, setIsLoading] = useState(true)
   const [isGenerating, setIsGenerating] = useState(false)
@@ -58,14 +64,16 @@ export default function InviteClient() {
           created_at,
           expires_at,
           is_used,
-          invitee_id,
-          invitee:profiles!invitee_id(name)
+          invitee_id
         `)
         .order("created_at", { ascending: false })
 
       if (invitesError) throw invitesError
 
-      setInvites(data || [])
+      // Type assertion for the data
+      const typedData = (data || []) as InviteWithProfile[]
+
+      setInvites(typedData)
 
       if (isRefresh) {
         toast({
