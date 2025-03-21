@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { getSupabaseClient } from "@/lib/supabase/client"
+import { createSupabaseClient } from "@/lib/supabase/client"
 import type { Profile } from "@/types/database"
 
 export function useAuth() {
   const router = useRouter()
-  const supabase = getSupabaseClient()
+  const supabase = createSupabaseClient()
   const [user, setUser] = useState<Profile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)

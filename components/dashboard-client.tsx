@@ -63,8 +63,8 @@ export default function DashboardClient({ profile, invites, verifications }: Das
 
   const handleSignOut = async () => {
     try {
-      const { getSupabaseClient } = await import("@/lib/supabase/client")
-      const supabase = getSupabaseClient()
+      const { createSupabaseClient } = await import("@/lib/supabase/client")
+      const supabase = createSupabaseClient()
       await supabase.auth.signOut()
       router.push("/login")
 

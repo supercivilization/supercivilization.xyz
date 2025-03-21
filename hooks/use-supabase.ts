@@ -1,12 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { getSupabaseClient } from "@/lib/supabase"
+import { createSupabaseClient } from "@/lib/supabase/client"
 import { useToast } from "@/hooks/use-toast"
 import { AppError, ErrorType } from "@/lib/error-handling"
 
 export function useSupabase() {
-  const supabase = getSupabaseClient()
+  const supabase = createSupabaseClient()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<AppError | null>(null)

@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Loader2, UserPlus, ShieldCheck, LogOut, RefreshCw } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import { getSupabaseClient } from "@/lib/supabase"
+import { createSupabaseClient } from "@/lib/supabase/client"
 
 interface UserProfile {
   email: string
@@ -68,7 +68,7 @@ interface UserData {
 export default function DashboardContent() {
   const router = useRouter()
   const { toast } = useToast()
-  const supabase = getSupabaseClient()
+  const supabase = createSupabaseClient()
 
   const [user, setUser] = useState<UserProfile | null>(null)
   const [invites, setInvites] = useState<Invite[]>([])

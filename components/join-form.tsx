@@ -4,7 +4,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
-import { getSupabaseClient } from "@/lib/supabase"
+import { createSupabaseClient } from "@/lib/supabase/client"
 import { useToast } from "@/hooks/use-toast"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
@@ -17,7 +17,7 @@ export default function JoinForm() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const inviteCode = searchParams.get("code") || ""
-  const supabase = getSupabaseClient()
+  const supabase = createSupabaseClient()
 
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
