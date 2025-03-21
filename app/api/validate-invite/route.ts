@@ -1,44 +1,15 @@
 import { NextResponse } from "next/server"
-import { getActionSupabaseClient } from "@/lib/supabase/server"
 import { headers } from "next/headers"
-import { Redis } from "@upstash/redis"
-
-// Initialize Redis client
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL || "",
-  token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
-})
-
-// Rate limiting configuration
-const RATE_LIMIT_WINDOW = 60 // 1 minute in seconds
-const MAX_REQUESTS = 10 // 10 requests per minute
-
-async function isRateLimited(ip: string): Promise<boolean> {
-  const key = `rate_limit:${ip}`
-  const current = await redis.incr(key)
-  
-  if (current === 1) {
-    await redis.expire(key, RATE_LIMIT_WINDOW)
-  }
-  
-  return current > MAX_REQUESTS
-}
+import { getActionSupabaseClient } from "@/lib/supabase/server"
 
 export async function GET(request: Request) {
   try {
     const headersList = await headers()
     const ip = headersList.get("x-forwarded-for") || "unknown"
 
-    // Rate limiting check
-    if (await isRateLimited(ip)) {
-      return NextResponse.json(
-        { valid: false, error: "Too many requests. Please try again later." },
-        { status: 429 }
-      )
-    }
-
-    const { searchParams } = new URL(request.url)
-    const code = searchParams.get("code")
+    // Get the code from the URL
+    const url = new URL(request.url)
+    const code = url.searchParams.get("code")
 
     console.log("Validating invite code:", code)
     console.log("Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)

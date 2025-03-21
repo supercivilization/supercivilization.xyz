@@ -27,7 +27,7 @@ export default function JoinForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [isValidatingCode, setIsValidatingCode] = useState(true)
-  const [isValidCode, setIsValidCode] = useState(true)
+  const [isValidCode, setIsValidCode] = useState(false)
 
   // Validate invite code on component mount
   useEffect(() => {
@@ -41,10 +41,17 @@ export default function JoinForm() {
       }
 
       try {
-        const response = await fetch(`/api/validate-invite?code=${encodeURIComponent(inviteCode)}`)
+        console.log("Validating code:", inviteCode)
+        const response = await fetch(`/api/validate-invite?code=${encodeURIComponent(inviteCode)}`, {
+          headers: {
+            'Cache-Control': 'no-cache',  // Prevent caching
+          }
+        })
         const data = await response.json()
 
         if (!isMounted) return
+
+        console.log("Validation response:", data)
 
         if (!response.ok) {
           setError(data.error || "Invalid invite code")
@@ -61,6 +68,7 @@ export default function JoinForm() {
         setIsValidCode(true)
         setError("")
       } catch (err) {
+        console.error("Validation error:", err)
         if (isMounted) {
           setError("Error validating invite code")
           setIsValidCode(false)
