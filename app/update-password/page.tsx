@@ -20,7 +20,6 @@ export default function UpdatePasswordPage() {
   const [success, setSuccess] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
-  const [user, setUser] = useState<any>(null)
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -28,14 +27,14 @@ export default function UpdatePasswordPage() {
   )
 
   useEffect(() => {
-    const checkUser = async () => {
-      const { data } = await supabase.auth.getSession()
-      if (data.session) {
-        setUser(data.session.user)
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        router.push('/login')
       }
     }
-    checkUser()
-  }, [supabase.auth])
+    checkSession()
+  }, [supabase.auth, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
