@@ -5,7 +5,7 @@ export async function GET(request: Request) {
   try {
     // Get the code from the URL and ensure it's properly formatted
     const url = new URL(request.url)
-    const code = url.searchParams.get("code")?.trim().toUpperCase()
+    const code = url.searchParams.get("code")?.trim()
 
     console.log("[Validation] Starting validation for code:", code)
     console.log("[Validation] Request URL:", request.url)
@@ -32,12 +32,17 @@ export async function GET(request: Request) {
 
     if (error) {
       console.error("[Validation] Database error:", error)
+      if (error.code === "PGRST116") {
+        return NextResponse.json(
+          { valid: false, error: "Invalid invite code" },
+          { status: 400 }
+        )
+      }
       return NextResponse.json(
         { 
           valid: false, 
           error: "Error validating invite code", 
-          details: error.message,
-          code: error.code 
+          details: error.message
         },
         { status: 500 }
       )
@@ -99,8 +104,7 @@ export async function GET(request: Request) {
       { 
         valid: false, 
         error: "Error validating invite code", 
-        details: err?.message || "Unknown error",
-        stack: process.env.NODE_ENV === 'development' ? err?.stack : undefined
+        details: err?.message || "Unknown error"
       },
       { status: 500 }
     )
