@@ -3,16 +3,17 @@ import { getActionSupabaseClient } from "@/lib/supabase/server"
 
 export async function GET(request: Request) {
   try {
-    // Get the code from the URL
+    // Get the code from the URL and ensure it's properly formatted
     const url = new URL(request.url)
-    const code = url.searchParams.get("code")
+    const code = url.searchParams.get("code")?.trim().toUpperCase()
 
-    console.log("Validating invite code:", code)
-    console.log("Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
-    console.log("Service Role Key available:", !!process.env.SUPABASE_SERVICE_ROLE_KEY)
+    console.log("[Validation] Starting validation for code:", code)
+    console.log("[Validation] Request URL:", request.url)
+    console.log("[Validation] Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
+    console.log("[Validation] Service Role Key available:", !!process.env.SUPABASE_SERVICE_ROLE_KEY)
 
     if (!code) {
-      console.log("No code provided")
+      console.log("[Validation] No code provided")
       return NextResponse.json(
         { valid: false, error: "Invite code is required" },
         { status: 400 }
@@ -21,58 +22,56 @@ export async function GET(request: Request) {
 
     const supabase = getActionSupabaseClient()
 
-    // First verify the table exists
-    const { data: tableExists, error: tableError } = await supabase
-      .from("information_schema.tables")
-      .select("table_name")
-      .eq("table_name", "invites")
-      .single()
-
-    if (tableError) {
-      console.error("Error checking table:", tableError)
-    }
-
-    console.log("Table exists check:", tableExists)
-
-    // Check the invite
-    console.log("Attempting to query invites table...")
+    // Check the invite directly without table verification
+    console.log("[Validation] Querying invites table for code:", code)
     const { data, error } = await supabase
       .from("invites")
-      .select("expires_at, is_used")
+      .select("expires_at, is_used, created_at")
       .eq("code", code)
       .single()
 
     if (error) {
-      console.error("Error validating invite code:", error)
+      console.error("[Validation] Database error:", error)
       return NextResponse.json(
-        { valid: false, error: "Invalid invite code", details: error.message },
-        { status: 400 }
+        { 
+          valid: false, 
+          error: "Error validating invite code", 
+          details: error.message,
+          code: error.code 
+        },
+        { status: 500 }
       )
     }
 
     if (!data) {
-      console.log("No invite found for code:", code)
+      console.log("[Validation] No invite found for code:", code)
       return NextResponse.json(
         { valid: false, error: "Invalid invite code" },
         { status: 400 }
       )
     }
 
-    console.log("Found invite:", data)
+    console.log("[Validation] Found invite:", {
+      code,
+      created_at: data.created_at,
+      expires_at: data.expires_at,
+      is_used: data.is_used
+    })
 
     const expiryDate = new Date(data.expires_at)
     const now = new Date()
     const isExpired = expiryDate < now
     const isUsed = data.is_used
 
-    console.log("Expiry check:", {
+    console.log("[Validation] Expiry check:", {
       expiryDate: expiryDate.toISOString(),
       now: now.toISOString(),
-      isExpired
+      isExpired,
+      isUsed
     })
 
     if (isExpired) {
-      console.log("Invite expired. Expiry:", expiryDate, "Now:", now)
+      console.log("[Validation] Invite expired. Expiry:", expiryDate, "Now:", now)
       return NextResponse.json(
         { valid: false, error: "This invite code has expired" },
         { status: 400 }
@@ -80,23 +79,29 @@ export async function GET(request: Request) {
     }
 
     if (isUsed) {
-      console.log("Invite already used")
+      console.log("[Validation] Invite already used")
       return NextResponse.json(
         { valid: false, error: "This invite code has already been used" },
         { status: 400 }
       )
     }
 
-    console.log("Invite is valid")
+    console.log("[Validation] Invite is valid")
     return NextResponse.json({
       valid: true,
       expires_at: data.expires_at,
-      is_used: data.is_used
+      is_used: data.is_used,
+      created_at: data.created_at
     })
   } catch (err: any) {
-    console.error("Unexpected error during invite validation:", err)
+    console.error("[Validation] Unexpected error:", err)
     return NextResponse.json(
-      { valid: false, error: "Error validating invite code", details: err?.message || "Unknown error" },
+      { 
+        valid: false, 
+        error: "Error validating invite code", 
+        details: err?.message || "Unknown error",
+        stack: process.env.NODE_ENV === 'development' ? err?.stack : undefined
+      },
       { status: 500 }
     )
   }
