@@ -3,14 +3,21 @@ import { getActionSupabaseClient } from "@/lib/supabase/server"
 
 export async function GET(request: Request) {
   try {
+    // Verify environment variables
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error("[Validation] Missing required environment variables")
+      return NextResponse.json(
+        { valid: false, error: "Server configuration error" },
+        { status: 500 }
+      )
+    }
+
     // Get the code from the URL and ensure it's properly formatted
     const url = new URL(request.url)
     const code = url.searchParams.get("code")?.trim()
 
     console.log("[Validation] Starting validation for code:", code)
     console.log("[Validation] Request URL:", request.url)
-    console.log("[Validation] Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
-    console.log("[Validation] Service Role Key available:", !!process.env.SUPABASE_SERVICE_ROLE_KEY)
 
     if (!code) {
       console.log("[Validation] No code provided")
@@ -36,6 +43,13 @@ export async function GET(request: Request) {
         return NextResponse.json(
           { valid: false, error: "Invalid invite code" },
           { status: 400 }
+        )
+      }
+      if (error.code === "401") {
+        console.error("[Validation] Authentication error:", error)
+        return NextResponse.json(
+          { valid: false, error: "Server authentication error" },
+          { status: 500 }
         )
       }
       return NextResponse.json(
