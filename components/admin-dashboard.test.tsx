@@ -1,9 +1,28 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { AdminDashboardClient } from './admin-dashboard-client'
-import { createClient } from '@supabase/supabase-js'
+import AdminDashboardClient from './admin-dashboard-client'
+import * as adminActions from '@/actions/admin-actions'
 
-// Mock Supabase client
-jest.mock('@supabase/supabase-js')
+// Mock the admin actions
+jest.mock('@/actions/admin-actions', () => ({
+  updateUserRole: jest.fn(),
+  banUser: jest.fn()
+}))
+
+// Mock the toast hook
+jest.mock('@/hooks/use-toast', () => ({
+  useToast: () => ({
+    toast: jest.fn()
+  })
+}))
+
+// Mock window.location.reload
+const mockReload = jest.fn()
+Object.defineProperty(window, 'location', {
+  value: {
+    reload: mockReload
+  },
+  writable: true
+})
 
 describe('Admin Dashboard', () => {
   const mockStats = {
@@ -51,6 +70,8 @@ describe('Admin Dashboard', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    // Mock window.prompt for each test
+    window.prompt = jest.fn()
   })
 
   it('should render admin dashboard with stats', () => {
@@ -82,73 +103,61 @@ describe('Admin Dashboard', () => {
   })
 
   it('should handle role updates', async () => {
-    const mockUpdateRole = jest.fn()
+    const mockUpdateUserRole = adminActions.updateUserRole as jest.Mock
+    mockUpdateUserRole.mockResolvedValueOnce({ success: true })
+    window.prompt = jest.fn().mockReturnValue('moderator')
+
     render(
       <AdminDashboardClient
         stats={mockStats}
         recentUsers={mockRecentUsers}
         recentLogs={mockRecentLogs}
-        onUpdateRole={mockUpdateRole}
       />
     )
 
     // Find and click role update button
-    const roleButton = screen.getByRole('button', { name: /update role/i })
+    const roleButton = screen.getByLabelText('Change role for John Doe')
     fireEvent.click(roleButton)
 
-    // Select new role
-    const moderatorOption = screen.getByText('moderator')
-    fireEvent.click(moderatorOption)
-
     await waitFor(() => {
-      expect(mockUpdateRole).toHaveBeenCalledWith('user1', 'moderator')
+      expect(mockUpdateUserRole).toHaveBeenCalledWith('user1', 'moderator')
     })
   })
 
   it('should handle user bans', async () => {
-    const mockBanUser = jest.fn()
+    const mockBanUser = adminActions.banUser as jest.Mock
+    mockBanUser.mockResolvedValueOnce({ success: true })
+    window.prompt = jest.fn().mockReturnValue('Test Reason')
+
     render(
       <AdminDashboardClient
         stats={mockStats}
         recentUsers={mockRecentUsers}
         recentLogs={mockRecentLogs}
-        onBanUser={mockBanUser}
       />
     )
 
     // Find and click ban button
-    const banButton = screen.getByRole('button', { name: /ban user/i })
+    const banButton = screen.getByLabelText('Ban John Doe')
     fireEvent.click(banButton)
 
-    // Enter ban reason
-    const reasonInput = screen.getByPlaceholderText(/reason/i)
-    fireEvent.change(reasonInput, { target: { value: 'Violation of rules' } })
-
-    // Submit ban
-    const submitButton = screen.getByRole('button', { name: /confirm/i })
-    fireEvent.click(submitButton)
-
     await waitFor(() => {
-      expect(mockBanUser).toHaveBeenCalledWith('user1', 'Violation of rules')
+      expect(mockBanUser).toHaveBeenCalledWith('user1', 'Test Reason')
     })
   })
 
-  it('should refresh data when refresh button is clicked', async () => {
-    const mockRefresh = jest.fn()
+  it('should refresh data when refresh button is clicked', () => {
     render(
       <AdminDashboardClient
         stats={mockStats}
         recentUsers={mockRecentUsers}
         recentLogs={mockRecentLogs}
-        onRefresh={mockRefresh}
       />
     )
 
     const refreshButton = screen.getByRole('button', { name: /refresh/i })
     fireEvent.click(refreshButton)
 
-    await waitFor(() => {
-      expect(mockRefresh).toHaveBeenCalled()
-    })
+    expect(mockReload).toHaveBeenCalled()
   })
 }) 

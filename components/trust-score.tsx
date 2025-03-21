@@ -75,7 +75,7 @@ export function TrustScoreDisplay({ userId }: { userId: string }) {
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span>Overall Score</span>
-            <span>{Math.round(score.total)}%</span>
+            <span data-testid="overall-score">{Math.round(score.total)}%</span>
           </div>
           <Progress value={score.total} className="h-2" />
         </div>

@@ -9,9 +9,10 @@ describe('Trust Scoring System', () => {
   const mockSupabase = {
     from: jest.fn(() => ({
       select: jest.fn(),
+      eq: jest.fn(),
       single: jest.fn(),
     })),
-  } as unknown as SupabaseClient
+  } as unknown as jest.Mocked<SupabaseClient>
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -20,10 +21,12 @@ describe('Trust Scoring System', () => {
 
   it('should calculate correct trust score for a new user', async () => {
     // Mock database responses
-    mockSupabase.from.mockImplementation((table: string) => ({
+    const mockFrom = mockSupabase.from as jest.MockedFunction<typeof mockSupabase.from>
+    mockFrom.mockReturnValue({
       select: jest.fn().mockReturnThis(),
+      eq: jest.fn().mockReturnThis(),
       single: jest.fn().mockResolvedValue({ data: null }),
-    }))
+    } as any)
 
     const score = await calculateTrustScore(mockSupabase, 'test-user-id')
 
@@ -34,9 +37,11 @@ describe('Trust Scoring System', () => {
 
   it('should calculate correct trust score for an active user', async () => {
     // Mock database responses
-    mockSupabase.from.mockImplementation((table: string) => ({
+    const mockFrom = mockSupabase.from as jest.MockedFunction<typeof mockSupabase.from>
+    mockFrom.mockImplementation((table: string) => ({
       select: jest.fn().mockReturnThis(),
-      single: jest.fn().mockImplementation((table: string) => {
+      eq: jest.fn().mockReturnThis(),
+      single: jest.fn().mockImplementation(() => {
         switch (table) {
           case 'prime_law_agreements':
             return Promise.resolve({ data: { understanding_score: 90 } })
@@ -48,7 +53,7 @@ describe('Trust Scoring System', () => {
             return Promise.resolve({ data: null })
         }
       }),
-    }))
+    } as any))
 
     const score = await calculateTrustScore(mockSupabase, 'test-user-id')
 

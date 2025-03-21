@@ -214,11 +214,19 @@ export default function AdminDashboardClient({ stats, recentUsers, recentLogs }:
                           handleRoleUpdate(user.user_id, newRole as "user" | "moderator" | "admin" | "superadmin")
                         }
                       }}
+                      aria-label={`Change role for ${user.name}`}
                     >
                       <Shield className="h-4 w-4" />
+                      <span className="sr-only">Change role</span>
                     </Button>
-                    <Button variant="destructive" size="sm" onClick={() => handleBanUser(user.user_id)}>
+                    <Button 
+                      variant="destructive" 
+                      size="sm" 
+                      onClick={() => handleBanUser(user.user_id)}
+                      aria-label={`Ban ${user.name}`}
+                    >
                       <UserX className="h-4 w-4" />
+                      <span className="sr-only">Ban user</span>
                     </Button>
                   </div>
                 </div>

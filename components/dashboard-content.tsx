@@ -52,11 +52,6 @@ interface Verification {
   created_at: string
 }
 
-interface UserData {
-  id: string
-  name: string
-}
-
 interface DatabaseVerification {
   id: string
   confirmed: boolean
@@ -274,7 +269,15 @@ export default function DashboardContent() {
       <div className="w-full max-w-2xl space-y-6">
         {/* Refresh Button */}
         <div className="flex justify-end">
-          <Button variant="outline" size="sm" onClick={fetchData} disabled={isRefreshing}>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={(e) => {
+              e.preventDefault()
+              fetchData()
+            }} 
+            disabled={isRefreshing}
+          >
             {isRefreshing ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

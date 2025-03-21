@@ -25,12 +25,20 @@ jest.mock('next/navigation', () => ({
     replace: jest.fn(),
     prefetch: jest.fn(),
   }),
-  usePathname: () => '',
-  useSearchParams: () => new URLSearchParams(),
+  useSearchParams: () => ({
+    get: jest.fn(),
+  }),
 }))
 
 // Mock next/headers
 jest.mock('next/headers', () => ({
   headers: () => new Map(),
   cookies: () => new Map(),
-})) 
+}))
+
+// Mock next/link
+jest.mock('next/link', () => {
+  return ({ children, ...props }) => {
+    return <a {...props}>{children}</a>
+  }
+}) 
