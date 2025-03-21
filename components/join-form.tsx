@@ -131,7 +131,19 @@ export default function JoinForm() {
     setError("")
 
     try {
-      // Get invite details first
+      // First validate the invite code again to ensure it's still valid
+      const validationResponse = await fetch(`/api/validate-invite?code=${encodeURIComponent(inviteCode)}`, {
+        headers: {
+          'Cache-Control': 'no-cache',
+        }
+      })
+      const validationData = await validationResponse.json()
+
+      if (!validationResponse.ok || !validationData.valid) {
+        throw new Error(validationData.error || "Invalid invite code")
+      }
+
+      // Get invite details
       const { data: invite, error: inviteError } = await supabase
         .from("invites")
         .select("inviter_id, expires_at")
