@@ -1,50 +1,48 @@
 export const runtime = "edge"
 
 import { createServerClient } from "@supabase/ssr"
-import { cookies } from "next/headers"
 import type { Database } from "@/types/supabase-types"
-import { RequestCookies } from "next/dist/server/web/spec-extension/cookies"
 
 // For use in Server Components
 export function getServerSupabaseClient() {
-  const cookieStore = cookies() as unknown as RequestCookies
-
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         get(name: string) {
-          return cookieStore.get(name)?.value
+          return ""
         },
         set(name: string, value: string, options: any) {
-          cookieStore.set({ name, value, ...options })
+          // No-op in edge functions
         },
         remove(name: string, options: any) {
-          cookieStore.delete({ name, ...options })
+          // No-op in edge functions
         },
       },
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
     }
   )
 }
 
 // For use in Server Actions and API routes
 export function getActionSupabaseClient() {
-  const cookieStore = cookies() as unknown as RequestCookies
-
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
       cookies: {
         get(name: string) {
-          return cookieStore.get(name)?.value
+          return ""
         },
         set(name: string, value: string, options: any) {
-          cookieStore.set({ name, value, ...options })
+          // No-op in edge functions
         },
         remove(name: string, options: any) {
-          cookieStore.delete({ name, ...options })
+          // No-op in edge functions
         },
       },
       auth: {
