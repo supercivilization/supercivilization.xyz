@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from '@/types/supabase-types'
-import type { SupabaseClientOptions } from '@supabase/supabase-js'
 
 let supabaseClient: ReturnType<typeof createClient<Database>> | null = null
 
