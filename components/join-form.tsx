@@ -134,12 +134,20 @@ export default function JoinForm() {
       // Get invite details first
       const { data: invite, error: inviteError } = await supabase
         .from("invites")
-        .select("inviter_id")
+        .select("inviter_id, expires_at")
         .eq("code", inviteCode)
         .single()
 
       if (inviteError) {
+        console.error("Invite validation error:", inviteError)
         throw new Error("Error validating invite code")
+      }
+
+      // Double check expiration
+      const expiryDate = new Date(invite.expires_at)
+      const now = new Date()
+      if (expiryDate < now) {
+        throw new Error("This invite code has expired")
       }
 
       // Register user with Supabase
@@ -157,7 +165,13 @@ export default function JoinForm() {
         },
       })
 
-      if (error) throw error
+      if (error) {
+        console.error("Signup error:", error)
+        if (error.message.includes("already registered")) {
+          throw new Error("This email is already registered")
+        }
+        throw error
+      }
 
       if (!authData || !authData.user) {
         throw new Error("Failed to create account")
@@ -175,13 +189,18 @@ export default function JoinForm() {
 
       if (updateError) {
         console.error("Error updating invite:", updateError)
-        // Don't throw here, as the user is already created
+        // Log the error but don't throw, as the user is already created
       }
 
       toast({
         title: "Account created!",
-        description: "Please check your email to confirm your account.",
+        description: "Please check your email to confirm your account. You'll be redirected to the login page.",
       })
+
+      // Redirect to login page after a short delay
+      setTimeout(() => {
+        router.push("/login")
+      }, 3000)
 
       setSubmitted(true)
     } catch (err: any) {
