@@ -56,11 +56,24 @@ interface Verification {
   id: string
   memberName: string
   confirmed: boolean
-  reason: string | null
+  reason: string
   created_at: string
 }
 
 interface UserData {
+  id: string
+  name: string
+}
+
+interface DatabaseVerification {
+  id: string
+  confirmed: boolean
+  reason: string | null
+  created_at: string
+  invitee_id: string
+}
+
+interface DatabaseUser {
   id: string
   name: string
 }
@@ -77,16 +90,11 @@ export default function DashboardContent() {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [, setError] = useState<string | null>(null)
 
-  const fetchData = async () => {
-    const isRefresh = !isLoading
-    if (isRefresh) {
-      setIsRefreshing(true)
-    } else {
-      setIsLoading(true)
-    }
-    setError(null)
-
+  const fetchData = async (isRefresh = false) => {
     try {
+      setIsLoading(true)
+      if (isRefresh) setIsRefreshing(true)
+
       // Check authentication
       const { data: authData, error: authError } = await supabase.auth.getUser()
 
@@ -164,18 +172,12 @@ export default function DashboardContent() {
 
       setInvites(formattedInvites)
 
-      // Fetch verification history
+      // Fetch verifications
       const { data: verificationData, error: verificationError } = await supabase
         .from("verifications")
-        .select(`
-          id,
-          confirmed,
-          reason,
-          created_at,
-          invitee_id
-        `)
-        .eq("verifier_id", userId)
+        .select("*")
         .order("created_at", { ascending: false })
+        .returns<DatabaseVerification[]>()
 
       if (verificationError) throw verificationError
 
@@ -184,15 +186,19 @@ export default function DashboardContent() {
 
       if (verificationData && verificationData.length > 0) {
         // Get all unique invitee IDs
-        const inviteeIds = [...new Set(verificationData.map((v: RawVerificationData) => v.invitee_id).filter(Boolean))]
+        const inviteeIds = [...new Set(verificationData.map(v => v.invitee_id).filter(Boolean))]
 
         // Fetch all users in one query
-        const { data: usersData } = await supabase.from("users").select("id, name").in("id", inviteeIds)
+        const { data: usersData } = await supabase
+          .from("users")
+          .select("id, name")
+          .in("id", inviteeIds)
+          .returns<DatabaseUser[]>()
 
         // Create a map of user IDs to names
-        const userMap = new Map()
+        const userMap = new Map<string, string>()
         if (usersData) {
-          usersData.forEach((user: UserData) => {
+          usersData.forEach((user) => {
             userMap.set(user.id, user.name)
           })
         }
@@ -201,7 +207,7 @@ export default function DashboardContent() {
         for (const v of verificationData) {
           formattedVerifications.push({
             id: v.id,
-            memberName: v.invitee_id && userMap.has(v.invitee_id) ? userMap.get(v.invitee_id) : "Unknown",
+            memberName: v.invitee_id && userMap.has(v.invitee_id) ? userMap.get(v.invitee_id)! : "Unknown",
             confirmed: v.confirmed,
             reason: v.reason || "N/A",
             created_at: v.created_at,
