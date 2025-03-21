@@ -10,13 +10,13 @@ export function getServerSupabaseClient() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
+        get(_name: string) {
           return ""
         },
-        set(name: string, value: string, options: any) {
+        set(_name: string, _value: string, _options: any) {
           // No-op in edge functions
         },
-        remove(name: string, options: any) {
+        remove(_name: string, _options: any) {
           // No-op in edge functions
         },
       },
@@ -35,13 +35,13 @@ export function getActionSupabaseClient() {
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
       cookies: {
-        get(name: string) {
+        get(_name: string) {
           return ""
         },
-        set(name: string, value: string, options: any) {
+        set(_name: string, _value: string, _options: any) {
           // No-op in edge functions
         },
-        remove(name: string, options: any) {
+        remove(_name: string, _options: any) {
           // No-op in edge functions
         },
       },
