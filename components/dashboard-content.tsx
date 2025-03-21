@@ -44,14 +44,6 @@ interface RawInvitee {
   status: string
 }
 
-interface RawVerificationData {
-  id: string
-  confirmed: boolean
-  reason: string | null
-  created_at: string
-  invitee_id: string
-}
-
 interface Verification {
   id: string
   memberName: string
