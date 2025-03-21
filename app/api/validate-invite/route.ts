@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server"
-import { headers } from "next/headers"
 import { getActionSupabaseClient } from "@/lib/supabase/server"
 
 export async function GET(request: Request) {
   try {
-    const headersList = await headers()
-
     // Get the code from the URL
     const url = new URL(request.url)
     const code = url.searchParams.get("code")
