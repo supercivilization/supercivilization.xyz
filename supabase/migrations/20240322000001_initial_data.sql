@@ -16,17 +16,69 @@ BEGIN
     WHERE email = 'admin@supercivilization.com';
 
     IF admin_user_id IS NULL THEN
-        -- Create admin user
+        -- Create admin user using Supabase's auth.users table
         INSERT INTO auth.users (
+            instance_id,
+            id,
+            aud,
+            role,
             email,
             encrypted_password,
             email_confirmed_at,
-            role
+            created_at,
+            updated_at,
+            confirmation_token,
+            email_change,
+            email_change_token_new,
+            recovery_sent_at,
+            last_sign_in_at,
+            raw_app_meta_data,
+            raw_user_meta_data,
+            is_super_admin,
+            created_at,
+            updated_at,
+            phone,
+            phone_confirmed_at,
+            phone_change,
+            phone_change_token,
+            confirmed_at,
+            email_change_token_current,
+            email_change_confirm_status,
+            banned_until,
+            confirmation_sent_at,
+            email_change_token_new,
+            recovery_token
         ) VALUES (
+            '00000000-0000-0000-0000-000000000000',
+            gen_random_uuid(),
+            'authenticated',
+            'authenticated',
             'admin@supercivilization.com',
             crypt('admin123', gen_salt('bf')),
             now(),
-            'authenticated'
+            now(),
+            now(),
+            '',
+            '',
+            '',
+            now(),
+            now(),
+            '{"provider":"email","providers":["email"]}',
+            '{}',
+            false,
+            now(),
+            now(),
+            '',
+            now(),
+            '',
+            '',
+            now(),
+            '',
+            0,
+            null,
+            now(),
+            '',
+            ''
         ) RETURNING id INTO admin_user_id;
     END IF;
 
