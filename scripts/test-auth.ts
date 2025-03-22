@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { User, Session } from '@supabase/supabase-js'
 
 // Get environment variables directly
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -19,40 +20,52 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
   }
 })
 
-async function testRegistration() {
+type UserCredentials = {
+  email: string
+  password: string
+  userId: string
+} | null
+
+async function testRegistration(): Promise<UserCredentials> {
   console.log('\n=== Testing Registration ===')
   
   const testEmail = `test${Date.now()}@example.com`
-  const testPassword = 'Test123!@#'
+  console.log(`Testing registration with email: ${testEmail}`)
   
   try {
-    console.log('Attempting registration with:', testEmail)
+    // Use admin API to create a user with email confirmed
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
       email: testEmail,
-      password: testPassword,
-      email_confirm: true, // Auto-confirm the email
-      user_metadata: {
-        name: 'Test User',
-      },
+      password: 'password123!',
+      email_confirm: true
     })
 
     if (error) {
       console.error('Registration error:', error)
-      return
+      return null
     }
 
     console.log('Registration successful!')
     console.log('User ID:', data.user.id)
     console.log('Email:', data.user.email)
-    console.log('Email confirmed:', data.user.email_confirmed_at ? 'Yes' : 'No')
     
-    return { email: testEmail, password: testPassword }
+    return {
+      email: testEmail,
+      password: 'password123!',
+      userId: data.user.id
+    }
   } catch (err) {
     console.error('Unexpected error during registration:', err)
+    return null
   }
 }
 
-async function testLogin(email: string, password: string) {
+type LoginResult = {
+  user: User | null
+  session: Session | null
+} | null
+
+async function testLogin(email: string, password: string): Promise<LoginResult> {
   console.log('\n=== Testing Login ===')
   
   try {
@@ -64,7 +77,7 @@ async function testLogin(email: string, password: string) {
 
     if (error) {
       console.error('Login error:', error)
-      return
+      return null
     }
 
     console.log('Login successful!')
@@ -72,13 +85,17 @@ async function testLogin(email: string, password: string) {
     console.log('Email:', data.user?.email)
     console.log('Session:', data.session ? 'Active' : 'No session')
     
-    return data
+    return {
+      user: data.user,
+      session: data.session
+    }
   } catch (err) {
     console.error('Unexpected error during login:', err)
+    return null
   }
 }
 
-async function testResendVerification(email: string) {
+async function testResendVerification(email: string): Promise<boolean> {
   console.log('\n=== Testing Resend Verification ===')
   
   try {
@@ -90,16 +107,18 @@ async function testResendVerification(email: string) {
 
     if (error) {
       console.error('Resend verification error:', error)
-      return
+      return false
     }
 
     console.log('Verification email sent successfully!')
+    return true
   } catch (err) {
     console.error('Unexpected error during resend verification:', err)
+    return false
   }
 }
 
-async function testAuthFlow() {
+async function testAuthFlow(): Promise<void> {
   try {
     // Test registration
     const credentials = await testRegistration()
