@@ -1,3 +1,12 @@
+-- Drop existing objects if they exist
+DROP FUNCTION IF EXISTS get_user_activity;
+DROP FUNCTION IF EXISTS log_user_activity;
+DROP POLICY IF EXISTS "Users can view their own activity" ON public.user_activity;
+DROP POLICY IF EXISTS "Users can insert their own activity" ON public.user_activity;
+DROP POLICY IF EXISTS "Admins can view all activity" ON public.user_activity;
+DROP TABLE IF EXISTS public.user_activity;
+DROP TYPE IF EXISTS public.activity_type;
+
 -- Create activity type enum
 CREATE TYPE public.activity_type AS ENUM (
     'login',
