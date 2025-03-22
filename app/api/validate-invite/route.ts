@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { getActionSupabaseClient } from "@/lib/supabase/server"
 
+export const runtime = "edge"
+
 export async function GET(request: Request) {
   try {
     // Verify environment variables
@@ -18,6 +20,8 @@ export async function GET(request: Request) {
 
     console.log("[Validation] Starting validation for code:", code)
     console.log("[Validation] Request URL:", request.url)
+    console.log("[Validation] Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
+    console.log("[Validation] Service Role Key available:", !!process.env.SUPABASE_SERVICE_ROLE_KEY)
 
     if (!code) {
       console.log("[Validation] No code provided")

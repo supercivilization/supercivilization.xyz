@@ -30,9 +30,13 @@ export function getServerSupabaseClient() {
 
 // For use in Server Actions and API routes
 export function getActionSupabaseClient() {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY is not set")
+  }
+
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
     {
       cookies: {
         get(_name: string) {
