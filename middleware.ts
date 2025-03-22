@@ -8,7 +8,7 @@ const RATE_LIMIT = {
   max: 100, // Limit each IP to 100 requests per windowMs
   auth: {
     windowMs: 60 * 60 * 1000, // 1 hour
-    max: 5, // Limit each IP to 5 auth requests per hour
+    max: 20, // Increase limit to 20 auth requests per hour
   }
 }
 
@@ -35,6 +35,11 @@ export async function middleware(request: NextRequest) {
       },
     }
   )
+
+  // Handle auth callback first to prevent rate limiting
+  if (request.nextUrl.pathname.startsWith('/auth/callback')) {
+    return response
+  }
 
   // Add security headers
   const cspHeader = `
@@ -90,7 +95,22 @@ export async function middleware(request: NextRequest) {
   // Refresh session if exists
   const {
     data: { session },
+    error: sessionError
   } = await supabase.auth.getSession()
+
+  if (sessionError) {
+    console.error('Session error:', sessionError)
+    // Clear any invalid session cookies
+    response.cookies.delete('sb-access-token')
+    response.cookies.delete('sb-refresh-token')
+  }
+
+  // Handle auth routes
+  if (request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/join')) {
+    if (session) {
+      return NextResponse.redirect(new URL("/dashboard", request.url))
+    }
+  }
 
   // Handle admin routes
   if (request.nextUrl.pathname.startsWith("/admin")) {
@@ -98,10 +118,24 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/login", request.url))
     }
 
-    // Check if the user is an admin
-    const { data: profile } = await supabase.from("profiles").select("role").eq("user_id", session.user.id).single()
+    try {
+      // Check if the user is an admin
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("user_id", session.user.id)
+        .single()
 
-    if (!profile || !["admin", "superadmin"].includes(profile.role)) {
+      if (profileError) {
+        console.error('Profile fetch error:', profileError)
+        return NextResponse.redirect(new URL("/unauthorized", request.url))
+      }
+
+      if (!profile || !["admin", "superadmin"].includes(profile.role)) {
+        return NextResponse.redirect(new URL("/unauthorized", request.url))
+      }
+    } catch (error) {
+      console.error('Admin check error:', error)
       return NextResponse.redirect(new URL("/unauthorized", request.url))
     }
   }
