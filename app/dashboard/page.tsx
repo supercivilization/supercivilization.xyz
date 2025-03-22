@@ -33,7 +33,11 @@ export default async function DashboardPage() {
         {
           user_id: user.id,
           name: user.email?.split('@')[0] || 'Anonymous',
-          status: 'pending'
+          email: user.email || '',
+          status: 'pending',
+          role: 'user',
+          reputation: 0,
+          created_at: new Date().toISOString()
         }
       ])
       .select()
