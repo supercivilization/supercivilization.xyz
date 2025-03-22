@@ -1,5 +1,6 @@
 import { getServerSupabaseClient } from "@/lib/supabase/server"
 import DashboardClient from "@/components/dashboard-client"
+import { redirect } from "next/navigation"
 
 // Add dynamic route configuration
 export const dynamic = 'force-dynamic'
@@ -8,15 +9,42 @@ export const revalidate = 0
 export default async function DashboardPage() {
   const supabase = getServerSupabaseClient()
 
+  // Check if user is authenticated
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  
+  if (authError || !user) {
+    console.error('Auth error:', authError)
+    redirect('/login')
+  }
+
   // Get user profile
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("*")
+    .eq("user_id", user.id)
     .single()
 
   if (profileError || !profile) {
     console.error('Profile error:', profileError)
-    throw new Error('Failed to load profile')
+    // If profile doesn't exist, create one
+    const { data: newProfile, error: createError } = await supabase
+      .from("profiles")
+      .insert([
+        {
+          user_id: user.id,
+          name: user.email?.split('@')[0] || 'Anonymous',
+          status: 'pending'
+        }
+      ])
+      .select()
+      .single()
+
+    if (createError) {
+      console.error('Profile creation error:', createError)
+      throw new Error('Failed to create profile')
+    }
+
+    return <DashboardClient profile={newProfile} invites={[]} verifications={[]} />
   }
 
   // Get user's invites
@@ -35,7 +63,8 @@ export default async function DashboardPage() {
 
   if (invitesError) {
     console.error('Invites error:', invitesError)
-    throw new Error('Failed to load invites')
+    // Don't throw error for invites, just return empty array
+    return <DashboardClient profile={profile} invites={[]} verifications={[]} />
   }
 
   // Get user's verifications
@@ -53,17 +82,21 @@ export default async function DashboardPage() {
 
   if (verificationsError) {
     console.error('Verifications error:', verificationsError)
-    throw new Error('Failed to load verifications')
+    // Don't throw error for verifications, just return empty array
+    return <DashboardClient profile={profile} invites={invites?.map(invite => ({
+      ...invite,
+      invitee: invite.invitee[0] || { name: "", status: "" }
+    })) || []} verifications={[]} />
   }
 
   return (
     <DashboardClient 
       profile={profile} 
-      invites={invites?.map((invite) => ({
+      invites={invites?.map(invite => ({
         ...invite,
         invitee: invite.invitee[0] || { name: "", status: "" }
       })) || []} 
-      verifications={verifications?.map((verification) => ({
+      verifications={verifications?.map(verification => ({
         ...verification,
         invitee: verification.invitee[0] || { name: "", status: "" }
       })) || []} 
