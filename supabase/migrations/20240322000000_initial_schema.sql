@@ -1,3 +1,20 @@
+-- Drop existing objects if they exist
+DROP VIEW IF EXISTS active_invites;
+DROP TABLE IF EXISTS verifications;
+DROP TABLE IF EXISTS product_items;
+DROP TABLE IF EXISTS admin_logs;
+DROP TABLE IF EXISTS invites;
+DROP TABLE IF EXISTS user_sessions;
+DROP TABLE IF EXISTS user_settings;
+DROP TABLE IF EXISTS user_profiles;
+DROP TABLE IF EXISTS profiles;
+DROP TABLE IF EXISTS roles;
+DROP TYPE IF EXISTS product_category;
+DROP TYPE IF EXISTS product_status;
+DROP TYPE IF EXISTS user_status;
+DROP FUNCTION IF EXISTS is_admin();
+DROP FUNCTION IF EXISTS update_updated_at();
+
 -- Enable necessary extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "citext";
@@ -132,6 +149,28 @@ JOIN profiles p ON i.inviter_id = p.user_id
 WHERE NOT i.is_used 
 AND i.expires_at > now();
 
+-- Drop existing indexes if they exist
+DROP INDEX IF EXISTS idx_profiles_user_id;
+DROP INDEX IF EXISTS idx_profiles_email;
+DROP INDEX IF EXISTS idx_profiles_role;
+DROP INDEX IF EXISTS idx_profiles_status;
+DROP INDEX IF EXISTS idx_user_profiles_user_id;
+DROP INDEX IF EXISTS idx_user_settings_user_id;
+DROP INDEX IF EXISTS idx_user_sessions_user_id;
+DROP INDEX IF EXISTS idx_user_sessions_last_active;
+DROP INDEX IF EXISTS idx_invites_code;
+DROP INDEX IF EXISTS idx_invites_inviter_id;
+DROP INDEX IF EXISTS idx_invites_invitee_id;
+DROP INDEX IF EXISTS idx_invites_expires_at;
+DROP INDEX IF EXISTS idx_admin_logs_admin_id;
+DROP INDEX IF EXISTS idx_admin_logs_target_id;
+DROP INDEX IF EXISTS idx_product_items_created_by;
+DROP INDEX IF EXISTS idx_product_items_assigned_to;
+DROP INDEX IF EXISTS idx_product_items_status;
+DROP INDEX IF EXISTS idx_product_items_category;
+DROP INDEX IF EXISTS idx_verifications_invitee_id;
+DROP INDEX IF EXISTS idx_verifications_verifier_id;
+
 -- Create indexes
 CREATE INDEX idx_profiles_user_id ON profiles(user_id);
 CREATE INDEX idx_profiles_email ON profiles(email);
@@ -153,6 +192,24 @@ CREATE INDEX idx_product_items_status ON product_items(status);
 CREATE INDEX idx_product_items_category ON product_items(category);
 CREATE INDEX idx_verifications_invitee_id ON verifications(invitee_id);
 CREATE INDEX idx_verifications_verifier_id ON verifications(verifier_id);
+
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Public profiles are viewable by everyone" ON profiles;
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can view any user profile" ON user_profiles;
+DROP POLICY IF EXISTS "Users can update own extended profile" ON user_profiles;
+DROP POLICY IF EXISTS "Users can view own settings" ON user_settings;
+DROP POLICY IF EXISTS "Users can update own settings" ON user_settings;
+DROP POLICY IF EXISTS "Users can view own sessions" ON user_sessions;
+DROP POLICY IF EXISTS "Users can delete own sessions" ON user_sessions;
+DROP POLICY IF EXISTS "Users can view own sent invites" ON invites;
+DROP POLICY IF EXISTS "Active users can create invites" ON invites;
+DROP POLICY IF EXISTS "Only admins can view logs" ON admin_logs;
+DROP POLICY IF EXISTS "Anyone can view published items" ON product_items;
+DROP POLICY IF EXISTS "Users can create product items" ON product_items;
+DROP POLICY IF EXISTS "Users can update own items" ON product_items;
+DROP POLICY IF EXISTS "Users can view verifications they're involved in" ON verifications;
+DROP POLICY IF EXISTS "Active users can create verifications" ON verifications;
 
 -- Enable Row Level Security
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
@@ -289,6 +346,13 @@ BEGIN
   RETURN NEW;
 END;
 $$;
+
+-- Drop existing triggers if they exist
+DROP TRIGGER IF EXISTS set_updated_at ON profiles;
+DROP TRIGGER IF EXISTS set_updated_at ON user_profiles;
+DROP TRIGGER IF EXISTS set_updated_at ON user_settings;
+DROP TRIGGER IF EXISTS set_updated_at ON user_sessions;
+DROP TRIGGER IF EXISTS set_updated_at ON product_items;
 
 -- Apply updated_at trigger to relevant tables
 CREATE TRIGGER set_updated_at
