@@ -110,12 +110,29 @@ export async function middleware(request: NextRequest) {
     if (session) {
       return NextResponse.redirect(new URL("/dashboard", request.url))
     }
+    return response
+  }
+
+  // Handle authenticated routes
+  if (
+    request.nextUrl.pathname.startsWith("/dashboard") ||
+    request.nextUrl.pathname.startsWith("/invite") ||
+    request.nextUrl.pathname.startsWith("/verify")
+  ) {
+    if (!session) {
+      const redirectUrl = new URL("/login", request.url)
+      redirectUrl.searchParams.set("redirectedFrom", request.nextUrl.pathname)
+      return NextResponse.redirect(redirectUrl)
+    }
+    return response
   }
 
   // Handle admin routes
   if (request.nextUrl.pathname.startsWith("/admin")) {
     if (!session) {
-      return NextResponse.redirect(new URL("/login", request.url))
+      const redirectUrl = new URL("/login", request.url)
+      redirectUrl.searchParams.set("redirectedFrom", request.nextUrl.pathname)
+      return NextResponse.redirect(redirectUrl)
     }
 
     try {
@@ -137,17 +154,6 @@ export async function middleware(request: NextRequest) {
     } catch (error) {
       console.error('Admin check error:', error)
       return NextResponse.redirect(new URL("/unauthorized", request.url))
-    }
-  }
-
-  // Handle authenticated routes
-  if (
-    request.nextUrl.pathname.startsWith("/dashboard") ||
-    request.nextUrl.pathname.startsWith("/invite") ||
-    request.nextUrl.pathname.startsWith("/verify")
-  ) {
-    if (!session) {
-      return NextResponse.redirect(new URL("/login", request.url))
     }
   }
 

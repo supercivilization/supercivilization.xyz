@@ -48,6 +48,19 @@ async function testRegistration(): Promise<UserCredentials> {
     console.log('Registration successful!')
     console.log('User ID:', data.user.id)
     console.log('Email:', data.user.email)
+    console.log('Email confirmed:', data.user.email_confirmed_at ? 'Yes' : 'No')
+    console.log('User metadata:', data.user.user_metadata)
+    
+    // Double check the user's status
+    const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserById(data.user.id)
+    if (userError) {
+      console.error('Error checking user status:', userError)
+    } else {
+      console.log('User status check:')
+      console.log('- Email confirmed:', userData.user.email_confirmed_at ? 'Yes' : 'No')
+      console.log('- Confirmation sent:', userData.user.confirmation_sent_at ? 'Yes' : 'No')
+      console.log('- Last sign in:', userData.user.last_sign_in_at || 'Never')
+    }
     
     return {
       email: testEmail,
