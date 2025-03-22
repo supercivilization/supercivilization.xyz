@@ -34,6 +34,10 @@ CREATE POLICY "Anyone can read invite by code"
     FOR SELECT
     USING (true);
 
+-- Drop existing functions if they exist
+DROP FUNCTION IF EXISTS public.validate_invite_code(text);
+DROP FUNCTION IF EXISTS public.mark_invite_as_used(text, uuid);
+
 -- Create function to validate invite code
 CREATE OR REPLACE FUNCTION public.validate_invite_code(invite_code text)
 RETURNS json
