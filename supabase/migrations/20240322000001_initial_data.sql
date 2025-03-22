@@ -35,8 +35,6 @@ BEGIN
             raw_app_meta_data,
             raw_user_meta_data,
             is_super_admin,
-            created_at,
-            updated_at,
             phone,
             phone_confirmed_at,
             phone_change,
@@ -46,7 +44,6 @@ BEGIN
             email_change_confirm_status,
             banned_until,
             confirmation_sent_at,
-            email_change_token_new,
             recovery_token
         ) VALUES (
             '00000000-0000-0000-0000-000000000000',
@@ -66,8 +63,6 @@ BEGIN
             '{"provider":"email","providers":["email"]}',
             '{}',
             false,
-            now(),
-            now(),
             '',
             now(),
             '',
@@ -77,7 +72,6 @@ BEGIN
             0,
             null,
             now(),
-            '',
             ''
         ) RETURNING id INTO admin_user_id;
     END IF;
