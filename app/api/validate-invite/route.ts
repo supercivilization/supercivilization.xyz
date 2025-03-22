@@ -5,6 +5,16 @@ export const runtime = "edge"
 
 export async function GET(request: Request) {
   try {
+    // Log environment variables (safely)
+    console.log("[Validation] Environment check:", {
+      hasUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+      hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+      urlLength: process.env.NEXT_PUBLIC_SUPABASE_URL?.length || 0,
+      keyLength: process.env.SUPABASE_SERVICE_ROLE_KEY?.length || 0,
+      urlStart: process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 10) + "...",
+      keyStart: process.env.SUPABASE_SERVICE_ROLE_KEY?.substring(0, 5) + "..."
+    })
+
     // Verify environment variables
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
       console.error("[Validation] Missing required environment variables")
@@ -20,8 +30,6 @@ export async function GET(request: Request) {
 
     console.log("[Validation] Starting validation for code:", code)
     console.log("[Validation] Request URL:", request.url)
-    console.log("[Validation] Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL)
-    console.log("[Validation] Service Role Key available:", !!process.env.SUPABASE_SERVICE_ROLE_KEY)
 
     if (!code) {
       console.log("[Validation] No code provided")
