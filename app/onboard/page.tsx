@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Shield, FileText, UserPlus, Fingerprint, Calendar, Video, Award, CheckCircle, Lock, Timer } from "lucide-react"
+import { Award, Video, Calendar, Fingerprint, UserPlus, FileText, Shield, CheckCircle, Lock, Timer } from "lucide-react"
 import Step1AcceptInvitation from "@/components/onboarding/step1-accept-invitation"
 import Step2AgreePrimeLaw from "@/components/onboarding/step2-agree-primelaw"
 import Step3CreateAccount from "@/components/onboarding/step3-create-account"
@@ -14,94 +14,10 @@ import Step7ActivateMembership from "@/components/onboarding/step7-activate-memb
 const STEP_CONFIGS = {
   1: {
     id: 1,
-    name: "Accept",
-    fullName: "Accept Invitation",
-    icon: Shield,
-    bgGradient: "from-zinc-950 via-violet-950 to-zinc-950",
-    iconBg: "bg-violet-500/20",
-    iconColor: "text-violet-400",
-    titleColor: "text-violet-200",
-    stepBg: "bg-violet-600",
-    stepRing: "ring-violet-400/50",
-    stepShadow: "shadow-violet-500/50",
-    stepText: "text-violet-400",
-  },
-  2: {
-    id: 2,
-    name: "Agree",
-    fullName: "Agree to Prime Law",
-    icon: FileText,
-    bgGradient: "from-zinc-950 via-blue-950 to-zinc-950",
-    iconBg: "bg-blue-500/20",
-    iconColor: "text-blue-400",
-    titleColor: "text-blue-200",
-    stepBg: "bg-blue-600",
-    stepRing: "ring-blue-400/50",
-    stepShadow: "shadow-blue-500/50",
-    stepText: "text-blue-400",
-  },
-  3: {
-    id: 3,
-    name: "Account",
-    fullName: "Create Account",
-    icon: UserPlus,
-    bgGradient: "from-zinc-950 via-cyan-950 to-zinc-950",
-    iconBg: "bg-cyan-500/20",
-    iconColor: "text-cyan-400",
-    titleColor: "text-cyan-200",
-    stepBg: "bg-cyan-600",
-    stepRing: "ring-cyan-400/50",
-    stepShadow: "shadow-cyan-500/50",
-    stepText: "text-cyan-400",
-  },
-  4: {
-    id: 4,
-    name: "Authenticate",
-    fullName: "Authenticate Identity",
-    icon: Fingerprint,
-    bgGradient: "from-zinc-950 via-emerald-950 to-zinc-950",
-    iconBg: "bg-emerald-500/20",
-    iconColor: "text-emerald-400",
-    titleColor: "text-emerald-200",
-    stepBg: "bg-emerald-600",
-    stepRing: "ring-emerald-400/50",
-    stepShadow: "shadow-emerald-500/50",
-    stepText: "text-emerald-400",
-  },
-  5: {
-    id: 5,
-    name: "Arrange",
-    fullName: "Arrange Ceremony",
-    icon: Calendar,
-    bgGradient: "from-zinc-950 via-amber-950 to-zinc-950",
-    iconBg: "bg-amber-500/20",
-    iconColor: "text-amber-400",
-    titleColor: "text-amber-200",
-    stepBg: "bg-amber-600",
-    stepRing: "ring-amber-400/50",
-    stepShadow: "shadow-amber-500/50",
-    stepText: "text-amber-400",
-  },
-  6: {
-    id: 6,
-    name: "Affirm",
-    fullName: "Affirm Commitment",
-    icon: Video,
-    bgGradient: "from-zinc-950 via-rose-950 to-zinc-950",
-    iconBg: "bg-rose-500/20",
-    iconColor: "text-rose-400",
-    titleColor: "text-rose-200",
-    stepBg: "bg-rose-600",
-    stepRing: "ring-rose-400/50",
-    stepShadow: "shadow-rose-500/50",
-    stepText: "text-rose-400",
-  },
-  7: {
-    id: 7,
-    name: "Activate",
-    fullName: "Activate Membership",
+    name: "Welcome",
+    fullName: "Welcome to Supercivilization",
     icon: Award,
-    bgGradient: "from-zinc-950 via-fuchsia-950 to-zinc-950",
+    bgGradient: "from-stone-950 via-fuchsia-950 to-stone-950", // Stone for warm fuchsia
     iconBg: "bg-fuchsia-500/20",
     iconColor: "text-fuchsia-400",
     titleColor: "text-fuchsia-200",
@@ -109,20 +25,111 @@ const STEP_CONFIGS = {
     stepRing: "ring-fuchsia-400/50",
     stepShadow: "shadow-fuchsia-500/50",
     stepText: "text-fuchsia-400",
+    neutral: "stone", // Warm
+  },
+  2: {
+    id: 2,
+    name: "Profile",
+    fullName: "Complete Your Profile",
+    icon: Video,
+    bgGradient: "from-stone-950 via-rose-950 to-stone-950", // Stone for warm rose
+    iconBg: "bg-rose-500/20",
+    iconColor: "text-rose-400",
+    titleColor: "text-rose-200",
+    stepBg: "bg-rose-600",
+    stepRing: "ring-rose-400/50",
+    stepShadow: "shadow-rose-500/50",
+    stepText: "text-rose-400",
+    neutral: "stone", // Warm
+  },
+  3: {
+    id: 3,
+    name: "Preferences",
+    fullName: "Set Your Preferences",
+    icon: Calendar,
+    bgGradient: "from-stone-950 via-amber-950 to-stone-950", // Stone for warm amber
+    iconBg: "bg-amber-500/20",
+    iconColor: "text-amber-400",
+    titleColor: "text-amber-200",
+    stepBg: "bg-amber-600",
+    stepRing: "ring-amber-400/50",
+    stepShadow: "shadow-amber-500/50",
+    stepText: "text-amber-400",
+    neutral: "stone", // Warm
+  },
+  4: {
+    id: 4,
+    name: "Connect",
+    fullName: "Connect Your Accounts",
+    icon: Fingerprint,
+    bgGradient: "from-zinc-950 via-emerald-950 to-zinc-950", // Zinc for neutral emerald
+    iconBg: "bg-emerald-500/20",
+    iconColor: "text-emerald-400",
+    titleColor: "text-emerald-200",
+    stepBg: "bg-emerald-600",
+    stepRing: "ring-emerald-400/50",
+    stepShadow: "shadow-emerald-500/50",
+    stepText: "text-emerald-400",
+    neutral: "zinc", // Neutral
+  },
+  5: {
+    id: 5,
+    name: "Explore",
+    fullName: "Explore Features",
+    icon: UserPlus,
+    bgGradient: "from-slate-950 via-cyan-950 to-slate-950", // Slate for cool cyan
+    iconBg: "bg-cyan-500/20",
+    iconColor: "text-cyan-400",
+    titleColor: "text-cyan-200",
+    stepBg: "bg-cyan-600",
+    stepRing: "ring-cyan-400/50",
+    stepShadow: "shadow-cyan-500/50",
+    stepText: "text-cyan-400",
+    neutral: "slate", // Cool
+  },
+  6: {
+    id: 6,
+    name: "Learn",
+    fullName: "Learn the Basics",
+    icon: FileText,
+    bgGradient: "from-slate-950 via-blue-950 to-slate-950", // Slate for cool blue
+    iconBg: "bg-blue-500/20",
+    iconColor: "text-blue-400",
+    titleColor: "text-blue-200",
+    stepBg: "bg-blue-600",
+    stepRing: "ring-blue-400/50",
+    stepShadow: "shadow-blue-500/50",
+    stepText: "text-blue-400",
+    neutral: "slate", // Cool
+  },
+  7: {
+    id: 7,
+    name: "Complete",
+    fullName: "You're All Set!",
+    icon: Shield,
+    bgGradient: "from-slate-950 via-violet-950 to-slate-950", // Slate for cool violet
+    iconBg: "bg-violet-500/20",
+    iconColor: "text-violet-400",
+    titleColor: "text-violet-200",
+    stepBg: "bg-violet-600",
+    stepRing: "ring-violet-400/50",
+    stepShadow: "shadow-violet-500/50",
+    stepText: "text-violet-400",
+    neutral: "slate", // Cool
   },
 } as const
 
 const STEP_ICONS = {
-  1: Shield,
-  2: FileText,
-  3: UserPlus,
+  1: Award,
+  2: Video,
+  3: Calendar,
   4: Fingerprint,
-  5: Calendar,
-  6: Video,
-  7: Award,
+  5: UserPlus,
+  6: FileText,
+  7: Shield,
 }
 
-export default function OnboardingPage() {
+export default function OnboardPage() {
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4 | 5 | 6 | 7>(1)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
   const [timeLeft, setTimeLeft] = useState({ days: 7, hours: 0, minutes: 0 })
@@ -168,9 +175,25 @@ export default function OnboardingPage() {
 
   const timeLeftString = `${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m`
 
+  // Context-aware neutral colors for header/footer based on current step
+  const neutral = currentStepData.neutral
+  const headerBorderClass =
+    neutral === "slate"
+      ? "border-slate-800/50"
+      : neutral === "stone"
+      ? "border-stone-800/50"
+      : "border-zinc-800/50"
+
+  const headerBgClass =
+    neutral === "slate"
+      ? "bg-slate-950/50"
+      : neutral === "stone"
+      ? "bg-stone-950/50"
+      : "bg-zinc-950/50"
+
   return (
     <div className={`min-h-screen bg-gradient-to-br ${currentStepData.bgGradient} transition-all duration-700`}>
-      <div className="border-b border-zinc-800/50 bg-zinc-950/50 backdrop-blur-sm">
+      <div className={`border-b ${headerBorderClass} ${headerBgClass} backdrop-blur-sm`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 max-w-7xl">
           {/* Progress Bar */}
           <div className="flex items-center justify-center mb-6 sm:mb-8">
@@ -181,6 +204,23 @@ export default function OnboardingPage() {
                 const isLocked = currentStep < step.id
                 const stepConfig = STEP_CONFIGS[step.id as keyof typeof STEP_CONFIGS]
                 const StepIcon = STEP_ICONS[step.id as keyof typeof STEP_ICONS]
+                const currentStepConfig = STEP_CONFIGS[currentStep]
+                const neutral = currentStepConfig.neutral
+
+                // Generate neutral-based classes
+                const lockedClasses =
+                  neutral === "slate"
+                    ? "bg-slate-800/50 text-slate-600 border border-slate-700/50 hover:bg-slate-800/70 hover:border-slate-600/70"
+                    : neutral === "stone"
+                    ? "bg-stone-800/50 text-stone-600 border border-stone-700/50 hover:bg-stone-800/70 hover:border-stone-600/70"
+                    : "bg-zinc-800/50 text-zinc-600 border border-zinc-700/50 hover:bg-zinc-800/70 hover:border-zinc-600/70"
+
+                const availableClasses =
+                  neutral === "slate"
+                    ? "bg-slate-700/50 text-slate-500 border border-slate-600/50 hover:bg-slate-700/70 hover:border-slate-500/70"
+                    : neutral === "stone"
+                    ? "bg-stone-700/50 text-stone-500 border border-stone-600/50 hover:bg-stone-700/70 hover:border-stone-500/70"
+                    : "bg-zinc-700/50 text-zinc-500 border border-zinc-600/50 hover:bg-zinc-700/70 hover:border-zinc-500/70"
 
                 return (
                   <div key={step.id} className="flex items-center">
@@ -202,8 +242,8 @@ export default function OnboardingPage() {
                             : isCurrent
                               ? `bg-gradient-to-br ${stepConfig.stepBg} text-white ring-2 sm:ring-3 lg:ring-4 ${stepConfig.stepRing} shadow-xl ${stepConfig.stepShadow} border border-white/30`
                               : isLocked
-                                ? "bg-zinc-800/50 text-zinc-600 border border-zinc-700/50 hover:bg-zinc-800/70 hover:border-zinc-600/70"
-                                : "bg-zinc-700/50 text-zinc-500 border border-zinc-600/50 hover:bg-zinc-700/70 hover:border-zinc-500/70"
+                                ? lockedClasses
+                                : availableClasses
                         }`}
                       >
                         {isLocked ? (
@@ -331,7 +371,7 @@ export default function OnboardingPage() {
         </AnimatePresence>
       </div>
 
-      <footer className="border-t border-zinc-800/50 bg-zinc-950/50 backdrop-blur-sm mt-12 sm:mt-16 lg:mt-20">
+      <footer className={`border-t ${headerBorderClass} ${headerBgClass} backdrop-blur-sm mt-12 sm:mt-16 lg:mt-20`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 max-w-7xl">
           {/* Countdown Timer */}
           {currentStep < 7 && (
@@ -343,7 +383,7 @@ export default function OnboardingPage() {
               <div className="max-w-2xl mx-auto">
                 <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-900/90 via-zinc-800/90 to-zinc-900/90 border border-zinc-700/50 p-6 sm:p-8">
                   {/* Animated background gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-violet-500/10 via-blue-500/10 to-cyan-500/10 animate-pulse" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-500/10 via-rose-500/10 to-amber-500/10 animate-pulse" />
 
                   <div className="relative z-10">
                     <div className="flex items-center justify-center gap-2 mb-4">
@@ -357,7 +397,7 @@ export default function OnboardingPage() {
                       {/* Days */}
                       <div className="flex flex-col items-center">
                         <div className="relative">
-                          <div className="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-blue-500/20 blur-xl" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/20 to-rose-500/20 blur-xl" />
                           <div className="relative bg-zinc-900/80 rounded-xl px-4 sm:px-6 py-3 sm:py-4 border border-zinc-700/50 backdrop-blur-sm">
                             <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-100 font-mono tabular-nums">
                               {timeLeft.days.toString().padStart(2, "0")}
@@ -372,7 +412,7 @@ export default function OnboardingPage() {
                       {/* Hours */}
                       <div className="flex flex-col items-center">
                         <div className="relative">
-                          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 blur-xl" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-rose-500/20 to-amber-500/20 blur-xl" />
                           <div className="relative bg-zinc-900/80 rounded-xl px-4 sm:px-6 py-3 sm:py-4 border border-zinc-700/50 backdrop-blur-sm">
                             <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-100 font-mono tabular-nums">
                               {timeLeft.hours.toString().padStart(2, "0")}
@@ -387,7 +427,7 @@ export default function OnboardingPage() {
                       {/* Minutes */}
                       <div className="flex flex-col items-center">
                         <div className="relative">
-                          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 blur-xl" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-emerald-500/20 blur-xl" />
                           <div className="relative bg-zinc-900/80 rounded-xl px-4 sm:px-6 py-3 sm:py-4 border border-zinc-700/50 backdrop-blur-sm">
                             <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-100 font-mono tabular-nums">
                               {timeLeft.minutes.toString().padStart(2, "0")}
@@ -400,7 +440,7 @@ export default function OnboardingPage() {
 
                     <div className="mt-4 text-center">
                       <p className="text-xs text-white/40">
-                        Invitation expires on {expiresAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at {expiresAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                        Onboarding expires on {expiresAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at {expiresAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                       </p>
                     </div>
                   </div>

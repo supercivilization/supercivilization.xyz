@@ -1,34 +1,41 @@
 import '@testing-library/jest-dom'
-import { TextEncoder, TextDecoder } from 'util'
+import { expect, afterEach, vi } from 'vitest'
+import { cleanup } from '@testing-library/react'
+import * as matchers from '@testing-library/jest-dom/matchers'
 import React from 'react'
 
-global.TextEncoder = TextEncoder
-// Cast TextDecoder to unknown first to avoid type compatibility issues
-global.TextDecoder = TextDecoder as unknown as typeof globalThis.TextDecoder
+// Add jest-dom matchers to vitest
+expect.extend(matchers)
+
+// Cleanup after each test case
+afterEach(() => {
+  cleanup()
+})
 
 // Mock next/navigation
-jest.mock('next/navigation', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    prefetch: jest.fn(),
-    back: jest.fn(),
-    forward: jest.fn(),
+    push: vi.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
   }),
   usePathname: () => '',
   useSearchParams: () => new URLSearchParams(),
 }))
 
 // Mock next/link
-jest.mock('next/link', () => {
-  const React = require('react')
-  return function Link({ children, href }: { children: React.ReactNode; href: string }) {
-    return React.createElement('a', { href }, children)
+vi.mock('next/link', () => {
+  return {
+    default: ({ children, href }: { children: React.ReactNode; href: string }) => {
+      return React.createElement('a', { href }, children)
+    }
   }
 })
 
 // Mock lucide-react
-jest.mock('lucide-react', () => ({
+vi.mock('lucide-react', () => ({
   ArrowLeft: () => 'ArrowLeft',
   Copy: () => 'Copy',
   Check: () => 'Check',
@@ -70,4 +77,4 @@ jest.mock('lucide-react', () => ({
   UserCheck: () => React.createElement('div', { 'data-testid': 'user-check-icon' }),
   UserX: () => React.createElement('div', { 'data-testid': 'user-x-icon' }),
   Activity: () => React.createElement('div', { 'data-testid': 'activity-icon' })
-})) 
+}))
