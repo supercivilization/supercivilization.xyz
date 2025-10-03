@@ -17,14 +17,18 @@ const STEP_CONFIGS = {
     name: "Accept",
     fullName: "Accept Invitation",
     icon: Shield,
-    bgGradient: "from-slate-950 via-violet-950 to-slate-950", // Slate for cool violet
-    iconBg: "bg-violet-500/20",
+    // Purple/Violet multi-color palette
+    bgGradient: "from-slate-950 via-purple-950 via-violet-950 to-slate-950",
+    iconBg: "bg-gradient-to-br from-purple-500/20 via-violet-500/20 to-purple-500/20",
     iconColor: "text-violet-400",
     titleColor: "text-violet-200",
-    stepBg: "bg-violet-600",
+    stepBg: "bg-gradient-to-br from-purple-500 via-violet-500 to-purple-600",
     stepRing: "ring-violet-400/50",
     stepShadow: "shadow-violet-500/50",
     stepText: "text-violet-400",
+    accentLeft: "bg-purple-500",
+    accentRight: "bg-violet-500",
+    pulseGradient: "from-purple-500/10 via-violet-500/10 to-purple-500/10",
     neutral: "slate", // Cool
   },
   2: {
@@ -32,14 +36,18 @@ const STEP_CONFIGS = {
     name: "Agree",
     fullName: "Agree to Prime Law",
     icon: FileText,
-    bgGradient: "from-slate-950 via-blue-950 to-slate-950", // Slate for cool blue
-    iconBg: "bg-blue-500/20",
+    // Indigo/Blue/Sky multi-color palette
+    bgGradient: "from-slate-950 via-indigo-950 via-blue-950 via-sky-950 to-slate-950",
+    iconBg: "bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20",
     iconColor: "text-blue-400",
     titleColor: "text-blue-200",
-    stepBg: "bg-blue-600",
+    stepBg: "bg-gradient-to-br from-indigo-500 via-blue-500 to-sky-600",
     stepRing: "ring-blue-400/50",
     stepShadow: "shadow-blue-500/50",
     stepText: "text-blue-400",
+    accentLeft: "bg-indigo-500",
+    accentRight: "bg-sky-500",
+    pulseGradient: "from-indigo-500/10 via-blue-500/10 to-sky-500/10",
     neutral: "slate", // Cool
   },
   3: {
@@ -47,14 +55,18 @@ const STEP_CONFIGS = {
     name: "Account",
     fullName: "Create Account",
     icon: UserPlus,
-    bgGradient: "from-slate-950 via-cyan-950 to-slate-950", // Slate for cool cyan
-    iconBg: "bg-cyan-500/20",
+    // Cyan/Teal multi-color palette
+    bgGradient: "from-slate-950 via-cyan-950 via-teal-950 to-slate-950",
+    iconBg: "bg-gradient-to-br from-cyan-500/20 via-teal-500/20 to-cyan-500/20",
     iconColor: "text-cyan-400",
     titleColor: "text-cyan-200",
-    stepBg: "bg-cyan-600",
+    stepBg: "bg-gradient-to-br from-cyan-500 via-teal-500 to-cyan-600",
     stepRing: "ring-cyan-400/50",
     stepShadow: "shadow-cyan-500/50",
     stepText: "text-cyan-400",
+    accentLeft: "bg-cyan-500",
+    accentRight: "bg-teal-500",
+    pulseGradient: "from-cyan-500/10 via-teal-500/10 to-cyan-500/10",
     neutral: "slate", // Cool
   },
   4: {
@@ -62,14 +74,18 @@ const STEP_CONFIGS = {
     name: "Authenticate",
     fullName: "Authenticate Identity",
     icon: Fingerprint,
-    bgGradient: "from-zinc-950 via-emerald-950 to-zinc-950", // Zinc for neutral emerald
-    iconBg: "bg-emerald-500/20",
+    // Emerald/Green/Lime multi-color palette
+    bgGradient: "from-zinc-950 via-emerald-950 via-green-950 via-lime-950 to-zinc-950",
+    iconBg: "bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20",
     iconColor: "text-emerald-400",
     titleColor: "text-emerald-200",
-    stepBg: "bg-emerald-600",
+    stepBg: "bg-gradient-to-br from-emerald-500 via-green-500 to-lime-600",
     stepRing: "ring-emerald-400/50",
     stepShadow: "shadow-emerald-500/50",
     stepText: "text-emerald-400",
+    accentLeft: "bg-emerald-500",
+    accentRight: "bg-lime-500",
+    pulseGradient: "from-emerald-500/10 via-green-500/10 to-lime-500/10",
     neutral: "zinc", // Neutral
   },
   5: {
@@ -77,14 +93,18 @@ const STEP_CONFIGS = {
     name: "Arrange",
     fullName: "Arrange Ceremony",
     icon: Calendar,
-    bgGradient: "from-stone-950 via-amber-950 to-stone-950", // Stone for warm amber
-    iconBg: "bg-amber-500/20",
+    // Amber/Yellow multi-color palette
+    bgGradient: "from-stone-950 via-amber-950 via-yellow-950 to-stone-950",
+    iconBg: "bg-gradient-to-br from-amber-500/20 via-yellow-500/20 to-amber-500/20",
     iconColor: "text-amber-400",
     titleColor: "text-amber-200",
-    stepBg: "bg-amber-600",
+    stepBg: "bg-gradient-to-br from-amber-500 via-yellow-500 to-amber-600",
     stepRing: "ring-amber-400/50",
     stepShadow: "shadow-amber-500/50",
     stepText: "text-amber-400",
+    accentLeft: "bg-amber-500",
+    accentRight: "bg-yellow-500",
+    pulseGradient: "from-amber-500/10 via-yellow-500/10 to-amber-500/10",
     neutral: "stone", // Warm
   },
   6: {
@@ -92,14 +112,18 @@ const STEP_CONFIGS = {
     name: "Affirm",
     fullName: "Affirm Commitment",
     icon: Video,
-    bgGradient: "from-stone-950 via-rose-950 to-stone-950", // Stone for warm rose
-    iconBg: "bg-rose-500/20",
+    // Orange/Red/Rose multi-color palette
+    bgGradient: "from-stone-950 via-orange-950 via-red-950 via-rose-950 to-stone-950",
+    iconBg: "bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20",
     iconColor: "text-rose-400",
     titleColor: "text-rose-200",
-    stepBg: "bg-rose-600",
+    stepBg: "bg-gradient-to-br from-orange-500 via-red-500 to-rose-600",
     stepRing: "ring-rose-400/50",
     stepShadow: "shadow-rose-500/50",
     stepText: "text-rose-400",
+    accentLeft: "bg-orange-500",
+    accentRight: "bg-rose-500",
+    pulseGradient: "from-orange-500/10 via-red-500/10 to-rose-500/10",
     neutral: "stone", // Warm
   },
   7: {
@@ -107,14 +131,18 @@ const STEP_CONFIGS = {
     name: "Activate",
     fullName: "Activate Membership",
     icon: Award,
-    bgGradient: "from-stone-950 via-fuchsia-950 to-stone-950", // Stone for warm fuchsia/pink
-    iconBg: "bg-fuchsia-500/20",
+    // Pink/Fuchsia multi-color palette
+    bgGradient: "from-stone-950 via-pink-950 via-fuchsia-950 to-stone-950",
+    iconBg: "bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-500/20",
     iconColor: "text-fuchsia-400",
     titleColor: "text-fuchsia-200",
-    stepBg: "bg-fuchsia-600",
+    stepBg: "bg-gradient-to-br from-pink-500 via-fuchsia-500 to-pink-600",
     stepRing: "ring-fuchsia-400/50",
     stepShadow: "shadow-fuchsia-500/50",
     stepText: "text-fuchsia-400",
+    accentLeft: "bg-pink-500",
+    accentRight: "bg-fuchsia-500",
+    pulseGradient: "from-pink-500/10 via-fuchsia-500/10 to-pink-500/10",
     neutral: "stone", // Warm
   },
 } as const
@@ -263,7 +291,7 @@ export default function OnboardingPage() {
                         {/* Pulse animation for current step */}
                         {isCurrent && (
                           <motion.div
-                            className={`absolute inset-0 rounded-xl sm:rounded-2xl ${stepConfig.stepBg} opacity-50`}
+                            className={`absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-br ${stepConfig.stepBg} opacity-50`}
                             animate={{
                               scale: [1, 1.5, 1],
                               opacity: [0.5, 0, 0.5],
@@ -316,38 +344,28 @@ export default function OnboardingPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-10 sm:mb-14 lg:mb-16"
+          className="text-center mb-8 sm:mb-10 lg:mb-12"
         >
           <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 15 }}
-            className={`inline-block p-5 sm:p-6 lg:p-8 ${currentStepData.iconBg} rounded-2xl sm:rounded-3xl mb-5 sm:mb-6 lg:mb-8 shadow-2xl border border-white/10`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="flex items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6"
           >
-            <currentStepData.icon
-              className={`w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 ${currentStepData.iconColor}`}
-            />
+            <div className={`h-0.5 sm:h-1 w-12 sm:w-16 lg:w-20 rounded-full ${currentStepData.accentLeft}`} />
+            <p className={`${currentStepData.titleColor} text-sm sm:text-base lg:text-lg font-semibold uppercase tracking-wider px-2 sm:px-4`}>
+              Step {currentStep} of 7
+            </p>
+            <div className={`h-0.5 sm:h-1 w-12 sm:w-16 lg:w-20 rounded-full ${currentStepData.accentRight}`} />
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white mb-3 sm:mb-4 lg:mb-6 px-4 leading-tight text-balance"
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white px-4 leading-tight text-balance"
           >
             {currentStepData.fullName}
           </motion.h1>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="flex items-center justify-center gap-3 sm:gap-4"
-          >
-            <div className={`h-0.5 sm:h-1 w-12 sm:w-16 lg:w-20 rounded-full ${currentStepData.stepBg}`} />
-            <p className={`${currentStepData.titleColor} text-lg sm:text-xl lg:text-2xl font-semibold px-2 sm:px-4`}>
-              Step {currentStep} of 7
-            </p>
-            <div className={`h-0.5 sm:h-1 w-12 sm:w-16 lg:w-20 rounded-full ${currentStepData.stepBg}`} />
-          </motion.div>
         </motion.div>
 
         <AnimatePresence mode="wait">
@@ -358,107 +376,81 @@ export default function OnboardingPage() {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.4 }}
           >
-            {currentStep === 1 && <Step1AcceptInvitation onComplete={handleStepComplete} timeLeft={timeLeftString} />}
-            {currentStep === 2 && <Step2AgreePrimeLaw onComplete={handleStepComplete} timeLeft={timeLeftString} />}
-            {currentStep === 3 && <Step3CreateAccount onComplete={handleStepComplete} timeLeft={timeLeftString} />}
+            {currentStep === 1 && <Step1AcceptInvitation onComplete={handleStepComplete} timeLeft={timeLeftString} colors={currentStepData} />}
+            {currentStep === 2 && <Step2AgreePrimeLaw onComplete={handleStepComplete} timeLeft={timeLeftString} colors={currentStepData} />}
+            {currentStep === 3 && <Step3CreateAccount onComplete={handleStepComplete} timeLeft={timeLeftString} colors={currentStepData} />}
             {currentStep === 4 && (
-              <Step4AuthenticateIdentity onComplete={handleStepComplete} timeLeft={timeLeftString} />
+              <Step4AuthenticateIdentity onComplete={handleStepComplete} timeLeft={timeLeftString} colors={currentStepData} />
             )}
-            {currentStep === 5 && <Step5ArrangeCeremony onComplete={handleStepComplete} timeLeft={timeLeftString} />}
-            {currentStep === 6 && <Step6AffirmCeremony onComplete={handleStepComplete} timeLeft={timeLeftString} />}
-            {currentStep === 7 && <Step7ActivateMembership onComplete={handleStepComplete} timeLeft={timeLeftString} />}
+            {currentStep === 5 && <Step5ArrangeCeremony onComplete={handleStepComplete} timeLeft={timeLeftString} colors={currentStepData} />}
+            {currentStep === 6 && <Step6AffirmCeremony onComplete={handleStepComplete} timeLeft={timeLeftString} colors={currentStepData} />}
+            {currentStep === 7 && <Step7ActivateMembership onComplete={handleStepComplete} timeLeft={timeLeftString} colors={currentStepData} />}
           </motion.div>
         </AnimatePresence>
       </div>
 
       <footer className={`border-t ${headerBorderClass} ${headerBgClass} backdrop-blur-sm mt-12 sm:mt-16 lg:mt-20`}>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 max-w-7xl">
-          {/* Countdown Timer */}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
+          {/* Centered Countdown Timer */}
           {currentStep < 7 && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mb-8 sm:mb-10 lg:mb-12"
+              className="mb-6"
             >
-              <div className="max-w-2xl mx-auto">
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-900/90 via-zinc-800/90 to-zinc-900/90 border border-zinc-700/50 p-6 sm:p-8">
-                  {/* Animated background gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-violet-500/10 via-blue-500/10 to-cyan-500/10 animate-pulse" />
+              {/* Centered label with decorative lines */}
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <div className={`h-px w-12 sm:w-20 ${currentStepData.accentLeft}`} />
+                <div className="flex items-center gap-2">
+                  <Timer className={`w-4 h-4 ${currentStepData.iconColor} animate-pulse`} />
+                  <p className={`text-xs sm:text-sm font-semibold ${currentStepData.titleColor} uppercase tracking-wider`}>
+                    Time Remaining
+                  </p>
+                </div>
+                <div className={`h-px w-12 sm:w-20 ${currentStepData.accentRight}`} />
+              </div>
 
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-center gap-2 mb-4">
-                      <Timer className="w-5 h-5 text-amber-400 animate-pulse" />
-                      <p className="text-sm font-semibold text-amber-200 uppercase tracking-wider">
-                        Complete Onboarding Within
-                      </p>
-                    </div>
-
-                    <div className="flex items-center justify-center gap-3 sm:gap-4 lg:gap-6">
-                      {/* Days */}
-                      <div className="flex flex-col items-center">
-                        <div className="relative">
-                          <div className="absolute inset-0 bg-gradient-to-br from-violet-500/20 to-blue-500/20 blur-xl" />
-                          <div className="relative bg-zinc-900/80 rounded-xl px-4 sm:px-6 py-3 sm:py-4 border border-zinc-700/50 backdrop-blur-sm">
-                            <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-100 font-mono tabular-nums">
-                              {timeLeft.days.toString().padStart(2, "0")}
-                            </div>
-                          </div>
-                        </div>
-                        <p className="text-xs sm:text-sm font-medium text-zinc-400 uppercase tracking-wider mt-2">Days</p>
-                      </div>
-
-                      <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-600">:</div>
-
-                      {/* Hours */}
-                      <div className="flex flex-col items-center">
-                        <div className="relative">
-                          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 blur-xl" />
-                          <div className="relative bg-zinc-900/80 rounded-xl px-4 sm:px-6 py-3 sm:py-4 border border-zinc-700/50 backdrop-blur-sm">
-                            <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-100 font-mono tabular-nums">
-                              {timeLeft.hours.toString().padStart(2, "0")}
-                            </div>
-                          </div>
-                        </div>
-                        <p className="text-xs sm:text-sm font-medium text-zinc-400 uppercase tracking-wider mt-2">Hours</p>
-                      </div>
-
-                      <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-600">:</div>
-
-                      {/* Minutes */}
-                      <div className="flex flex-col items-center">
-                        <div className="relative">
-                          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 blur-xl" />
-                          <div className="relative bg-zinc-900/80 rounded-xl px-4 sm:px-6 py-3 sm:py-4 border border-zinc-700/50 backdrop-blur-sm">
-                            <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-100 font-mono tabular-nums">
-                              {timeLeft.minutes.toString().padStart(2, "0")}
-                            </div>
-                          </div>
-                        </div>
-                        <p className="text-xs sm:text-sm font-medium text-zinc-400 uppercase tracking-wider mt-2">Minutes</p>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 text-center">
-                      <p className="text-xs text-white/40">
-                        Invitation expires on {expiresAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at {expiresAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-                      </p>
+              {/* Centered timer numbers */}
+              <div className="flex items-center justify-center gap-2 sm:gap-3">
+                {/* Days */}
+                <div className="flex flex-col items-center">
+                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} border border-white/10`}>
+                    <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor} font-mono tabular-nums`}>
+                      {timeLeft.days.toString().padStart(2, "0")}
                     </div>
                   </div>
+                  <p className="text-[10px] sm:text-xs font-medium text-white/40 uppercase tracking-wider mt-1">Days</p>
+                </div>
+
+                <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor}`}>:</div>
+
+                {/* Hours */}
+                <div className="flex flex-col items-center">
+                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} border border-white/10`}>
+                    <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor} font-mono tabular-nums`}>
+                      {timeLeft.hours.toString().padStart(2, "0")}
+                    </div>
+                  </div>
+                  <p className="text-[10px] sm:text-xs font-medium text-white/40 uppercase tracking-wider mt-1">Hrs</p>
+                </div>
+
+                <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor}`}>:</div>
+
+                {/* Minutes */}
+                <div className="flex flex-col items-center">
+                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} border border-white/10`}>
+                    <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor} font-mono tabular-nums`}>
+                      {timeLeft.minutes.toString().padStart(2, "0")}
+                    </div>
+                  </div>
+                  <p className="text-[10px] sm:text-xs font-medium text-white/40 uppercase tracking-wider mt-1">Min</p>
                 </div>
               </div>
             </motion.div>
           )}
 
-          <div className="text-center space-y-4 sm:space-y-6">
-            <div>
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2">Supercivilization</h2>
-              <p className="text-sm sm:text-base text-white/60">Building a society based on the Prime Law</p>
-            </div>
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-            <p className="text-xs sm:text-sm lg:text-base text-white/50 leading-relaxed font-medium text-balance max-w-3xl mx-auto">
-              The Prime Law: No person or group may initiate force, fraud, or coercion against any individual, property,
-              or contract.
-            </p>
+          {/* Minimal footer info */}
+          <div className="text-center">
             <p className="text-xs text-white/40">© 2025 Supercivilization. All rights reserved.</p>
           </div>
         </div>

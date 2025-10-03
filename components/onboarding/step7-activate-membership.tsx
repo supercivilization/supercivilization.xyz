@@ -6,6 +6,7 @@ import { Award, CheckCircle, ArrowRight, CreditCard, Zap, Sparkles } from "lucid
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
+import ProgressIndicator from "./progress-indicator"
 
 interface Step7Props {
   onComplete: () => void
@@ -53,34 +54,38 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4">
+    <div className="max-w-3xl mx-auto px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white/10 backdrop-blur-lg rounded-xl sm:rounded-2xl border border-white/20 p-4 sm:p-6 md:p-8 shadow-2xl"
+        className="bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl"
       >
+        <ProgressIndicator currentStep={7} stepTitle="Activate Membership" estimatedMinutes={5} />
+
         {step === "payment" && (
-          <div className="space-y-4 sm:space-y-6">
-            <div className="bg-fuchsia-500/20 rounded-lg p-4 sm:p-6 border border-fuchsia-400/30">
-              <h3 className="font-semibold text-white mb-2 text-sm sm:text-base">Why We Charge</h3>
-              <p className="text-xs sm:text-sm text-fuchsia-100 mb-3 leading-relaxed">
-                Financial commitment demonstrates skin-in-the-game and funds our path to network state status.
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 text-[10px] sm:text-xs text-fuchsia-100">
+          <div className="space-y-6 sm:space-y-8">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Activate Membership</h2>
+              <p className="text-sm sm:text-base text-pink-100 leading-relaxed mb-6 sm:mb-8">Financial commitment demonstrates skin-in-the-game and funds our path to network state status.</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 rounded-lg p-5 sm:p-6 border border-pink-400/30">
+              <h3 className="font-semibold text-white mb-4 text-sm sm:text-base">Funding Allocation</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 text-[10px] sm:text-xs text-pink-100">
                 <div>
-                  <div className="font-semibold text-fuchsia-200 text-sm sm:text-base">40%</div>
+                  <div className="font-semibold text-pink-200 text-sm sm:text-base">40%</div>
                   <div>Platform & ops</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-fuchsia-200 text-sm sm:text-base">30%</div>
+                  <div className="font-semibold text-pink-200 text-sm sm:text-base">30%</div>
                   <div>Property</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-fuchsia-200 text-sm sm:text-base">20%</div>
+                  <div className="font-semibold text-pink-200 text-sm sm:text-base">20%</div>
                   <div>Treasury</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-fuchsia-200 text-sm sm:text-base">10%</div>
+                  <div className="font-semibold text-pink-200 text-sm sm:text-base">10%</div>
                   <div>Community</div>
                 </div>
               </div>
@@ -97,7 +102,7 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
                     key={plan.id}
                     className={`flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl cursor-pointer transition-all border-2 ${
                       selectedPlan === plan.id
-                        ? "bg-fuchsia-500/20 border-fuchsia-400/50"
+                        ? "bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 border-pink-400/50"
                         : "bg-white/5 border-white/10 hover:border-white/30"
                     }`}
                   >
@@ -106,14 +111,14 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
                       name="plan"
                       checked={selectedPlan === plan.id}
                       onChange={() => setSelectedPlan(plan.id)}
-                      className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-fuchsia-600 flex-shrink-0"
+                      className="mt-1 w-4 h-4 sm:w-5 sm:h-5 text-pink-600 flex-shrink-0"
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-2 gap-3">
                         <div className="flex items-center gap-2 min-w-0">
                           <span className="font-semibold text-white text-sm sm:text-base truncate">{plan.name}</span>
                           {plan.recommended && (
-                            <span className="bg-fuchsia-600 text-white text-[10px] sm:text-xs px-2 py-0.5 rounded font-medium whitespace-nowrap">
+                            <span className="bg-gradient-to-r from-pink-600 to-fuchsia-600 text-white text-[10px] sm:text-xs px-2 py-0.5 rounded font-medium whitespace-nowrap">
                               RECOMMENDED
                             </span>
                           )}
@@ -121,7 +126,7 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
                         <div className="text-right flex-shrink-0">
                           <div className="text-xl sm:text-2xl font-bold text-white">${plan.price}</div>
                           {plan.monthlyEquivalent && (
-                            <div className="text-[10px] sm:text-xs text-fuchsia-300">
+                            <div className="text-[10px] sm:text-xs text-pink-300">
                               ${plan.monthlyEquivalent}/mo equiv
                             </div>
                           )}
@@ -129,7 +134,7 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
                       </div>
                       <p className="text-xs sm:text-sm text-white/70 leading-relaxed">{plan.description}</p>
                       {plan.savings && (
-                        <div className="inline-block bg-emerald-500/20 text-emerald-300 text-[10px] sm:text-xs px-2 py-1 rounded mt-2">
+                        <div className="inline-block bg-gradient-to-r from-pink-500/20 to-fuchsia-500/20 text-pink-300 text-[10px] sm:text-xs px-2 py-1 rounded mt-2">
                           Save {plan.savings}%
                         </div>
                       )}
@@ -147,7 +152,7 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
                   onClick={() => setPaymentMethod("card")}
                   className={`flex-1 p-3 sm:p-4 rounded-lg border-2 transition ${
                     paymentMethod === "card"
-                      ? "bg-fuchsia-500/20 border-fuchsia-400/50"
+                      ? "bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 border-pink-400/50"
                       : "bg-white/5 border-white/10 hover:border-white/30"
                   }`}
                 >
@@ -158,7 +163,7 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
                   onClick={() => setPaymentMethod("crypto")}
                   className={`flex-1 p-3 sm:p-4 rounded-lg border-2 transition ${
                     paymentMethod === "crypto"
-                      ? "bg-fuchsia-500/20 border-fuchsia-400/50"
+                      ? "bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 border-pink-400/50"
                       : "bg-white/5 border-white/10 hover:border-white/30"
                   }`}
                 >
@@ -191,15 +196,17 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
             </div>
 
             {/* Consent */}
-            <label className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl cursor-pointer transition-all border-2 bg-white/5 hover:bg-white/10 border-white/10 hover:border-fuchsia-400/50">
+            <label htmlFor="payment-consent" className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl cursor-pointer transition-all border-2 bg-white/5 hover:bg-white/10 border-white/10 hover:border-pink-400/50">
               <Checkbox
+                id="payment-consent"
                 checked={paymentConsent}
                 onCheckedChange={(checked) => setPaymentConsent(checked as boolean)}
                 className="mt-1 flex-shrink-0"
+                aria-label="Payment Authorization"
               />
               <div className="flex-1 min-w-0">
                 <div className="font-semibold text-white mb-2 text-sm sm:text-base">Payment Authorization</div>
-                <div className="text-xs sm:text-sm text-white/70 leading-relaxed">
+                <div className="text-xs sm:text-sm text-white/85 leading-relaxed">
                   I authorize payment of ${selectedPlanDetails.price} for {selectedPlanDetails.name} membership. Past
                   contributions are non-refundable except within first 7 days.
                 </div>
@@ -209,7 +216,7 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
             <Button
               onClick={handlePayment}
               disabled={!paymentConsent || processing}
-              className={`w-full text-sm sm:text-base py-2 sm:py-3 ${paymentConsent && !processing ? "bg-fuchsia-600 hover:bg-fuchsia-700" : "bg-gray-600"}`}
+              className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-all ${paymentConsent && !processing ? "bg-gradient-to-r from-pink-600 via-fuchsia-600 to-pink-700 hover:from-pink-700 hover:via-fuchsia-700 hover:to-pink-800 shadow-pink-500/30 hover:shadow-xl hover:shadow-pink-500/40" : "bg-gray-600/50 cursor-not-allowed"}`}
             >
               {processing ? (
                 <>
@@ -227,16 +234,16 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
         )}
 
         {step === "processing" && (
-          <div className="text-center py-6 sm:py-8">
+          <div className="text-center py-8 sm:py-10">
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="inline-block p-3 sm:p-4 bg-fuchsia-500/20 rounded-full mb-4 sm:mb-6"
+              className="inline-block p-4 sm:p-5 bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 rounded-full mb-6 sm:mb-8"
             >
-              <Sparkles className="w-12 h-12 sm:w-16 sm:h-16 text-fuchsia-400 animate-pulse" />
+              <Sparkles className="w-14 h-14 sm:w-16 sm:h-16 text-pink-400 animate-pulse" />
             </motion.div>
-            <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Minting Membership NFTs</h2>
-            <p className="text-sm sm:text-base text-fuchsia-200 mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-5">Minting Membership NFTs</h2>
+            <p className="text-sm sm:text-base text-pink-200 mb-6 sm:mb-8">
               Creating on-chain proof for all participants
             </p>
 
@@ -248,9 +255,9 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.3 }}
-                    className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border-2 bg-emerald-500/20 border-emerald-400/50"
+                    className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border-2 bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 border-pink-400/50"
                   >
-                    <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400 flex-shrink-0" />
+                    <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-pink-400 flex-shrink-0" />
                     <div className="flex-1 text-left">
                       <div className="font-medium text-white text-sm sm:text-base">{item}</div>
                     </div>
@@ -262,22 +269,22 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
         )}
 
         {step === "activated" && (
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-4 sm:py-6">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 200 }}
-              className="inline-block p-3 sm:p-4 bg-emerald-500/20 rounded-full mb-4 sm:mb-6"
+              className="inline-block p-4 sm:p-5 bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 rounded-full mb-6 sm:mb-8"
             >
-              <Award className="w-16 h-16 sm:w-20 sm:h-20 text-emerald-400" />
+              <Award className="w-16 h-16 sm:w-20 sm:h-20 text-pink-400" />
             </motion.div>
 
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Membership Activated!</h2>
-            <p className="text-lg sm:text-xl text-emerald-200 mb-1">Welcome to Supercivilization</p>
-            <p className="text-sm sm:text-base text-white/60 mb-6 sm:mb-8">Member #{String(Date.now()).slice(-4)}</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Membership Activated!</h2>
+            <p className="text-lg sm:text-xl text-pink-200 mb-1">Welcome to Supercivilization</p>
+            <p className="text-sm sm:text-base text-white/80 mb-6 sm:mb-8">Member #{String(Date.now()).slice(-4)}</p>
 
-            <div className="bg-white/5 rounded-lg p-4 sm:p-6 border border-white/10 mb-4 sm:mb-6 text-left">
-              <h4 className="font-semibold text-white mb-3 sm:mb-4 text-sm sm:text-base">
+            <div className="bg-white/5 rounded-lg p-5 sm:p-6 border border-white/10 mb-6 sm:mb-8 text-left">
+              <h4 className="font-semibold text-white mb-4 sm:mb-5 text-sm sm:text-base">
                 Discovery Complete - Onboarding Begins
               </h4>
               <div className="space-y-2 sm:space-y-3">
@@ -293,18 +300,18 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
                     transition={{ delay: index * 0.1 }}
                     className="flex gap-2 sm:gap-3"
                   >
-                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-pink-400 mt-0.5 flex-shrink-0" />
                     <div className="min-w-0">
                       <div className="font-medium text-white text-sm sm:text-base">{item.title}</div>
-                      <div className="text-xs sm:text-sm text-white/70 leading-relaxed">{item.desc}</div>
+                      <div className="text-xs sm:text-sm text-white/85 leading-relaxed">{item.desc}</div>
                     </div>
                   </motion.div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-fuchsia-500/20 rounded-lg p-3 sm:p-4 border border-fuchsia-400/30 mb-4 sm:mb-6">
-              <p className="text-xs sm:text-sm text-fuchsia-100 leading-relaxed">
+            <div className="bg-fuchsia-500/20 rounded-lg p-4 sm:p-5 border border-fuchsia-400/30 mb-6 sm:mb-8">
+              <p className="text-sm text-fuchsia-100 leading-relaxed">
                 <strong className="text-white">The 48-Hour Rule:</strong> Check your email within 48 hours and complete
                 your first action to maintain momentum. Your journey has begun.
               </p>
@@ -312,7 +319,7 @@ export default function Step7ActivateMembership({ onComplete }: Step7Props) {
 
             <Button
               onClick={onComplete}
-              className="w-full bg-emerald-600 text-white hover:bg-emerald-700 text-sm sm:text-base py-2 sm:py-3"
+              className="w-full bg-gradient-to-r from-pink-600 via-fuchsia-600 to-pink-700 text-white hover:from-pink-700 hover:via-fuchsia-700 hover:to-pink-800 shadow-pink-500/30 hover:shadow-xl hover:shadow-pink-500/40 text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-all"
             >
               Begin Onboarding Experience
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />

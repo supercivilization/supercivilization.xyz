@@ -5,13 +5,15 @@ import { motion } from "framer-motion"
 import { Shield, CheckCircle, AlertCircle, ArrowRight, Info, Users, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import ProgressIndicator from "./progress-indicator"
 
 interface Step1Props {
   onComplete: () => void
   timeLeft: string
+  colors?: any
 }
 
-export default function Step1AcceptInvitation({ onComplete, timeLeft }: Step1Props) {
+export default function Step1AcceptInvitation({ onComplete, timeLeft, colors }: Step1Props) {
   const [inviteCode, setInviteCode] = useState("")
   const [validating, setValidating] = useState(false)
   const [validated, setValidated] = useState(false)
@@ -51,19 +53,21 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft }: Step1Pro
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-8 sm:p-10 md:p-12 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-purple-500/20 via-transparent to-purple-500/20 pointer-events-none" />
+        <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-purple-500/20 via-transparent to-purple-500/20 pointer-events-none" />
 
         <div className="relative z-10">
+          <ProgressIndicator currentStep={1} stepTitle="Accept Invitation" estimatedMinutes={2} />
+
           {!validated ? (
             <div className="space-y-6 sm:space-y-8">
               <div>
-                <div className="flex items-center gap-3 mb-4 sm:mb-5">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 flex items-center gap-3">
                   <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 text-purple-400" />
-                  <h2 className="text-3xl sm:text-4xl font-bold text-white">Exclusive Invitation</h2>
-                </div>
-                <p className="text-base sm:text-lg text-purple-100/90 mb-6 leading-relaxed text-pretty">
+                  Exclusive Invitation
+                </h2>
+                <p className="text-sm sm:text-base text-purple-100 mb-6 sm:mb-8 leading-relaxed text-pretty">
                   Supercivilization is invitation-only. Entry requires sponsorship from a member in good standing who
                   has assembled a verification team for you.
                 </p>
@@ -77,7 +81,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft }: Step1Pro
                     <Info className="w-6 h-6 text-purple-300 flex-shrink-0 mt-0.5" />
                     <div className="text-sm sm:text-base text-purple-100">
                       <strong className="text-purple-200 text-base sm:text-lg block mb-3">Why invitation-only?</strong>
-                      <ul className="space-y-2 text-purple-200/90 leading-relaxed">
+                      <ul className="space-y-2 text-purple-200 leading-relaxed">
                         <li className="flex items-start gap-2">
                           <span className="text-purple-400 mt-0.5">•</span>
                           <span>Ensures high-trust relationships</span>
@@ -109,13 +113,13 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft }: Step1Pro
                     onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
                     onKeyPress={(e) => e.key === "Enter" && !validating && inviteCode && validateInvite()}
                     placeholder="SC-2025-XXXX"
-                    className="w-full px-5 sm:px-6 py-4 sm:py-5 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 text-lg sm:text-xl font-mono focus:border-purple-400/50 focus:ring-4 focus:ring-purple-500/20 transition-all"
+                    className="w-full px-5 sm:px-6 py-4 sm:py-5 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 text-lg sm:text-xl font-mono focus:border-violet-400/50 focus:ring-4 focus:ring-violet-500/20 transition-all"
                   />
                   {error && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mt-2.5 flex items-center gap-2 text-red-300 text-sm sm:text-base bg-red-500/10 rounded-lg p-3 border border-red-400/30"
+                      className="mt-2.5 flex items-center gap-2 text-purple-300 text-sm sm:text-base bg-gradient-to-br from-purple-500/10 via-violet-500/10 to-purple-600/10 rounded-lg p-3 border border-purple-400/30"
                     >
                       <AlertCircle className="w-4 h-4 flex-shrink-0" />
                       <span>{error}</span>
@@ -126,7 +130,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft }: Step1Pro
                 <Button
                   onClick={validateInvite}
                   disabled={!inviteCode || validating}
-                  className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 text-lg sm:text-xl py-5 sm:py-7 rounded-xl font-bold shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {validating ? (
                     <>
@@ -142,11 +146,11 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft }: Step1Pro
                 </Button>
 
                 <motion.div
-                  className="bg-gradient-to-br from-amber-500/20 to-amber-600/20 border border-amber-400/30 rounded-xl p-5 shadow-lg"
+                  className="bg-gradient-to-br from-purple-500/20 via-violet-500/20 to-purple-600/20 border border-violet-400/30 rounded-xl p-5 shadow-lg"
                   whileHover={{ scale: 1.01 }}
                 >
-                  <p className="text-base sm:text-lg text-amber-200 font-semibold">
-                    <strong className="text-amber-100">Demo Code:</strong> SC-2025-A7B3
+                  <p className="text-base sm:text-lg text-violet-200 font-semibold">
+                    <strong className="text-purple-100">Demo Code:</strong> SC-2025-A7B3
                   </p>
                 </motion.div>
               </div>
@@ -162,9 +166,9 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft }: Step1Pro
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                  className="inline-block p-4 bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 rounded-2xl mb-4 border border-emerald-400/30 shadow-xl"
+                  className="inline-block p-4 bg-gradient-to-br from-purple-500/20 via-violet-500/20 to-purple-600/20 rounded-2xl mb-4 border border-violet-400/30 shadow-xl"
                 >
-                  <CheckCircle className="w-14 h-14 sm:w-16 sm:h-16 text-emerald-400" />
+                  <CheckCircle className="w-14 h-14 sm:w-16 sm:h-16 text-violet-400" />
                 </motion.div>
                 <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Invitation Verified</h2>
                 <p className="text-base sm:text-lg text-purple-200">Your verification team is ready</p>
@@ -185,11 +189,11 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft }: Step1Pro
                         @{DEMO_INVITE.inviter.accountName}
                       </div>
                     </div>
-                    <span className="px-2 sm:px-3 py-1 bg-emerald-500/20 text-emerald-300 text-[10px] sm:text-xs font-medium rounded-full whitespace-nowrap">
+                    <span className="px-2 sm:px-3 py-1 bg-violet-500/20 text-violet-300 text-[10px] sm:text-xs font-medium rounded-full whitespace-nowrap">
                       {DEMO_INVITE.inviter.standing}
                     </span>
                   </div>
-                  <div className="text-[10px] sm:text-xs text-white/60">
+                  <div className="text-[10px] sm:text-xs text-white/80">
                     Member since {DEMO_INVITE.inviter.memberSince}
                   </div>
                 </div>
@@ -216,11 +220,11 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft }: Step1Pro
                             @{witness.accountName}
                           </div>
                         </div>
-                        <span className="px-2 sm:px-3 py-1 bg-emerald-500/20 text-emerald-300 text-[10px] sm:text-xs font-medium rounded-full whitespace-nowrap">
+                        <span className="px-2 sm:px-3 py-1 bg-violet-500/20 text-violet-300 text-[10px] sm:text-xs font-medium rounded-full whitespace-nowrap">
                           {witness.standing}
                         </span>
                       </div>
-                      <div className="text-[10px] sm:text-xs text-white/60">Member since {witness.memberSince}</div>
+                      <div className="text-[10px] sm:text-xs text-white/80">Member since {witness.memberSince}</div>
                     </motion.div>
                   ))}
                 </div>

@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { CheckCircle, Lock, Unlock, ArrowRight, AlertCircle, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import ProgressIndicator from "./progress-indicator"
 
 interface Step2Props {
   onComplete: () => void
@@ -26,21 +27,24 @@ export default function Step2AgreePrimeLaw({ onComplete }: Step2Props) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4">
+    <div className="max-w-3xl mx-auto px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 p-8 sm:p-10 md:p-12 shadow-2xl"
+        className="bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl"
       >
-        <div className="mb-10">
-          <p className="text-blue-100 text-lg sm:text-xl mb-6 leading-relaxed text-pretty">
+        <ProgressIndicator currentStep={2} stepTitle="The Prime Law" estimatedMinutes={5} />
+
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">The Prime Law</h2>
+          <p className="text-sm sm:text-base text-indigo-100 mb-6 sm:mb-8 leading-relaxed text-pretty">
             Before creating your account, you must understand and acknowledge The Prime Law - the single constitutional
             principle that governs all interactions within Supercivilization.
           </p>
-          <div className="bg-blue-500/20 rounded-xl p-6 border border-blue-400/30">
+          <div className="bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-xl p-6 border border-sky-400/30">
             <div className="flex items-start gap-4">
-              <Shield className="w-6 h-6 text-blue-300 flex-shrink-0 mt-0.5" />
-              <p className="text-sm sm:text-base text-blue-100 leading-relaxed">
+              <Shield className="w-6 h-6 text-sky-300 flex-shrink-0 mt-0.5" />
+              <p className="text-sm sm:text-base text-indigo-100 leading-relaxed">
                 This is not fine print. The Prime Law is the <strong className="text-white">only law</strong> we have.
                 Everything else - Terms of Service, Privacy Policy, Community Guidelines - flows from and must align
                 with this foundational principle.
@@ -50,16 +54,16 @@ export default function Step2AgreePrimeLaw({ onComplete }: Step2Props) {
         </div>
 
         {/* The Prime Law */}
-        <div className="bg-gradient-to-br from-white/10 to-white/5 rounded-xl border-2 border-blue-400/50 p-6 mb-6">
-          <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            <Shield className="w-6 h-6 text-blue-400" />
+        <div className="bg-gradient-to-br from-white/10 to-white/5 rounded-xl border-2 border-sky-400/50 p-5 sm:p-6 mb-6 sm:mb-8">
+          <h3 className="text-lg sm:text-xl font-semibold text-white mb-4 flex items-center gap-2">
+            <Shield className="w-6 h-6 text-sky-400" />
             The Prime Law
           </h3>
 
           <div className="space-y-4 text-white">
             <div className="bg-white/10 rounded-lg p-4 border border-white/20">
-              <p className="font-semibold mb-2 text-blue-200">Preamble</p>
-              <ul className="space-y-2 text-sm text-blue-100">
+              <p className="font-semibold mb-2 text-indigo-200">Preamble</p>
+              <ul className="space-y-2 text-sm text-indigo-100">
                 <li>• The purpose of human life is to prosper and live happily</li>
                 <li>• The function of society is to provide conditions for individuals to fulfill that purpose</li>
                 <li>• The Prime Law guarantees those conditions by forbidding initiatory force, fraud, or coercion</li>
@@ -83,16 +87,16 @@ export default function Step2AgreePrimeLaw({ onComplete }: Step2Props) {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-blue-500/20 rounded-lg p-4 border border-blue-400/30"
+                  className="bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-lg p-4 border border-sky-400/30"
                 >
-                  <p className="font-semibold mb-2 text-blue-200">{article.title}</p>
+                  <p className="font-semibold mb-2 text-indigo-200">{article.title}</p>
                   <p className="text-sm text-white">{article.text}</p>
                 </motion.div>
               ))}
             </div>
 
-            <div className="bg-amber-500/20 rounded-lg p-4 border border-amber-400/30">
-              <p className="text-sm text-amber-100 font-medium">
+            <div className="bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-lg p-4 border border-sky-400/30">
+              <p className="text-sm text-indigo-100 font-medium">
                 The Prime Law is the fundamental, natural law of protection and may not be amended.
               </p>
             </div>
@@ -101,7 +105,7 @@ export default function Step2AgreePrimeLaw({ onComplete }: Step2Props) {
           {!showFullText && (
             <button
               onClick={() => setShowFullText(true)}
-              className="mt-4 text-blue-300 hover:text-blue-200 text-sm font-medium flex items-center gap-2"
+              className="mt-4 text-sky-300 hover:text-sky-200 text-sm font-medium flex items-center gap-2"
             >
               Read detailed explanation
               <ArrowRight className="w-4 h-4" />
@@ -114,10 +118,10 @@ export default function Step2AgreePrimeLaw({ onComplete }: Step2Props) {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            className="bg-white/5 rounded-lg p-6 mb-6 border border-white/10"
+            className="bg-white/5 rounded-lg p-5 sm:p-6 mb-6 sm:mb-8 border border-white/10"
           >
             <h4 className="font-semibold text-white mb-3">What This Means in Practice</h4>
-            <div className="space-y-3 text-sm text-blue-100">
+            <div className="space-y-3 text-sm text-indigo-100">
               <p>
                 <strong className="text-white">Initiatory Force:</strong> Aggression against person or property.
                 Self-defense and defense of property are explicitly allowed.
@@ -132,9 +136,9 @@ export default function Step2AgreePrimeLaw({ onComplete }: Step2Props) {
               </p>
             </div>
 
-            <div className="mt-4 bg-emerald-500/20 rounded-lg p-4 border border-emerald-400/30">
-              <p className="text-sm text-emerald-100">
-                <strong className="text-emerald-200">Simple Rule:</strong> You're free to do anything that doesn't
+            <div className="mt-4 bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-lg p-4 border border-sky-400/30">
+              <p className="text-sm text-indigo-100">
+                <strong className="text-sky-200">Simple Rule:</strong> You're free to do anything that doesn't
                 involve initiating force, committing fraud, or coercing others. This applies to everyone equally - no
                 special privileges, no exceptions.
               </p>
@@ -143,7 +147,7 @@ export default function Step2AgreePrimeLaw({ onComplete }: Step2Props) {
         )}
 
         {/* Agreement Checkboxes */}
-        <div className="space-y-4 mb-8">
+        <div className="space-y-4 mb-6 sm:mb-8">
           {[
             {
               key: "primeLaw" as const,
@@ -166,33 +170,36 @@ export default function Step2AgreePrimeLaw({ onComplete }: Step2Props) {
           ].map((item, index) => (
             <motion.label
               key={item.key}
+              htmlFor={`agreement-${item.key}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               className={`flex items-start gap-4 p-5 rounded-xl cursor-pointer transition-all border-2 ${
                 agreements[item.key]
-                  ? "bg-blue-500/20 border-blue-400/50"
+                  ? "bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 border-sky-400/50"
                   : "bg-white/5 border-white/10 hover:border-white/30"
               }`}
             >
               <Checkbox
+                id={`agreement-${item.key}`}
                 checked={agreements[item.key]}
                 onCheckedChange={() => toggleAgreement(item.key)}
                 className="mt-1"
+                aria-label={item.title}
               />
               <div className="flex-1">
                 <div className="font-semibold text-white mb-1">{item.title}</div>
-                <div className="text-sm text-blue-100">{item.description}</div>
+                <div className="text-sm text-indigo-100">{item.description}</div>
               </div>
-              {agreements[item.key] && <CheckCircle className="w-6 h-6 text-blue-400 flex-shrink-0" />}
+              {agreements[item.key] && <CheckCircle className="w-6 h-6 text-sky-400 flex-shrink-0" />}
             </motion.label>
           ))}
         </div>
 
         {!canContinue && (
-          <div className="mb-6 bg-amber-500/20 rounded-lg p-4 border border-amber-400/30 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-amber-300 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-amber-100">
+          <div className="mb-6 sm:mb-8 bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-lg p-4 sm:p-5 border border-sky-400/30 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-sky-300 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-indigo-100">
               You must acknowledge all three agreements to proceed. These are not optional - they are the constitutional
               foundation of Supercivilization.
             </p>
@@ -202,9 +209,9 @@ export default function Step2AgreePrimeLaw({ onComplete }: Step2Props) {
         <Button
           onClick={onComplete}
           disabled={!canContinue}
-          className={`w-full text-lg sm:text-xl py-6 sm:py-7 rounded-xl font-bold shadow-lg transition-all ${
+          className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-all ${
             canContinue
-              ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40"
+              ? "bg-gradient-to-r from-indigo-600 via-blue-600 to-sky-700 hover:from-indigo-700 hover:via-blue-700 hover:to-sky-800 shadow-sky-500/30 hover:shadow-xl hover:shadow-sky-500/40"
               : "bg-gray-600 opacity-50 cursor-not-allowed"
           }`}
         >

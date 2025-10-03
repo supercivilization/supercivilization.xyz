@@ -2,9 +2,11 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { ArrowRight, Eye, EyeOff, CheckCircle, AlertCircle, Lock } from "lucide-react"
+import { ArrowRight, Eye, EyeOff, CheckCircle, AlertCircle, Mail, User, AtSign, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import ProgressIndicator from "./progress-indicator"
 
 interface Step3Props {
   onComplete: () => void
@@ -13,23 +15,50 @@ interface Step3Props {
 
 export default function Step3CreateAccount({ onComplete }: Step3Props) {
   const [formData, setFormData] = useState({
-    fullName: "",
+    displayName: "",
     email: "",
-    accountName: "",
     password: "",
     confirmPassword: "",
   })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Auto-generate username from display name
+  const generateUsername = (displayName: string): string => {
+    return displayName
+      .toLowerCase()
+      .replace(/\s+/g, '_')
+      .replace(/[^a-z0-9_]/g, '')
+      .substring(0, 20)
+  }
+
+  const validateEmail = (email: string) => {
+    if (!email) return "Email is required"
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Invalid email format"
+    return null
+  }
+
+  const validatePassword = (password: string) => {
+    if (password.length < 8) return "Password must be at least 8 characters"
+    if (!/[A-Z]/.test(password)) return "Password must contain an uppercase letter"
+    if (!/[a-z]/.test(password)) return "Password must contain a lowercase letter"
+    if (!/[0-9]/.test(password)) return "Password must contain a number"
+    return null
+  }
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
 
-    if (!formData.fullName) newErrors.fullName = "Full name is required"
-    if (!formData.email) newErrors.email = "Email is required"
-    if (!formData.accountName) newErrors.accountName = "Account name is required"
-    if (!formData.password) newErrors.password = "Password is required"
+    if (!formData.displayName) newErrors.displayName = "Display name is required"
+
+    const emailError = validateEmail(formData.email)
+    if (emailError) newErrors.email = emailError
+
+    const passwordError = validatePassword(formData.password)
+    if (passwordError) newErrors.password = passwordError
+
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match"
     }
@@ -38,69 +67,117 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      onComplete()
-    }
+  const handleSubmit = async () => {
+    if (!validateForm()) return
+
+    setIsSubmitting(true)
+
+    const username = generateUsername(formData.displayName)
+
+    // TODO: Implement Supabase signup
+    // const { data, error } = await supabase.auth.signUp({
+    //   email: formData.email,
+    //   password: formData.password,
+    //   options: {
+    //     data: {
+    //       display_name: formData.displayName,
+    //       username: username,
+    //     }
+    //   }
+    // })
+
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500))
+
+    setIsSubmitting(false)
+    onComplete()
   }
 
   const canSubmit =
-    formData.fullName && formData.email && formData.accountName && formData.password && formData.confirmPassword
+    formData.displayName && formData.email && formData.password && formData.confirmPassword
 
   return (
-    <div className="max-w-2xl mx-auto px-4">
+    <div className="max-w-3xl mx-auto px-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         {/* Gradient border effect */}
-        <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-cyan-500/20 via-transparent to-cyan-500/20 pointer-events-none" />
+        <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-cyan-500/20 via-teal-500/20 to-cyan-500/20 pointer-events-none" />
 
         <div className="relative z-10">
+          <ProgressIndicator currentStep={3} stepTitle="Create Account" estimatedMinutes={3} />
           <div className="mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-3">Create Your Account</h2>
-            <p className="text-sm sm:text-base text-cyan-100/90 leading-relaxed">
-              This information will be verified during your induction ceremony.
+            <p className="text-sm sm:text-base text-cyan-100 leading-relaxed">
+              Choose your identity and create your secure account.
             </p>
           </div>
 
           <div className="space-y-4 sm:space-y-5 mb-6 sm:mb-8">
+            {/* Display Name */}
             <div>
-              <label className="block text-sm sm:text-base font-semibold text-cyan-200 mb-2.5">Full Legal Name</label>
+              <Label htmlFor="displayName" className="block text-sm sm:text-base font-semibold text-cyan-200 mb-2.5 flex items-center gap-2">
+                <User className="w-4 h-4" />
+                Display Name
+              </Label>
               <Input
+                id="displayName"
                 type="text"
-                value={formData.fullName}
-                onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                placeholder="As it appears on government ID"
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 text-base focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-500/20 transition-all"
+                value={formData.displayName}
+                onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
+                placeholder="Your preferred name"
+                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
               />
-              {errors.fullName && (
+              <p className="mt-1.5 text-xs text-cyan-200/80">
+                This is how other members will see you
+              </p>
+              {formData.displayName && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  className="mt-2 flex items-center gap-2 text-xs text-cyan-300"
+                >
+                  <AtSign className="w-3 h-3" />
+                  <span className="font-mono">@{generateUsername(formData.displayName) || 'username_preview'}</span>
+                  <span className="text-cyan-200/80">(auto-generated username)</span>
+                </motion.div>
+              )}
+              {errors.displayName && (
                 <motion.p
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 text-sm text-red-300 flex items-center gap-2 bg-red-500/10 rounded-lg p-2.5 border border-red-400/30"
+                  className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 border border-teal-400/30"
                 >
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  {errors.fullName}
+                  {errors.displayName}
                 </motion.p>
               )}
             </div>
 
+            {/* Email */}
             <div>
-              <label className="block text-sm sm:text-base font-semibold text-cyan-200 mb-2.5">Email Address</label>
+              <Label htmlFor="email" className="block text-sm sm:text-base font-semibold text-cyan-200 mb-2.5 flex items-center gap-2">
+                <Mail className="w-4 h-4" />
+                Email Address
+              </Label>
               <Input
+                id="email"
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="your@email.com"
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 text-base focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-500/20 transition-all"
+                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
               />
+              <p className="mt-1.5 text-xs text-cyan-200/80">
+                We'll send you a verification link
+              </p>
               {errors.email && (
                 <motion.p
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 text-sm text-red-300 flex items-center gap-2 bg-red-500/10 rounded-lg p-2.5 border border-red-400/30"
+                  className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 border border-teal-400/30"
                 >
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
                   {errors.email}
@@ -108,50 +185,37 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
               )}
             </div>
 
+            {/* Password */}
             <div>
-              <label className="block text-sm sm:text-base font-semibold text-cyan-200 mb-2.5">Account Name</label>
-              <Input
-                type="text"
-                value={formData.accountName}
-                onChange={(e) => setFormData({ ...formData, accountName: e.target.value.toLowerCase() })}
-                placeholder="username"
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 font-mono text-base focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-500/20 transition-all"
-              />
-              {errors.accountName && (
-                <motion.p
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 text-sm text-red-300 flex items-center gap-2 bg-red-500/10 rounded-lg p-2.5 border border-red-400/30"
-                >
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  {errors.accountName}
-                </motion.p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm sm:text-base font-semibold text-cyan-200 mb-2.5">Password</label>
+              <Label htmlFor="password" className="block text-sm sm:text-base font-semibold text-cyan-200 mb-2.5 flex items-center gap-2">
+                <Lock className="w-4 h-4" />
+                Password
+              </Label>
               <div className="relative">
                 <Input
+                  id="password"
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   placeholder="Create a strong password"
-                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-500/20 transition-all"
+                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+              <p className="mt-1.5 text-xs text-cyan-200/80">
+                Min 8 characters, include uppercase, lowercase, and number
+              </p>
               {errors.password && (
                 <motion.p
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 text-sm text-red-300 flex items-center gap-2 bg-red-500/10 rounded-lg p-2.5 border border-red-400/30"
+                  className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 border border-teal-400/30"
                 >
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
                   {errors.password}
@@ -159,20 +223,24 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
               )}
             </div>
 
+            {/* Confirm Password */}
             <div>
-              <label className="block text-sm sm:text-base font-semibold text-cyan-200 mb-2.5">Confirm Password</label>
+              <Label htmlFor="confirmPassword" className="block text-sm sm:text-base font-semibold text-cyan-200 mb-2.5">
+                Confirm Password
+              </Label>
               <div className="relative">
                 <Input
+                  id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   placeholder="Re-enter your password"
-                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-cyan-400/50 focus:ring-4 focus:ring-cyan-500/20 transition-all"
+                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -181,7 +249,7 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
                 <motion.p
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 text-sm text-red-300 flex items-center gap-2 bg-red-500/10 rounded-lg p-2.5 border border-red-400/30"
+                  className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 border border-teal-400/30"
                 >
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
                   {errors.confirmPassword}
@@ -190,29 +258,21 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
             </div>
           </div>
 
-          <motion.div
-            className="bg-gradient-to-br from-cyan-500/20 to-cyan-600/20 rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-cyan-400/30 mb-6 sm:mb-8 shadow-lg"
-            whileHover={{ scale: 1.01 }}
-          >
-            <div className="flex items-start gap-3">
-              <Lock className="w-5 h-5 text-cyan-300 flex-shrink-0 mt-0.5" />
-              <p className="text-sm sm:text-base text-cyan-100 leading-relaxed">
-                <strong className="text-white">Privacy Note:</strong> Your full legal name will only be visible to your
-                verification team during the ceremony. Your account name is what other members will see.
-              </p>
-            </div>
-          </motion.div>
-
           <Button
             onClick={handleSubmit}
-            disabled={!canSubmit}
+            disabled={!canSubmit || isSubmitting}
             className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-all ${
-              canSubmit
-                ? "bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-700 hover:to-cyan-800 shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40"
-                : "bg-gray-600/50 cursor-not-allowed"
+              canSubmit && !isSubmitting
+                ? "bg-gradient-to-r from-cyan-600 via-teal-600 to-cyan-700 hover:from-cyan-700 hover:via-teal-700 hover:to-cyan-800 shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40"
+                : "bg-gray-600/50 cursor-not-allowed opacity-50"
             }`}
           >
-            {canSubmit ? (
+            {isSubmitting ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2 inline-block" />
+                Creating Account...
+              </>
+            ) : canSubmit ? (
               <>
                 Create Account
                 <ArrowRight className="w-5 h-5 ml-2" />
