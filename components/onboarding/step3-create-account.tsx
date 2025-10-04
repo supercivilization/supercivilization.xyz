@@ -159,15 +159,15 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-cyan-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl  p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
-        {/* Gradient border effect */}
+        {/* Gradient border-0 effect */}
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-cyan-500/20 via-teal-500/20 to-cyan-500/20 pointer-events-none" />
 
         <div className="relative z-10">
           <ProgressIndicator currentStep={3} stepTitle="Create Account" estimatedMinutes={3} />
           <div className="mb-4 sm:mb-6">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-3">Create Your Account</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white text-shadow mb-2 sm:mb-3">Create Your Account</h2>
             <p className="text-sm sm:text-base text-slate-200 leading-relaxed">
               Choose your identity and create your secure account.
             </p>
@@ -187,7 +187,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                 onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
                 onBlur={() => setTouchedFields({ ...touchedFields, displayName: true })}
                 placeholder="Your preferred name"
-                className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/70 focus:ring-4 focus:ring-teal-500/20 transition-all ${focusVisible.default} ${errors.displayName ? 'border-red-400/50' : 'border-cyan-400/30'}`}
+                className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 ring-1 ring-inset ring-white/10 shadow-md shadow-cyan-500/10 rounded-xl text-white placeholder-white/40 text-base focus-visible:ring-4 focus-visible:ring-teal-500/20 transition-opacity ${focusVisible.default} ${errors.displayName ? 'ring-red-400/50' : ''}`}
               />
               <p className="mt-1.5 text-xs text-slate-300">
                 This is how other members will see you
@@ -207,7 +207,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                 <motion.p
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 border border-teal-400/30"
+                  className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 ring-1 ring-inset ring-white/10 shadow-md shadow-teal-500/10"
                 >
                   <AlertCircle className="w-5 h-5 flex-shrink-0" />
                   {errors.displayName}
@@ -228,7 +228,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 onBlur={() => setTouchedFields({ ...touchedFields, email: true })}
                 placeholder="your@email.com"
-                className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/70 focus:ring-4 focus:ring-teal-500/20 transition-all ${focusVisible.default} ${errors.email ? 'border-red-400/50' : 'border-cyan-400/30'}`}
+                className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-0 rounded-xl text-white placeholder-white/40 text-base focus-visible:ring-4 focus-visible:ring-teal-500/20 transition-opacity ${focusVisible.default} `}
               />
               <p className="mt-1.5 text-xs text-slate-300">
                 We'll send you a verification link
@@ -237,7 +237,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                 <motion.p
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 border border-teal-400/30"
+                  className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 ring-1 ring-inset ring-white/10 shadow-md shadow-teal-500/10"
                 >
                   <AlertCircle className="w-5 h-5 flex-shrink-0" />
                   {errors.email}
@@ -259,7 +259,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   onBlur={() => setTouchedFields({ ...touchedFields, password: true })}
                   placeholder="Create a strong password"
-                  className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all ${focusVisible.default} ${errors.password ? 'border-red-400/50' : 'border-cyan-400/30'}`}
+                  className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-0 rounded-xl text-white placeholder-white/40 pr-14 text-base focus-visible:ring-4 focus-visible:ring-teal-500/20 transition-opacity ${focusVisible.default} `}
                 />
                 <button
                   type="button"
@@ -304,7 +304,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                 <motion.p
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 border border-teal-400/30"
+                  className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 ring-1 ring-inset ring-white/10 shadow-md shadow-teal-500/10"
                 >
                   <AlertCircle className="w-5 h-5 flex-shrink-0" />
                   {errors.password}
@@ -325,7 +325,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   onBlur={() => setTouchedFields({ ...touchedFields, confirmPassword: true })}
                   placeholder="Re-enter your password"
-                  className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all ${focusVisible.default} ${errors.confirmPassword ? 'border-red-400/50' : 'border-cyan-400/30'}`}
+                  className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-0 rounded-xl text-white placeholder-white/40 pr-14 text-base focus-visible:ring-4 focus-visible:ring-teal-500/20 transition-opacity ${focusVisible.default} `}
                 />
                 <button
                   type="button"
@@ -350,7 +350,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                 <motion.p
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 border border-teal-400/30"
+                  className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 ring-1 ring-inset ring-white/10 shadow-md shadow-teal-500/10"
                 >
                   <AlertCircle className="w-5 h-5 flex-shrink-0" />
                   {errors.confirmPassword}
@@ -362,11 +362,12 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
           <Button
             onClick={handleSubmit}
             disabled={!canSubmit || isSubmitting}
-            className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-all ${
+            className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-opacity focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-500/40 focus-visible:ring-offset-0 touch-manipulation ${
               canSubmit && !isSubmitting
                 ? "bg-gradient-to-r from-cyan-600 via-teal-600 to-cyan-700 hover:from-cyan-700 hover:via-teal-700 hover:to-cyan-800 shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40"
-                : "bg-gray-600/50 cursor-not-allowed opacity-50"
+                : "bg-white/10 text-white/40 cursor-not-allowed"
             }`}
+            aria-label={isSubmitting ? "Creating account..." : "Create account"}
           >
             {isSubmitting ? (
               <>

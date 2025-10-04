@@ -53,7 +53,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-violet-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl  p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-purple-500/20 via-transparent to-purple-500/20 pointer-events-none" />
 
@@ -63,7 +63,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
           {!validated ? (
             <div className="space-y-4 sm:space-y-6">
               <div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 flex items-center gap-3">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white text-shadow mb-3 sm:mb-4 flex items-center gap-3">
                   <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 text-purple-400" />
                   Exclusive Invitation
                 </h2>
@@ -73,7 +73,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
                 </p>
 
                 <motion.div
-                  className="bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-2xl p-6 border border-purple-400/30 shadow-lg"
+                  className="bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-2xl p-6 ring-1 ring-inset ring-white/10 shadow-md shadow-purple-500/10 shadow-lg"
                   whileHover={{ scale: 1.01 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
@@ -106,20 +106,27 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-base sm:text-lg font-bold text-slate-100 mb-3">Invitation Code</label>
+                  <label htmlFor="invite-code" className="block text-base sm:text-lg font-bold text-slate-100 mb-3">Invitation Code</label>
                   <Input
+                    id="invite-code"
                     type="text"
                     value={inviteCode}
                     onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
-                    onKeyPress={(e) => e.key === "Enter" && !validating && inviteCode && validateInvite()}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !validating && inviteCode) {
+                        e.preventDefault()
+                        validateInvite()
+                      }
+                    }}
                     placeholder="SC-2025-XXXX"
-                    className="w-full px-5 sm:px-6 py-4 sm:py-5 bg-white/10 border border-violet-400/30 rounded-xl text-white placeholder-white/40 text-lg sm:text-xl font-mono focus:border-violet-400/70 focus:ring-4 focus:ring-violet-500/20 transition-all"
+                    autoComplete="off"
+                    className="w-full px-5 sm:px-6 py-4 sm:py-5 bg-white/10 ring-1 ring-inset ring-white/10 shadow-md shadow-violet-500/10 rounded-xl text-white placeholder-white/40 text-base sm:text-lg font-mono focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-violet-500/40 focus-visible:ring-offset-0 transition-all touch-manipulation"
                   />
                   {error && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mt-2.5 flex items-center gap-2 text-purple-300 text-sm sm:text-base bg-gradient-to-br from-purple-500/10 via-violet-500/10 to-purple-600/10 rounded-lg p-3 border border-purple-400/30"
+                      className="mt-2.5 flex items-center gap-2 text-purple-300 text-sm sm:text-base bg-gradient-to-br from-purple-500/10 via-violet-500/10 to-purple-600/10 rounded-lg p-3 ring-1 ring-inset ring-white/10 shadow-md shadow-purple-500/10"
                     >
                       <AlertCircle className="w-5 h-5 flex-shrink-0" />
                       <span>{error}</span>
@@ -130,7 +137,8 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
                 <Button
                   onClick={validateInvite}
                   disabled={!inviteCode || validating}
-                  className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-purple-500/40 focus-visible:ring-offset-0 touch-manipulation"
+                  aria-label="Verify invitation code"
                 >
                   {validating ? (
                     <>
@@ -146,7 +154,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
                 </Button>
 
                 <motion.div
-                  className="bg-gradient-to-br from-purple-500/20 via-violet-500/20 to-purple-600/20 border border-violet-400/30 rounded-xl p-5 shadow-lg"
+                  className="bg-gradient-to-br from-purple-500/20 via-violet-500/20 to-purple-600/20 ring-1 ring-inset ring-white/10 shadow-md shadow-violet-500/10 rounded-xl p-5 shadow-lg"
                   whileHover={{ scale: 1.01 }}
                 >
                   <p className="text-base sm:text-lg text-slate-100 font-semibold">
@@ -166,11 +174,11 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                  className="inline-block p-4 bg-gradient-to-br from-purple-500/20 via-violet-500/20 to-purple-600/20 rounded-2xl mb-4 border border-violet-400/30 shadow-xl"
+                  className="inline-block p-4 bg-gradient-to-br from-purple-500/20 via-violet-500/20 to-purple-600/20 rounded-2xl mb-4 ring-1 ring-inset ring-white/10 shadow-md shadow-violet-500/10 shadow-xl"
                 >
                   <CheckCircle className="w-14 h-14 sm:w-16 sm:h-16 text-violet-400" />
                 </motion.div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Invitation Verified</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold text-white text-shadow mb-2">Invitation Verified</h2>
                 <p className="text-base sm:text-lg text-slate-200">Your verification team is ready</p>
               </div>
 
@@ -211,7 +219,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="bg-white/5 rounded-lg p-3 sm:p-4 border border-violet-400/30"
+                      className="bg-white/5 rounded-lg p-3 sm:p-4 ring-1 ring-inset ring-white/10 shadow-md shadow-violet-500/10"
                     >
                       <div className="flex items-center justify-between mb-2 gap-3">
                         <div className="min-w-0">
@@ -231,7 +239,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
               </div>
 
               <motion.div
-                className="bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-purple-400/30 shadow-lg"
+                className="bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl sm:rounded-2xl p-4 sm:p-5 ring-1 ring-inset ring-white/10 shadow-md shadow-purple-500/10 shadow-lg"
                 whileHover={{ scale: 1.01 }}
               >
                 <p className="text-sm sm:text-base text-slate-200 leading-relaxed">
@@ -243,7 +251,8 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
 
               <Button
                 onClick={onComplete}
-                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-all"
+                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 transition-opacity focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-purple-500/40 focus-visible:ring-offset-0 touch-manipulation"
+                aria-label="Continue to Prime Law"
               >
                 Continue to Prime Law
                 <ArrowRight className="w-5 h-5 ml-2" />

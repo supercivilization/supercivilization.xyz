@@ -167,7 +167,7 @@ export default function Step0Welcome() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 transition-all duration-700">
       {/* Header with Progress - Same as other steps */}
-      <div className="border-b border-zinc-800/50 bg-zinc-950/50 backdrop-blur-sm">
+      <div className="bg-zinc-950/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 max-w-7xl">
           {/* Progress Bar */}
           <div className="flex items-center justify-center">
@@ -181,7 +181,7 @@ export default function Step0Welcome() {
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ delay: index * 0.05 }}
                         disabled
-                        className="relative w-11 h-11 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-300 cursor-not-allowed bg-slate-800/50 text-slate-600 border border-slate-700/50 hover:bg-slate-800/70 hover:border-slate-600/70"
+                        className="relative w-11 h-11 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-300 cursor-not-allowed bg-slate-800/50 text-slate-600 hover:bg-slate-800/70"
                       >
                         <Lock className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
                       </motion.button>
@@ -219,7 +219,7 @@ export default function Step0Welcome() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/5  rounded-full mb-4 sm:mb-6"
+            className="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-800/30  rounded-full mb-4 sm:mb-6"
           >
             <Zap className="w-3.5 h-3.5 text-zinc-400" />
             <span className="text-xs sm:text-sm font-medium text-zinc-300">Invitation-Only Access</span>
@@ -242,7 +242,7 @@ export default function Step0Welcome() {
           transition={{ delay: 0.3 }}
           className="mb-10 sm:mb-12 lg:mb-14"
         >
-          <div className="relative aspect-video rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-950 border border-zinc-800/50 shadow-xl group">
+          <div className="relative aspect-video rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-950 shadow-xl group">
             {/* Video Placeholder with Play Button */}
             <div className="absolute inset-0 flex items-center justify-center bg-zinc-950">
               <motion.button
@@ -294,7 +294,7 @@ export default function Step0Welcome() {
                   className="bg-white/[0.03] backdrop-blur-sm rounded-xl p-4 sm:p-5  hover:bg-white/[0.05] transition-all"
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
-                    <div className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg ${step.classes.bg} border ${step.classes.border} flex items-center justify-center`}>
+                    <div className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg ${step.classes.bg} flex items-center justify-center`}>
                       <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${step.classes.icon}`} />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -324,7 +324,7 @@ export default function Step0Welcome() {
           transition={{ delay: 0.9 }}
           className="mb-10 sm:mb-12 lg:mb-14 max-w-3xl mx-auto"
         >
-          <div className="relative overflow-hidden rounded-xl border border-zinc-700/50 bg-gradient-to-br from-zinc-900/50 to-zinc-950/50 backdrop-blur-sm p-6 sm:p-8">
+          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-zinc-900/50 to-zinc-950/50 backdrop-blur-sm p-6 sm:p-8">
             <div className="absolute top-0 right-0 w-48 h-48 bg-zinc-500/5 rounded-full blur-3xl" />
             <div className="relative text-center">
               <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">

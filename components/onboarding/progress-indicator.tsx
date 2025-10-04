@@ -19,6 +19,16 @@ const stepColors = {
   7: "from-pink-500 via-fuchsia-500 to-pink-600",         // Pink/Fuchsia
 }
 
+const stepCompletedColors = {
+  1: "from-purple-400/80 via-violet-400/80 to-purple-500/80",
+  2: "from-indigo-400/80 via-blue-400/80 to-sky-400/80",
+  3: "from-cyan-400/80 via-teal-400/80 to-cyan-500/80",
+  4: "from-emerald-400/80 via-green-400/80 to-lime-400/80",
+  5: "from-amber-400/80 via-yellow-400/80 to-amber-500/80",
+  6: "from-orange-400/80 via-red-400/80 to-rose-400/80",
+  7: "from-pink-400/80 via-fuchsia-400/80 to-pink-500/80",
+}
+
 export default function ProgressIndicator({
   currentStep,
   totalSteps = 7,
@@ -28,22 +38,30 @@ export default function ProgressIndicator({
   const colorClass = stepColors[currentStep as keyof typeof stepColors] || stepColors[1]
 
   return (
-    <div className="mb-4 sm:mb-6">
+    <div className="mb-4 sm:mb-6" role="navigation" aria-label="Progress indicator">
       <div className="flex items-center justify-between mb-3">
         {/* Step Dots */}
-        <div className="flex items-center gap-2">
-          {Array.from({ length: totalSteps }).map((_, index) => (
-            <div
-              key={index}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                index + 1 === currentStep
-                  ? `w-8 bg-gradient-to-r ${colorClass}`
-                  : index + 1 < currentStep
-                    ? "w-2 bg-white/40"
-                    : "w-2 bg-white/20"
-              }`}
-            />
-          ))}
+        <div className="flex items-center gap-2" role="progressbar" aria-valuenow={currentStep} aria-valuemin={1} aria-valuemax={totalSteps} aria-label={`Step ${currentStep} of ${totalSteps}`}>
+          {Array.from({ length: totalSteps }).map((_, index) => {
+            const stepNumber = index + 1
+            const isCompleted = stepNumber < currentStep
+            const isCurrent = stepNumber === currentStep
+            const completedColorClass = stepCompletedColors[stepNumber as keyof typeof stepCompletedColors]
+
+            return (
+              <div
+                key={index}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  isCurrent
+                    ? `w-8 bg-gradient-to-r ${colorClass}`
+                    : isCompleted
+                      ? `w-2 bg-gradient-to-r ${completedColorClass}`
+                      : "w-2 bg-white/20"
+                }`}
+                aria-label={`Step ${stepNumber}${isCurrent ? ' (current)' : isCompleted ? ' (completed)' : ''}`}
+              />
+            )
+          })}
         </div>
 
         {/* Time Estimate */}

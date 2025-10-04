@@ -51,7 +51,7 @@ const STEP_CONFIGS = {
   },
   4: {
     id: 4,
-    name: "Authenticate",
+    name: "Auth",
     fullName: "Authenticate Identity",
     icon: Fingerprint,
     bgGradient: "from-zinc-950 via-emerald-950 via-green-950 via-lime-950 to-zinc-950",
@@ -191,13 +191,6 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
   }
 
   const neutral = currentStepData?.neutral
-  const headerBorderClass =
-    neutral === "slate"
-      ? "border-slate-800/50"
-      : neutral === "stone"
-      ? "border-stone-800/50"
-      : "border-zinc-800/50"
-
   const headerBgClass =
     neutral === "slate"
       ? "bg-slate-950/50"
@@ -207,11 +200,11 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${currentStepData.bgGradient} transition-all duration-700`}>
-      <div className={`border-b ${headerBorderClass} ${headerBgClass} backdrop-blur-sm`}>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 max-w-7xl">
+      <div className={`${headerBgClass} backdrop-blur-sm`}>
+        <div className="container mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-5 sm:py-6 md:py-7 lg:py-9 max-w-7xl">
           {/* Progress Bar */}
-          <div className="flex items-center justify-center">
-            <div className="flex items-start gap-0">
+          <div className="flex items-center justify-center overflow-x-auto scrollbar-hide">
+            <div className="flex items-center gap-0 min-w-max px-2 py-2">
               {allSteps.map((step, index) => {
                 const isCompleted = completedSteps.includes(step.id)
                 const isCurrent = currentStep === step.id
@@ -219,22 +212,11 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
                 const stepConfig = STEP_CONFIGS[step.id as keyof typeof STEP_CONFIGS]
                 const StepIcon = STEP_ICONS[step.id as keyof typeof STEP_ICONS]
 
-                const lockedClasses =
-                  neutral === "slate"
-                    ? "bg-slate-800/50 text-slate-600 border border-slate-700/50 hover:bg-slate-800/70 hover:border-slate-600/70"
-                    : neutral === "stone"
-                    ? "bg-stone-800/50 text-stone-600 border border-stone-700/50 hover:bg-stone-800/70 hover:border-stone-600/70"
-                    : "bg-zinc-800/50 text-zinc-600 border border-zinc-700/50 hover:bg-zinc-800/70 hover:border-zinc-600/70"
-
-                const availableClasses =
-                  neutral === "slate"
-                    ? "bg-slate-700/50 text-slate-500 border border-slate-600/50 hover:bg-slate-700/70 hover:border-slate-500/70"
-                    : neutral === "stone"
-                    ? "bg-stone-700/50 text-stone-500 border border-stone-600/50 hover:bg-stone-700/70 hover:border-stone-500/70"
-                    : "bg-zinc-700/50 text-zinc-500 border border-zinc-600/50 hover:bg-zinc-700/70 hover:border-zinc-500/70"
+                const lockedClasses = `${stepConfig.iconBg} ${stepConfig.iconColor}/60 hover:${stepConfig.iconColor}/80`
+                const availableClasses = `${stepConfig.iconBg} ${stepConfig.iconColor} hover:${stepConfig.iconColor}`
 
                 return (
-                  <div key={step.id} className="flex items-start gap-0">
+                  <div key={step.id} className="flex items-center gap-0">
                     <div className="flex flex-col items-center gap-2 sm:gap-2.5 lg:gap-3">
                       {/* Step Circle */}
                       <motion.button
@@ -249,9 +231,9 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
                         aria-label={`${step.fullName} - Step ${step.id}`}
                         aria-current={isCurrent ? "step" : undefined}
-                        className={`relative ${touchTarget.large} rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer ${focusVisible.onGradient} ${
+                        className={`relative ${touchTarget.large} rounded-xl sm:rounded-2xl flex items-center justify-center transition-opacity duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-offset-0 touch-manipulation ${
                           isCompleted
-                            ? "bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-lg shadow-emerald-500/30 border border-emerald-300 hover:shadow-emerald-500/50"
+                            ? `bg-gradient-to-br ${stepConfig.stepBg} text-white shadow-lg ${stepConfig.stepShadow} hover:shadow-xl`
                             : isCurrent
                               ? `bg-gradient-to-br ${stepConfig.stepBg} text-white ring-2 sm:ring-3 lg:ring-4 ${stepConfig.stepRing} shadow-xl ${stepConfig.stepShadow}`
                               : isLocked
@@ -294,10 +276,11 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
                       <div className="text-center w-12 sm:w-20 lg:w-24">
                         <div
                           className={`text-[10px] sm:text-xs lg:text-sm font-semibold transition-colors duration-300 leading-tight ${
-                            isCurrent ? stepConfig.stepText : isCompleted ? "text-emerald-400" : "text-zinc-500"
+                            isCurrent ? stepConfig.stepText : isCompleted ? stepConfig.stepText : "text-zinc-500"
                           }`}
                         >
-                          {step.name}
+                          <span className="sm:hidden">S{step.id}</span>
+                          <span className="hidden sm:inline">{step.name}</span>
                         </div>
                       </div>
                     </div>
@@ -310,7 +293,7 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: isCompleted ? 1 : 0 }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
-                            className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 origin-left shadow-md shadow-emerald-500/50"
+                            className={`h-full bg-gradient-to-r ${stepConfig.stepBg} origin-left shadow-md ${stepConfig.stepShadow}`}
                           />
                         </div>
                       </div>
@@ -324,7 +307,7 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 lg:py-12 max-w-7xl">
+      <div className="py-6 sm:py-8 lg:py-12">
         <motion.div
           key={`header-${currentStep}`}
           initial={{ opacity: 0, y: 20 }}
@@ -336,7 +319,7 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white px-4 leading-tight text-balance ${contrastSafeText.heading}`}
+            className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white px-4 leading-tight text-balance text-shadow-lg ${contrastSafeText.heading}`}
           >
             {currentStepData.fullName}
           </motion.h1>
@@ -345,7 +328,7 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
         {children}
       </div>
 
-      <footer className={`border-t ${headerBorderClass} ${headerBgClass} backdrop-blur-sm mt-12 sm:mt-16 lg:mt-20`}>
+      <footer className={`${headerBgClass} backdrop-blur-sm mt-12 sm:mt-16 lg:mt-20`}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
           {/* Countdown Timer */}
           {currentStep < 7 && (
@@ -357,32 +340,32 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
               <div className="flex items-center justify-center gap-2 sm:gap-3">
                 {/* Days */}
                 <div className="flex flex-col items-center">
-                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} `}>
-                    <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor} font-mono tabular-nums`}>
+                  <div className={`px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg ${currentStepData.iconBg}`}>
+                    <div className={`text-lg sm:text-xl md:text-2xl font-bold ${currentStepData.iconColor} tabular-nums`} style={{ fontFeatureSettings: '"tnum"' }}>
                       {timeLeft.days.toString().padStart(2, "0")}
                     </div>
                   </div>
                   <p className="text-[10px] sm:text-xs font-medium text-white/40 uppercase tracking-wider mt-1">Days</p>
                 </div>
 
-                <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor}`}>:</div>
+                <div className={`text-lg sm:text-xl md:text-2xl font-bold ${currentStepData.iconColor}`}>:</div>
 
                 {/* Hours */}
                 <div className="flex flex-col items-center">
-                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} `}>
-                    <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor} font-mono tabular-nums`}>
+                  <div className={`px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg ${currentStepData.iconBg}`}>
+                    <div className={`text-lg sm:text-xl md:text-2xl font-bold ${currentStepData.iconColor} tabular-nums`} style={{ fontFeatureSettings: '"tnum"' }}>
                       {timeLeft.hours.toString().padStart(2, "0")}
                     </div>
                   </div>
                   <p className="text-[10px] sm:text-xs font-medium text-white/40 uppercase tracking-wider mt-1">Hrs</p>
                 </div>
 
-                <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor}`}>:</div>
+                <div className={`text-lg sm:text-xl md:text-2xl font-bold ${currentStepData.iconColor}`}>:</div>
 
                 {/* Minutes */}
                 <div className="flex flex-col items-center">
-                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} `}>
-                    <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor} font-mono tabular-nums`}>
+                  <div className={`px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg ${currentStepData.iconBg}`}>
+                    <div className={`text-lg sm:text-xl md:text-2xl font-bold ${currentStepData.iconColor} tabular-nums`} style={{ fontFeatureSettings: '"tnum"' }}>
                       {timeLeft.minutes.toString().padStart(2, "0")}
                     </div>
                   </div>

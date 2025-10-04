@@ -91,7 +91,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-emerald-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl  p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20 pointer-events-none" />
 
@@ -99,7 +99,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
           <ProgressIndicator currentStep={4} stepTitle="Verify Identity" estimatedMinutes={4} />
 
         <div className="mb-4 sm:mb-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Verify Your Identity</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white text-shadow mb-3 sm:mb-4">Verify Your Identity</h2>
           <p className="text-sm sm:text-base text-zinc-200 leading-relaxed">
             Connect one account to verify you're a real person. No government ID required.
           </p>
@@ -151,7 +151,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
                   disabled={isConnected}
                   whileHover={!isConnected ? { scale: 1.02 } : {}}
                   whileTap={!isConnected ? { scale: 0.98 } : {}}
-                  className={`relative p-4 rounded-xl border-2 transition-all text-left ${
+                  className={`relative p-4 rounded-xl border-2 transition-opacity text-left ${
                     isConnected
                       ? "bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20 border-lime-400/50"
                       : "bg-white/5 border-emerald-400/30 hover:border-emerald-400/60 cursor-pointer"
@@ -193,7 +193,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
 
             <div className="space-y-4">
               {/* Personal Website */}
-              <div className="bg-white/5 rounded-xl p-4 border border-emerald-400/30">
+              <div className="bg-white/5 rounded-xl p-4 ring-1 ring-inset ring-white/10 shadow-md shadow-emerald-500/10">
                 <Label htmlFor="website" className="flex items-center gap-2 text-sm font-semibold text-zinc-100 mb-2">
                   <Globe className="w-4 h-4" />
                   Personal Website/Portfolio (+{SCORE_VALUES.WEBSITE} pts)
@@ -206,7 +206,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
                     onChange={(e) => setPersonalWebsite(e.target.value)}
                     placeholder="https://yoursite.com"
                     disabled={connectedAccounts.includes('website')}
-                    className="flex-1 bg-white/10 border border-emerald-400/30 rounded-xl text-white placeholder-white/40 focus:border-lime-400/70 focus:ring-4 focus:ring-lime-500/20 transition-all"
+                    className="flex-1 bg-white/10 ring-1 ring-inset ring-white/10 shadow-md shadow-emerald-500/10 rounded-xl text-white placeholder-white/40 focus-visible:ring-4 focus-visible:ring-lime-500/20 transition-opacity"
                   />
                   <Button
                     onClick={handleAddWebsite}
@@ -226,7 +226,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
               <button
                 onClick={handleVerifyPhone}
                 disabled={phoneVerified}
-                className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
+                className={`w-full p-4 rounded-xl border-2 transition-opacity text-left ${
                   phoneVerified
                     ? "bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20 border-lime-400/50"
                     : "bg-white/5 border-emerald-400/30 hover:border-emerald-400/60"
@@ -252,7 +252,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
               <button
                 onClick={handleConnectWallet}
                 disabled={walletConnected}
-                className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
+                className={`w-full p-4 rounded-xl border-2 transition-opacity text-left ${
                   walletConnected
                     ? "bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20 border-lime-400/50"
                     : "bg-white/5 border-emerald-400/30 hover:border-emerald-400/60"
@@ -278,7 +278,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
         )}
 
         {/* Verification Team Info */}
-        <div className="bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20 rounded-xl p-4 sm:p-5 border border-lime-400/30 mb-4 sm:mb-6">
+        <div className="bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20 rounded-xl p-4 sm:p-5 ring-1 ring-inset ring-white/10 shadow-md shadow-lime-500/10 mb-4 sm:mb-6">
           <h4 className="flex items-center gap-2 font-semibold text-white mb-3 text-sm sm:text-base">
             <Users className="w-4 h-4 sm:w-5 sm:h-5" />
             Your Verification Team
@@ -308,11 +308,12 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
         <Button
           onClick={onComplete}
           disabled={!canProceed}
-          className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-all ${
+          className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-opacity focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-500/40 focus-visible:ring-offset-0 touch-manipulation ${
             canProceed
               ? "bg-gradient-to-r from-emerald-600 via-green-600 to-lime-700 hover:from-emerald-700 hover:via-green-700 hover:to-lime-800 shadow-lime-500/30 hover:shadow-xl hover:shadow-lime-500/40"
-              : "bg-gray-600/50 cursor-not-allowed opacity-50"
+              : "bg-white/10 text-white/40 cursor-not-allowed"
           }`}
+          aria-label={canProceed ? "Continue to ceremony setup" : "Connect an account to continue"}
         >
           {canProceed ? (
             <>

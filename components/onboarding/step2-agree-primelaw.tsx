@@ -33,7 +33,7 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-blue-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl  p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 pointer-events-none" />
 
@@ -41,12 +41,12 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
           <ProgressIndicator currentStep={2} stepTitle="The Prime Law" estimatedMinutes={5} />
 
           <div className="mb-4 sm:mb-6">
-          <h2 className={`text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 ${contrastSafeText.heading}`}>The Prime Law</h2>
+          <h2 className={`text-2xl sm:text-3xl font-bold text-white text-shadow mb-3 sm:mb-4 ${contrastSafeText.heading}`}>The Prime Law</h2>
           <p className={`text-sm sm:text-base text-slate-200 mb-4 sm:mb-6 leading-relaxed text-pretty ${contrastSafeText.body}`}>
             Before creating your account, you must understand and acknowledge The Prime Law - the single constitutional
             principle that governs all interactions within Supercivilization.
           </p>
-          <div className="bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-xl p-6 border border-sky-400/30">
+          <div className="bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-xl p-6 ring-1 ring-inset ring-white/10 shadow-lg shadow-sky-500/10">
             <div className="flex items-start gap-4">
               <Shield className="w-6 h-6 text-sky-300 flex-shrink-0 mt-0.5" />
               <p className="text-sm sm:text-base text-slate-100 leading-relaxed">
@@ -59,14 +59,14 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
         </div>
 
         {/* The Prime Law */}
-        <div className="bg-gradient-to-br from-white/10 to-white/5 rounded-xl border-2 border-sky-400/50 p-5 sm:p-6 mb-4 sm:mb-6">
+        <div className="bg-gradient-to-br from-white/10 to-white/5 rounded-xl ring-1 ring-inset ring-white/10 shadow-lg shadow-sky-500/20 p-5 sm:p-6 mb-4 sm:mb-6">
           <h3 className="text-lg sm:text-xl font-semibold text-white mb-4 flex items-center gap-2">
             <Shield className="w-6 h-6 text-sky-400" />
             The Prime Law
           </h3>
 
           <div className="space-y-4 text-white">
-            <div className="bg-white/10 rounded-lg p-4 border border-indigo-400/30">
+            <div className="bg-white/10 rounded-lg p-4 ring-1 ring-inset ring-white/10 shadow-md shadow-indigo-500/10">
               <p className="font-semibold mb-2 text-slate-100">Preamble</p>
               <ul className="space-y-2 text-sm text-slate-200">
                 <li>• The purpose of human life is to prosper and live happily</li>
@@ -92,7 +92,7 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-lg p-4 border border-sky-400/30"
+                  className="bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-lg p-4 ring-1 ring-inset ring-white/10 shadow-md shadow-sky-500/10"
                 >
                   <p className="font-semibold mb-2 text-slate-100">{article.title}</p>
                   <p className="text-sm text-slate-200">{article.text}</p>
@@ -100,7 +100,7 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
               ))}
             </div>
 
-            <div className="bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-lg p-4 border border-sky-400/30">
+            <div className="bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-lg p-4 ring-1 ring-inset ring-white/10 shadow-md shadow-sky-500/10">
               <p className="text-sm text-slate-200 font-medium">
                 The Prime Law is the fundamental, natural law of protection and may not be amended.
               </p>
@@ -110,7 +110,9 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
           {!showFullText && (
             <button
               onClick={() => setShowFullText(true)}
-              className="mt-4 text-sky-300 hover:text-sky-200 text-sm font-medium flex items-center gap-2"
+              className="mt-4 text-sky-300 hover:text-sky-200 text-sm font-medium flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/40 focus-visible:ring-offset-0 rounded touch-manipulation"
+              aria-expanded="false"
+              aria-controls="detailed-explanation"
             >
               Read detailed explanation
               <ArrowRight className="w-4 h-4" />
@@ -121,9 +123,10 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
         {/* Expanded Explanation */}
         {showFullText && (
           <motion.div
+            id="detailed-explanation"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            className="bg-white/5 rounded-lg p-5 sm:p-6 mb-4 sm:mb-6 border border-blue-500/20"
+            className="bg-white/5 rounded-lg p-5 sm:p-6 mb-4 sm:mb-6 "
           >
             <h4 className="font-semibold text-white mb-3">What This Means in Practice</h4>
             <div className="space-y-3 text-sm text-slate-200">
@@ -141,7 +144,7 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
               </p>
             </div>
 
-            <div className="mt-4 bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-lg p-4 border border-sky-400/30">
+            <div className="mt-4 bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-lg p-4 ring-1 ring-inset ring-white/10 shadow-md shadow-sky-500/10">
               <p className="text-sm text-slate-200">
                 <strong className="text-sky-200">Simple Rule:</strong> You're free to do anything that doesn't
                 involve initiating force, committing fraud, or coercing others. This applies to everyone equally - no
@@ -179,17 +182,17 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className={`flex items-start gap-4 p-5 rounded-xl cursor-pointer transition-all border-2 ${
+              className={`flex items-start gap-4 p-5 rounded-xl cursor-pointer transition-all ${
                 agreements[item.key]
-                  ? "bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 border-sky-300"
-                  : "bg-white/5 border-sky-300/50 hover:border-sky-300"
+                  ? "bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 ring-1 ring-inset ring-white/20 shadow-lg shadow-sky-500/20"
+                  : "bg-white/5 ring-1 ring-inset ring-white/10 shadow-md shadow-sky-500/10 hover:shadow-lg hover:shadow-sky-500/20"
               }`}
             >
               <Checkbox
                 id={`agreement-${item.key}`}
                 checked={agreements[item.key]}
                 onCheckedChange={() => toggleAgreement(item.key)}
-                className={`mt-1 border-2 border-sky-200 bg-slate-900 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-indigo-500 data-[state=checked]:via-blue-500 data-[state=checked]:to-sky-600 data-[state=checked]:border-sky-300 ${focusVisible.highContrast}`}
+                className={`mt-1 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-indigo-500 data-[state=checked]:via-blue-500 data-[state=checked]:to-sky-600 focus-visible:ring-blue-500/40 ${focusVisible.highContrast}`}
                 aria-label={item.title}
               />
               <div className="flex-1">
@@ -202,7 +205,7 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
         </div>
 
         {!canContinue && (
-          <div className="mb-4 sm:mb-6 bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-lg p-4 sm:p-5 border border-sky-400/30 flex items-start gap-3">
+          <div className="mb-4 sm:mb-6 bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-lg p-4 sm:p-5 ring-1 ring-inset ring-white/10 shadow-md shadow-sky-500/10 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-sky-300 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-slate-200">
               You must acknowledge all three agreements to proceed. These are not optional - they are the constitutional
@@ -214,11 +217,12 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
         <Button
           onClick={onComplete}
           disabled={!canContinue}
-          className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-all ${
+          className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-opacity focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-500/40 focus-visible:ring-offset-0 touch-manipulation ${
             canContinue
               ? "bg-gradient-to-r from-indigo-600 via-blue-600 to-sky-700 hover:from-indigo-700 hover:via-blue-700 hover:to-sky-800 shadow-sky-500/30 hover:shadow-xl hover:shadow-sky-500/40"
-              : "bg-gray-600 opacity-50 cursor-not-allowed"
+              : "bg-white/10 text-white/40 cursor-not-allowed"
           }`}
+          aria-label={canContinue ? "Continue to account creation" : "Accept all agreements to continue"}
         >
           {canContinue ? <Unlock className="w-6 h-6 mr-2" /> : <Lock className="w-6 h-6 mr-2" />}
           {canContinue ? "Continue to Account Creation" : "Accept All to Continue"}

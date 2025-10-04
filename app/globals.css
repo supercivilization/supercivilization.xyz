@@ -75,6 +75,36 @@ body {
   font-variation-settings: 'opsz' auto;
 }
 
+/* Reduced motion support - 2025 Best Practice */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Touch-action optimization for better mobile experience */
+button,
+a,
+[role="button"],
+[role="link"] {
+  touch-action: manipulation;
+}
+
+/* Hide scrollbar while maintaining scroll functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 @layer utilities {
   .animate-bounce-x {
     animation: bounce-x 1s infinite;
@@ -111,6 +141,18 @@ body {
 
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r;
+  }
+
+  .text-shadow-sm {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   }
 }
 

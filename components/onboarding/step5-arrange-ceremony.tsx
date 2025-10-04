@@ -40,7 +40,7 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-amber-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl  p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-amber-500/20 via-yellow-500/20 to-amber-500/20 pointer-events-none" />
 
@@ -48,7 +48,7 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
           <ProgressIndicator currentStep={5} stepTitle="Arrange Ceremony" estimatedMinutes={3} />
 
           <div className="mb-4 sm:mb-6">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white text-shadow mb-3 sm:mb-4">
               Schedule Your Induction
             </h2>
             <p className="text-sm sm:text-base text-stone-200 leading-relaxed text-pretty">
@@ -66,7 +66,7 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white/5 rounded-xl p-4 sm:p-5 border border-amber-400/30 mb-3"
+              className="bg-white/5 rounded-xl p-4 sm:p-5 ring-1 ring-inset ring-white/10 shadow-md shadow-amber-500/10 mb-3"
             >
               <div className="flex items-start gap-3 sm:gap-4">
                 <Shield className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-400 flex-shrink-0 mt-0.5" />
@@ -75,7 +75,7 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
                     <div className="font-semibold text-white text-sm sm:text-base truncate">
                       {CEREMONY_TEAM.inviter.name}
                     </div>
-                    <span className="px-2 sm:px-3 py-1 bg-gradient-to-br from-amber-500/20 via-yellow-500/20 to-amber-600/20 text-yellow-300 border border-yellow-400/30 text-xs sm:text-sm font-medium rounded-full whitespace-nowrap">
+                    <span className="px-2 sm:px-3 py-1 bg-gradient-to-br from-amber-500/20 via-yellow-500/20 to-amber-600/20 text-yellow-300 ring-1 ring-inset ring-white/10 shadow-md shadow-yellow-500/10 text-xs sm:text-sm font-medium rounded-full whitespace-nowrap">
                       {CEREMONY_TEAM.inviter.standing}
                     </span>
                   </div>
@@ -92,14 +92,14 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: (index + 1) * 0.1 }}
-                className="bg-white/5 rounded-xl p-4 sm:p-5 border border-amber-400/30 mb-3"
+                className="bg-white/5 rounded-xl p-4 sm:p-5 ring-1 ring-inset ring-white/10 shadow-md shadow-amber-500/10 mb-3"
               >
                 <div className="flex items-start gap-3 sm:gap-4">
                   <Users className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-400 flex-shrink-0 mt-0.5" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start sm:items-center justify-between gap-2 mb-2">
                       <div className="font-semibold text-white text-sm sm:text-base truncate">{witness.name}</div>
-                      <span className="px-2 sm:px-3 py-1 bg-gradient-to-br from-amber-500/20 via-yellow-500/20 to-amber-600/20 text-yellow-300 border border-yellow-400/30 text-xs sm:text-sm font-medium rounded-full whitespace-nowrap">
+                      <span className="px-2 sm:px-3 py-1 bg-gradient-to-br from-amber-500/20 via-yellow-500/20 to-amber-600/20 text-yellow-300 ring-1 ring-inset ring-white/10 shadow-md shadow-yellow-500/10 text-xs sm:text-sm font-medium rounded-full whitespace-nowrap">
                         {witness.standing}
                       </span>
                     </div>
@@ -113,7 +113,7 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
           </div>
 
           <motion.div
-            className="bg-gradient-to-br from-amber-500/20 via-yellow-500/20 to-amber-600/20 rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-yellow-400/30 mb-4 sm:mb-6 shadow-lg"
+            className="bg-gradient-to-br from-amber-500/20 via-yellow-500/20 to-amber-600/20 rounded-xl sm:rounded-2xl p-4 sm:p-5 ring-1 ring-inset ring-white/10 shadow-md shadow-yellow-500/10 mb-4 sm:mb-6 shadow-lg"
             whileHover={{ scale: 1.01 }}
           >
             <div className="flex items-start gap-3">
@@ -138,7 +138,7 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
                   value={formData.preferredDate}
                   onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
                   min={new Date().toISOString().split("T")[0]}
-                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-amber-400/30 rounded-xl text-white text-base focus:border-yellow-400/50 focus:ring-4 focus:ring-yellow-500/20 transition-all"
+                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 ring-1 ring-inset ring-white/10 shadow-md shadow-amber-500/10 rounded-xl text-white text-base focus-visible:ring-4 focus-visible:ring-yellow-500/20 transition-opacity"
                 />
               </div>
               <div>
@@ -150,7 +150,7 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
                   type="time"
                   value={formData.preferredTime}
                   onChange={(e) => setFormData({ ...formData, preferredTime: e.target.value })}
-                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-amber-400/30 rounded-xl text-white text-base focus:border-yellow-400/50 focus:ring-4 focus:ring-yellow-500/20 transition-all"
+                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 ring-1 ring-inset ring-white/10 shadow-md shadow-amber-500/10 rounded-xl text-white text-base focus-visible:ring-4 focus-visible:ring-yellow-500/20 transition-opacity"
                 />
               </div>
             </div>
@@ -164,13 +164,13 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 placeholder="Any scheduling preferences or constraints..."
                 rows={3}
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-amber-400/30 rounded-xl text-white placeholder-white/40 text-base focus:border-yellow-400/50 focus:ring-4 focus:ring-yellow-500/20 transition-all resize-none"
+                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-0 ring-1 ring-inset ring-white/10 shadow-md shadow-amber-500/10 rounded-xl text-white placeholder-white/40 text-base focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-yellow-500/40 focus-visible:ring-offset-0 transition-opacity resize-none"
               />
             </div>
           </div>
 
           <motion.div
-            className="bg-gradient-to-br from-amber-500/20 via-yellow-500/20 to-amber-600/20 rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-yellow-400/30 mb-4 sm:mb-6 shadow-lg"
+            className="bg-gradient-to-br from-amber-500/20 via-yellow-500/20 to-amber-600/20 rounded-xl sm:rounded-2xl p-4 sm:p-5 ring-1 ring-inset ring-white/10 shadow-md shadow-yellow-500/10 mb-4 sm:mb-6 shadow-lg"
             whileHover={{ scale: 1.01 }}
           >
             <div className="flex items-start gap-3">
@@ -202,11 +202,12 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
           <Button
             onClick={onComplete}
             disabled={!canSubmit}
-            className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-all ${
+            className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-opacity focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-500/40 focus-visible:ring-offset-0 touch-manipulation ${
               canSubmit
                 ? "bg-gradient-to-r from-amber-600 via-yellow-600 to-amber-700 hover:from-amber-700 hover:via-yellow-700 hover:to-amber-800 shadow-yellow-500/30 hover:shadow-xl hover:shadow-yellow-500/40"
-                : "bg-gray-600/50 cursor-not-allowed"
+                : "bg-white/10 text-white/40 cursor-not-allowed"
             }`}
+            aria-label={canSubmit ? "Propose schedule" : "Select date and time to continue"}
           >
             {canSubmit ? (
               <>

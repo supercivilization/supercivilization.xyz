@@ -59,7 +59,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-fuchsia-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl  p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-500/20 pointer-events-none" />
 
@@ -69,11 +69,11 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
         {step === "payment" && (
           <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Activate Membership</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white text-shadow mb-3 sm:mb-4">Activate Membership</h2>
               <p className="text-sm sm:text-base text-stone-200 leading-relaxed mb-4 sm:mb-6">Financial commitment demonstrates skin-in-the-game and funds our path to network state status.</p>
             </div>
 
-            <div className="bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 rounded-lg p-5 sm:p-6 border border-pink-400/30">
+            <div className="bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 rounded-lg p-5 sm:p-6 ring-1 ring-inset ring-white/10 shadow-md shadow-pink-500/10">
               <h3 className="font-semibold text-white mb-4 text-sm sm:text-base">Funding Allocation</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm text-stone-200">
                 <div>
@@ -104,7 +104,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
                 {plans.map((plan) => (
                   <label
                     key={plan.id}
-                    className={`flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl cursor-pointer transition-all border-2 ${
+                    className={`flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl cursor-pointer transition-opacity border-2 ${
                       selectedPlan === plan.id
                         ? "bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 border-pink-400/50"
                         : "bg-white/5 border-pink-300/50 hover:border-pink-300"
@@ -181,18 +181,18 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
                   <Input
                     type="text"
                     placeholder="Card number"
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-fuchsia-400/30 rounded-lg text-white placeholder-white/40 text-sm sm:text-base focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20 transition-all"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/10 ring-1 ring-inset ring-fuchsia-500/20 shadow-md shadow-fuchsia-500/10 rounded-lg text-white placeholder-white/40 text-sm sm:text-base focus-visible:ring-4 focus-visible:ring-fuchsia-500/40 transition-opacity"
                   />
                   <div className="grid grid-cols-2 gap-2 sm:gap-3">
                     <Input
                       type="text"
                       placeholder="MM/YY"
-                      className="px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-fuchsia-400/30 rounded-lg text-white placeholder-white/40 text-sm sm:text-base focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20 transition-all"
+                      className="px-3 sm:px-4 py-2 sm:py-3 bg-white/10 ring-1 ring-inset ring-fuchsia-500/20 shadow-md shadow-fuchsia-500/10 rounded-lg text-white placeholder-white/40 text-sm sm:text-base focus-visible:ring-4 focus-visible:ring-fuchsia-500/40 transition-opacity"
                     />
                     <Input
                       type="text"
                       placeholder="CVC"
-                      className="px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-fuchsia-400/30 rounded-lg text-white placeholder-white/40 text-sm sm:text-base focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20 transition-all"
+                      className="px-3 sm:px-4 py-2 sm:py-3 bg-white/10 ring-1 ring-inset ring-fuchsia-500/20 shadow-md shadow-fuchsia-500/10 rounded-lg text-white placeholder-white/40 text-sm sm:text-base focus-visible:ring-4 focus-visible:ring-fuchsia-500/40 transition-opacity"
                     />
                   </div>
                 </div>
@@ -200,12 +200,12 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
             </div>
 
             {/* Consent */}
-            <label htmlFor="payment-consent" className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl cursor-pointer transition-all border-2 bg-white/5 hover:bg-white/10 border-pink-300/50 hover:border-pink-300">
+            <label htmlFor="payment-consent" className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl cursor-pointer transition-opacity ring-1 ring-inset ring-white/10 shadow-md shadow-pink-500/10 hover:shadow-lg hover:shadow-pink-500/20">
               <Checkbox
                 id="payment-consent"
                 checked={paymentConsent}
                 onCheckedChange={(checked) => setPaymentConsent(checked as boolean)}
-                className="mt-1 flex-shrink-0 border-2 border-pink-200 bg-slate-900 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-pink-500 data-[state=checked]:via-fuchsia-500 data-[state=checked]:to-pink-600 data-[state=checked]:border-fuchsia-400"
+                className="mt-1 flex-shrink-0 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-pink-500 data-[state=checked]:via-fuchsia-500 data-[state=checked]:to-pink-600 focus-visible:ring-fuchsia-500/40"
                 aria-label="Payment Authorization"
               />
               <div className="flex-1 min-w-0">
@@ -220,7 +220,8 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
             <Button
               onClick={handlePayment}
               disabled={!paymentConsent || processing}
-              className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-all ${paymentConsent && !processing ? "bg-gradient-to-r from-pink-600 via-fuchsia-600 to-pink-700 hover:from-pink-700 hover:via-fuchsia-700 hover:to-pink-800 shadow-pink-500/30 hover:shadow-xl hover:shadow-pink-500/40" : "bg-gray-600/50 cursor-not-allowed"}`}
+              className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-opacity focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-fuchsia-500/40 focus-visible:ring-offset-0 touch-manipulation ${paymentConsent && !processing ? "bg-gradient-to-r from-pink-600 via-fuchsia-600 to-pink-700 hover:from-pink-700 hover:via-fuchsia-700 hover:to-pink-800 shadow-pink-500/30 hover:shadow-xl hover:shadow-pink-500/40" : "bg-white/10 text-white/40 cursor-not-allowed"}`}
+              aria-label={processing ? "Processing payment..." : paymentConsent ? "Complete payment" : "Authorization required"}
             >
               {processing ? (
                 <>
@@ -246,7 +247,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
             >
               <Sparkles className="w-14 h-14 sm:w-16 sm:h-16 text-pink-400 animate-pulse" />
             </motion.div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-5">Minting Membership NFTs</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white text-shadow mb-4 sm:mb-5">Minting Membership NFTs</h2>
             <p className="text-sm sm:text-base text-stone-200 mb-4 sm:mb-6">
               Creating on-chain proof for all participants
             </p>
@@ -259,7 +260,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.3 }}
-                    className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg border-2 bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 border-pink-400/50"
+                    className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg ring-1 ring-inset ring-white/20 shadow-lg shadow-pink-500/20"
                   >
                     <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-pink-400 flex-shrink-0" />
                     <div className="flex-1 text-left">
@@ -283,11 +284,11 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
               <Award className="w-16 h-16 sm:w-20 sm:h-20 text-pink-400" />
             </motion.div>
 
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Membership Activated!</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white text-shadow mb-3 sm:mb-4">Membership Activated!</h2>
             <p className="text-lg sm:text-xl text-stone-100 mb-1">Welcome to Supercivilization</p>
             <p className="text-sm sm:text-base text-stone-200 mb-4 sm:mb-6">Member #{String(Date.now()).slice(-4)}</p>
 
-            <div className="bg-white/5 rounded-lg p-5 sm:p-6 border border-fuchsia-400/30 mb-4 sm:mb-6 text-left">
+            <div className="bg-white/5 rounded-lg p-5 sm:p-6 ring-1 ring-inset ring-white/10 shadow-md shadow-fuchsia-500/10 mb-4 sm:mb-6 text-left">
               <h4 className="font-semibold text-white mb-4 sm:mb-5 text-sm sm:text-base">
                 Discovery Complete - Onboarding Begins
               </h4>
@@ -314,7 +315,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
               </div>
             </div>
 
-            <div className="bg-fuchsia-500/20 rounded-lg p-4 sm:p-5 border border-fuchsia-400/30 mb-4 sm:mb-6">
+            <div className="bg-fuchsia-500/20 rounded-lg p-4 sm:p-5 ring-1 ring-inset ring-white/10 shadow-md shadow-fuchsia-500/10 mb-4 sm:mb-6">
               <p className="text-sm text-stone-200 leading-relaxed">
                 <strong className="text-white">The 48-Hour Rule:</strong> Check your email within 48 hours and complete
                 your first action to maintain momentum. Your journey has begun.
@@ -323,7 +324,8 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
 
             <Button
               onClick={onComplete}
-              className="w-full bg-gradient-to-r from-pink-600 via-fuchsia-600 to-pink-700 text-white hover:from-pink-700 hover:via-fuchsia-700 hover:to-pink-800 shadow-pink-500/30 hover:shadow-xl hover:shadow-pink-500/40 text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-all"
+              className="w-full bg-gradient-to-r from-pink-600 via-fuchsia-600 to-pink-700 text-white hover:from-pink-700 hover:via-fuchsia-700 hover:to-pink-800 shadow-pink-500/30 hover:shadow-xl hover:shadow-pink-500/40 text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-opacity focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-fuchsia-500/40 focus-visible:ring-offset-0 touch-manipulation"
+              aria-label="Begin onboarding experience"
             >
               Begin Onboarding Experience
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />

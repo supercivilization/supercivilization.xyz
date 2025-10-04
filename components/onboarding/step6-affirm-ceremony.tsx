@@ -29,7 +29,7 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-rose-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl  p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 pointer-events-none" />
 
@@ -39,11 +39,11 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
         {!uploadedFile ? (
           <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className={`text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 ${contrastSafeText.heading}`}>Recording Consent</h2>
+              <h2 className={`text-2xl sm:text-3xl font-bold text-white text-shadow mb-3 sm:mb-4 ${contrastSafeText.heading}`}>Recording Consent</h2>
               <p className={`text-sm sm:text-base text-stone-200 leading-relaxed ${contrastSafeText.body}`}>Your ceremony must be recorded and permanently stored on IPFS.</p>
             </div>
 
-            <div className="bg-white/5 rounded-lg p-5 sm:p-6 border border-rose-400/30">
+            <div className="bg-white/5 rounded-lg p-5 sm:p-6 ring-1 ring-inset ring-white/10 shadow-md shadow-rose-500/10">
               <h4 className="font-semibold text-white mb-4">Why We Record</h4>
               <div className="space-y-3 text-sm text-stone-200">
                 {[
@@ -76,12 +76,12 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
               </div>
             </div>
 
-            <label htmlFor="recording-consent" className="flex items-start gap-4 p-5 sm:p-6 rounded-xl cursor-pointer transition-all border-2 bg-white/5 hover:bg-white/10 border-rose-300/50 hover:border-rose-300">
+            <label htmlFor="recording-consent" className="flex items-start gap-4 p-5 sm:p-6 rounded-xl cursor-pointer transition-opacity ring-1 ring-inset ring-white/10 shadow-md shadow-rose-500/10 hover:shadow-lg hover:shadow-rose-500/20">
               <Checkbox
                 id="recording-consent"
                 checked={recordingConsent}
                 onCheckedChange={(checked) => setRecordingConsent(checked as boolean)}
-                className={`mt-1 flex-shrink-0 border-2 border-rose-200 bg-slate-900 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-orange-500 data-[state=checked]:via-red-500 data-[state=checked]:to-rose-600 data-[state=checked]:border-rose-400 ${focusVisible.highContrast}`}
+                className={`mt-1 flex-shrink-0 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-orange-500 data-[state=checked]:via-red-500 data-[state=checked]:to-rose-600 focus-visible:ring-rose-500/40 ${focusVisible.highContrast}`}
                 aria-label="I Consent to Recording"
               />
               <div className="flex-1 min-w-0">
@@ -99,7 +99,7 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
               </div>
             </label>
 
-            <div className="bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 rounded-lg p-4 sm:p-5 border border-rose-400/30">
+            <div className="bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 rounded-lg p-4 sm:p-5 ring-1 ring-inset ring-white/10 shadow-md shadow-rose-500/10">
               <p className="text-xs sm:text-sm text-stone-200 leading-relaxed">
                 <strong className="text-white">Demo:</strong> Click the button below to simulate uploading your ceremony
                 recording.
@@ -109,7 +109,8 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
             <Button
               onClick={handleFileUpload}
               disabled={!recordingConsent}
-              className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-all ${recordingConsent ? "bg-gradient-to-r from-orange-600 via-red-600 to-rose-700 hover:from-orange-700 hover:via-red-700 hover:to-rose-800 shadow-rose-500/30 hover:shadow-xl hover:shadow-rose-500/40" : "bg-gray-600/50 cursor-not-allowed"}`}
+              className={`w-full text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-opacity focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose-500/40 focus-visible:ring-offset-0 touch-manipulation ${recordingConsent ? "bg-gradient-to-r from-orange-600 via-red-600 to-rose-700 hover:from-orange-700 hover:via-red-700 hover:to-rose-800 shadow-rose-500/30 hover:shadow-xl hover:shadow-rose-500/40" : "bg-white/10 text-white/40 cursor-not-allowed"}`}
+              aria-label={recordingConsent ? "Upload ceremony recording" : "Consent required to upload"}
             >
               {recordingConsent ? (
                 <>
@@ -126,7 +127,7 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
           </div>
         ) : (
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-4 sm:space-y-6">
-            <div className="bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 rounded-lg p-5 sm:p-6 border border-rose-400/50">
+            <div className="bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 rounded-lg p-5 sm:p-6 ring-1 ring-inset ring-white/10 shadow-md shadow-rose-500/10">
               <div className="flex items-center gap-4 mb-4 sm:mb-5">
                 <CheckCircle className="w-12 h-12 sm:w-14 sm:h-14 text-rose-400 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
@@ -145,7 +146,7 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
               </div>
             </div>
 
-            <div className="bg-white/5 rounded-lg p-5 sm:p-6 border border-rose-400/30">
+            <div className="bg-white/5 rounded-lg p-5 sm:p-6 ring-1 ring-inset ring-white/10 shadow-md shadow-rose-500/10">
               <h4 className="font-semibold text-white mb-3 sm:mb-4 text-sm sm:text-base">Ceremony Verification</h4>
               <div className="space-y-2 text-sm">
                 {[
@@ -168,14 +169,14 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 rounded-lg p-4 sm:p-5 border border-rose-400/30">
+            <div className="bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 rounded-lg p-4 sm:p-5 ring-1 ring-inset ring-white/10 shadow-md shadow-rose-500/10">
               <p className="text-xs sm:text-sm text-stone-200 leading-relaxed">
                 <strong className="text-white">Next:</strong> Complete payment to activate your membership and mint NFTs
                 for all ceremony participants.
               </p>
             </div>
 
-            <Button onClick={onComplete} className="w-full bg-gradient-to-r from-orange-600 via-red-600 to-rose-700 text-white hover:from-orange-700 hover:via-red-700 hover:to-rose-800 shadow-rose-500/30 hover:shadow-xl hover:shadow-rose-500/40 text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-all">
+            <Button onClick={onComplete} className="w-full bg-gradient-to-r from-orange-600 via-red-600 to-rose-700 text-white hover:from-orange-700 hover:via-red-700 hover:to-rose-800 shadow-rose-500/30 hover:shadow-xl hover:shadow-rose-500/40 text-base sm:text-lg py-4 sm:py-6 rounded-xl font-semibold shadow-lg transition-opacity focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose-500/40 focus-visible:ring-offset-0 touch-manipulation" aria-label="Continue to activation">
               Continue to Activation
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
