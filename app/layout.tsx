@@ -14,7 +14,46 @@ const inter = Inter({
 export const metadata = {
   title: "Supercivilization",
   description: "Join a parallel society built on genius.",
-    generator: 'v0.dev'
+  generator: 'v0.dev',
+  authors: [{ name: 'Joshua Seymour', url: 'https://www.joshuaseymour.com' }],
+  creator: 'Joshua Seymour',
+  publisher: 'Supercivilization',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://www.supercivilization.xyz',
+    siteName: 'Supercivilization',
+    title: 'Supercivilization',
+    description: 'Join a parallel society built on genius.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@supercivilizing',
+    creator: '@joshuaseymour',
+  },
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Supercivilization',
+  url: 'https://www.supercivilization.xyz',
+  logo: 'https://www.supercivilization.xyz/logo.png',
+  sameAs: [
+    'https://github.com/supercivilization',
+    'https://x.com/supercivilizing',
+    'https://www.tiktok.com/@supercivilization',
+    'https://www.youtube.com/@supercivilization',
+  ],
+  founder: {
+    '@type': 'Person',
+    name: 'Joshua Seymour',
+    url: 'https://www.joshuaseymour.com',
+    sameAs: [
+      'https://x.com/joshuaseymour',
+    ],
+  },
+  description: 'Join a parallel society built on genius.',
 }
 
 export default function RootLayout({
@@ -24,6 +63,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="font-sans" suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
@@ -33,7 +78,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-
-
-import './globals.css'
