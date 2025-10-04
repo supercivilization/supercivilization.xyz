@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { Shield, FileText, UserPlus, Fingerprint, Calendar, Video, Award, CheckCircle, Lock } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import { contrastSafeText, touchTarget, focusVisible } from "@/lib/ui-utils"
 
 const STEP_CONFIGS = {
   1: {
@@ -135,6 +136,30 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
     }
   }, [])
 
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Arrow keys for navigation
+      if (e.key === 'ArrowRight' && currentStep < 7) {
+        e.preventDefault()
+        router.push(`/discover/${currentStep + 1}`)
+      }
+      if (e.key === 'ArrowLeft' && currentStep > 1) {
+        e.preventDefault()
+        router.push(`/discover/${currentStep - 1}`)
+      }
+      // Number keys for direct navigation (1-7)
+      const num = parseInt(e.key)
+      if (!isNaN(num) && num >= 1 && num <= 7) {
+        e.preventDefault()
+        router.push(`/discover/${num}`)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [currentStep, router])
+
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date()
@@ -222,7 +247,9 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
                         whileHover={{ scale: 1.15 }}
                         whileTap={{ scale: 0.95 }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                        className={`relative w-11 h-11 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer ${
+                        aria-label={`${step.fullName} - Step ${step.id}`}
+                        aria-current={isCurrent ? "step" : undefined}
+                        className={`relative ${touchTarget.large} rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer ${focusVisible.onGradient} ${
                           isCompleted
                             ? "bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-lg shadow-emerald-500/30 border border-emerald-300 hover:shadow-emerald-500/50"
                             : isCurrent
@@ -309,7 +336,7 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white px-4 leading-tight text-balance"
+            className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white px-4 leading-tight text-balance ${contrastSafeText.heading}`}
           >
             {currentStepData.fullName}
           </motion.h1>

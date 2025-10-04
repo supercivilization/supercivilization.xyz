@@ -6,6 +6,7 @@ import { CheckCircle, Lock, Unlock, ArrowRight, AlertCircle, Shield } from "luci
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import ProgressIndicator from "./progress-indicator"
+import { contrastSafeText, focusVisible } from "@/lib/ui-utils"
 
 interface Step2Props {
   onComplete: () => void
@@ -40,8 +41,8 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
           <ProgressIndicator currentStep={2} stepTitle="The Prime Law" estimatedMinutes={5} />
 
           <div className="mb-4 sm:mb-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">The Prime Law</h2>
-          <p className="text-sm sm:text-base text-slate-200 mb-4 sm:mb-6 leading-relaxed text-pretty">
+          <h2 className={`text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 ${contrastSafeText.heading}`}>The Prime Law</h2>
+          <p className={`text-sm sm:text-base text-slate-200 mb-4 sm:mb-6 leading-relaxed text-pretty ${contrastSafeText.body}`}>
             Before creating your account, you must understand and acknowledge The Prime Law - the single constitutional
             principle that governs all interactions within Supercivilization.
           </p>
@@ -188,7 +189,7 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
                 id={`agreement-${item.key}`}
                 checked={agreements[item.key]}
                 onCheckedChange={() => toggleAgreement(item.key)}
-                className="mt-1 border-2 border-sky-200 bg-slate-900 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-indigo-500 data-[state=checked]:via-blue-500 data-[state=checked]:to-sky-600 data-[state=checked]:border-sky-300"
+                className={`mt-1 border-2 border-sky-200 bg-slate-900 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-indigo-500 data-[state=checked]:via-blue-500 data-[state=checked]:to-sky-600 data-[state=checked]:border-sky-300 ${focusVisible.highContrast}`}
                 aria-label={item.title}
               />
               <div className="flex-1">

@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { ArrowRight, Eye, EyeOff, CheckCircle, AlertCircle, Mail, User, AtSign, Lock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import ProgressIndicator from "./progress-indicator"
+import { contrastSafeText, focusVisible } from "@/lib/ui-utils"
 
 interface Step3Props {
   onComplete: () => void
@@ -25,6 +26,12 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>({})
+  const [passwordStrength, setPasswordStrength] = useState<{ score: number; label: string; color: string }>({
+    score: 0,
+    label: "",
+    color: "",
+  })
 
   // Auto-generate username from display name
   const generateUsername = (displayName: string): string => {
@@ -48,6 +55,55 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
     if (!/[0-9]/.test(password)) return "Password must contain a number"
     return null
   }
+
+  const calculatePasswordStrength = (password: string): { score: number; label: string; color: string } => {
+    if (!password) return { score: 0, label: "", color: "" }
+
+    let score = 0
+    if (password.length >= 8) score++
+    if (password.length >= 12) score++
+    if (/[A-Z]/.test(password)) score++
+    if (/[a-z]/.test(password)) score++
+    if (/[0-9]/.test(password)) score++
+    if (/[^A-Za-z0-9]/.test(password)) score++
+
+    if (score <= 2) return { score: 1, label: "Weak", color: "text-red-400" }
+    if (score <= 4) return { score: 2, label: "Fair", color: "text-yellow-400" }
+    if (score <= 5) return { score: 3, label: "Good", color: "text-cyan-400" }
+    return { score: 4, label: "Strong", color: "text-emerald-400" }
+  }
+
+  // Real-time password strength calculation
+  useEffect(() => {
+    setPasswordStrength(calculatePasswordStrength(formData.password))
+  }, [formData.password])
+
+  // Real-time validation for touched fields
+  useEffect(() => {
+    const newErrors: Record<string, string> = {}
+
+    if (touchedFields.displayName && !formData.displayName) {
+      newErrors.displayName = "Display name is required"
+    }
+
+    if (touchedFields.email) {
+      const emailError = validateEmail(formData.email)
+      if (emailError) newErrors.email = emailError
+    }
+
+    if (touchedFields.password) {
+      const passwordError = validatePassword(formData.password)
+      if (passwordError) newErrors.password = passwordError
+    }
+
+    if (touchedFields.confirmPassword && formData.confirmPassword) {
+      if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = "Passwords do not match"
+      }
+    }
+
+    setErrors(newErrors)
+  }, [formData, touchedFields])
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -129,8 +185,9 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                 type="text"
                 value={formData.displayName}
                 onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
+                onBlur={() => setTouchedFields({ ...touchedFields, displayName: true })}
                 placeholder="Your preferred name"
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-cyan-400/30 rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/70 focus:ring-4 focus:ring-teal-500/20 transition-all"
+                className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/70 focus:ring-4 focus:ring-teal-500/20 transition-all ${focusVisible.default} ${errors.displayName ? 'border-red-400/50' : 'border-cyan-400/30'}`}
               />
               <p className="mt-1.5 text-xs text-slate-300">
                 This is how other members will see you
@@ -169,8 +226,9 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onBlur={() => setTouchedFields({ ...touchedFields, email: true })}
                 placeholder="your@email.com"
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-cyan-400/30 rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/70 focus:ring-4 focus:ring-teal-500/20 transition-all"
+                className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/70 focus:ring-4 focus:ring-teal-500/20 transition-all ${focusVisible.default} ${errors.email ? 'border-red-400/50' : 'border-cyan-400/30'}`}
               />
               <p className="mt-1.5 text-xs text-slate-300">
                 We'll send you a verification link
@@ -199,18 +257,47 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  onBlur={() => setTouchedFields({ ...touchedFields, password: true })}
                   placeholder="Create a strong password"
-                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-cyan-400/30 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
+                  className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all ${focusVisible.default} ${errors.password ? 'border-red-400/50' : 'border-cyan-400/30'}`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-              <p className="mt-1.5 text-xs text-slate-300">
+              {formData.password && passwordStrength.label && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  className="mt-2"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs text-slate-300">Password Strength:</span>
+                    <span className={`text-xs font-semibold ${passwordStrength.color} ${contrastSafeText.muted}`}>
+                      {passwordStrength.label}
+                    </span>
+                  </div>
+                  <div className="h-1.5 bg-slate-800/50 rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(passwordStrength.score / 4) * 100}%` }}
+                      transition={{ duration: 0.3 }}
+                      className={`h-full ${
+                        passwordStrength.score === 1 ? 'bg-red-400' :
+                        passwordStrength.score === 2 ? 'bg-yellow-400' :
+                        passwordStrength.score === 3 ? 'bg-cyan-400' :
+                        'bg-emerald-400'
+                      }`}
+                    />
+                  </div>
+                </motion.div>
+              )}
+              <p className={`mt-1.5 text-xs text-slate-300 ${contrastSafeText.muted}`}>
                 Min 8 characters, include uppercase, lowercase, and number
               </p>
               {errors.password && (
@@ -236,17 +323,29 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                   type={showConfirmPassword ? "text" : "password"}
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                  onBlur={() => setTouchedFields({ ...touchedFields, confirmPassword: true })}
                   placeholder="Re-enter your password"
-                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-cyan-400/30 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
+                  className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all ${focusVisible.default} ${errors.confirmPassword ? 'border-red-400/50' : 'border-cyan-400/30'}`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white transition-colors"
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+              {formData.confirmPassword && !errors.confirmPassword && formData.password === formData.confirmPassword && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="mt-2 flex items-center gap-2 text-xs text-emerald-400"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  <span className={contrastSafeText.muted}>Passwords match</span>
+                </motion.div>
+              )}
               {errors.confirmPassword && (
                 <motion.p
                   initial={{ opacity: 0, y: -10 }}

@@ -6,6 +6,7 @@ import { Video, CheckCircle, ArrowRight, Camera, Upload } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import ProgressIndicator from "./progress-indicator"
+import { contrastSafeText, focusVisible } from "@/lib/ui-utils"
 
 interface Step6Props {
   onComplete: () => void
@@ -38,8 +39,8 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
         {!uploadedFile ? (
           <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Recording Consent</h2>
-              <p className="text-sm sm:text-base text-stone-200 leading-relaxed">Your ceremony must be recorded and permanently stored on IPFS.</p>
+              <h2 className={`text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 ${contrastSafeText.heading}`}>Recording Consent</h2>
+              <p className={`text-sm sm:text-base text-stone-200 leading-relaxed ${contrastSafeText.body}`}>Your ceremony must be recorded and permanently stored on IPFS.</p>
             </div>
 
             <div className="bg-white/5 rounded-lg p-5 sm:p-6 border border-rose-400/30">
@@ -80,7 +81,7 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
                 id="recording-consent"
                 checked={recordingConsent}
                 onCheckedChange={(checked) => setRecordingConsent(checked as boolean)}
-                className="mt-1 flex-shrink-0 border-2 border-rose-200 bg-slate-900 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-orange-500 data-[state=checked]:via-red-500 data-[state=checked]:to-rose-600 data-[state=checked]:border-rose-400"
+                className={`mt-1 flex-shrink-0 border-2 border-rose-200 bg-slate-900 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-orange-500 data-[state=checked]:via-red-500 data-[state=checked]:to-rose-600 data-[state=checked]:border-rose-400 ${focusVisible.highContrast}`}
                 aria-label="I Consent to Recording"
               />
               <div className="flex-1 min-w-0">
