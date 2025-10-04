@@ -18,6 +18,9 @@ export const metadata = {
   authors: [{ name: 'Joshua Seymour', url: 'https://www.joshuaseymour.com' }],
   creator: 'Joshua Seymour',
   publisher: 'Supercivilization',
+  icons: {
+    icon: '/favicon.svg',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -38,7 +41,7 @@ const jsonLd = {
   '@type': 'Organization',
   name: 'Supercivilization',
   url: 'https://www.supercivilization.xyz',
-  logo: 'https://www.supercivilization.xyz/logo.png',
+  logo: 'https://www.supercivilization.xyz/logo.svg',
   sameAs: [
     'https://github.com/supercivilization',
     'https://x.com/supercivilizing',

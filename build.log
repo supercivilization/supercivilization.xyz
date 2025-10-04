@@ -1,0 +1,24 @@
+
+> my-v0-project@0.1.0 build
+> next build --turbo
+
+   ▲ Next.js 15.5.4 (Turbopack)
+   - Environments: .env.local, .env
+   - Experiments (use with caution):
+     · serverActions
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+ ✓ Finished writing to disk in 73ms
+
+> Build error occurred
+[Error: Turbopack build failed with 1 errors:
+./app/favicon.ico
+Processing image failed
+unable to decode image data
+
+Caused by:
+- Format error decoding Ico: ICO image entry has too many color planes or too large hotspot value
+- ICO image entry has too many color planes or too large hotspot value
+
+]
