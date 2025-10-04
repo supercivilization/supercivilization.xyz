@@ -224,7 +224,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
             >
               {processing ? (
                 <>
-                  <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-fuchsia-500/30 border-t-fuchsia-400 rounded-full animate-spin mr-2" />
                   Processing...
                 </>
               ) : (

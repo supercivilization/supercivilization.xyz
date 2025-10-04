@@ -134,7 +134,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
                 >
                   {validating ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                      <div className="w-5 h-5 border-2 border-violet-500/30 border-t-violet-400 rounded-full animate-spin mr-2" />
                       Validating...
                     </>
                   ) : (
@@ -179,7 +179,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
                   <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
                   Your Sponsor
                 </h3>
-                <div className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10">
+                <div className="bg-white/5 rounded-lg p-3 sm:p-4 ">
                   <div className="flex items-center justify-between mb-2 sm:mb-3 gap-3">
                     <div className="min-w-0">
                       <div className="font-semibold text-white text-sm sm:text-base truncate">

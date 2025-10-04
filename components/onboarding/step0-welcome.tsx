@@ -219,7 +219,7 @@ export default function Step0Welcome() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full mb-4 sm:mb-6"
+            className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/5  rounded-full mb-4 sm:mb-6"
           >
             <Zap className="w-3.5 h-3.5 text-zinc-400" />
             <span className="text-xs sm:text-sm font-medium text-zinc-300">Invitation-Only Access</span>
@@ -251,7 +251,7 @@ export default function Step0Welcome() {
                 className="relative"
               >
                 <div className="absolute inset-0 bg-zinc-700 rounded-full blur-xl opacity-40" />
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 hover:bg-white/15 transition-colors">
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center  hover:bg-white/15 transition-colors">
                   <Play className="w-7 h-7 sm:w-9 sm:h-9 text-white ml-0.5" fill="white" />
                 </div>
               </motion.button>
@@ -291,7 +291,7 @@ export default function Step0Welcome() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.5 + index * 0.05 }}
-                  className="bg-white/[0.03] backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-white/10 hover:bg-white/[0.05] transition-all"
+                  className="bg-white/[0.03] backdrop-blur-sm rounded-xl p-4 sm:p-5  hover:bg-white/[0.05] transition-all"
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
                     <div className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg ${step.classes.bg} border ${step.classes.border} flex items-center justify-center`}>
@@ -349,7 +349,7 @@ export default function Step0Welcome() {
           transition={{ delay: 1 }}
           className="mb-10 sm:mb-12 lg:mb-14"
         >
-          <div className="bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/10 p-5 sm:p-6 lg:p-8">
+          <div className="bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-xl rounded-xl sm:rounded-2xl  p-5 sm:p-6 lg:p-8">
             <div className="text-center mb-6">
               <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-3">
                 Ready to Begin Your Journey?

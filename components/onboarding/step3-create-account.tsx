@@ -370,7 +370,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
           >
             {isSubmitting ? (
               <>
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2 inline-block" />
+                <div className="w-5 h-5 border-2 border-cyan-500/30 border-t-cyan-400 rounded-full animate-spin mr-2 inline-block" />
                 Creating Account...
               </>
             ) : canSubmit ? (

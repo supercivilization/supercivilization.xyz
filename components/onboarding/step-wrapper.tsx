@@ -253,7 +253,7 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
                           isCompleted
                             ? "bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-lg shadow-emerald-500/30 border border-emerald-300 hover:shadow-emerald-500/50"
                             : isCurrent
-                              ? `bg-gradient-to-br ${stepConfig.stepBg} text-white ring-2 sm:ring-3 lg:ring-4 ${stepConfig.stepRing} shadow-xl ${stepConfig.stepShadow} border border-white/30`
+                              ? `bg-gradient-to-br ${stepConfig.stepBg} text-white ring-2 sm:ring-3 lg:ring-4 ${stepConfig.stepRing} shadow-xl ${stepConfig.stepShadow}`
                               : isLocked
                                 ? lockedClasses
                                 : availableClasses
@@ -357,7 +357,7 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
               <div className="flex items-center justify-center gap-2 sm:gap-3">
                 {/* Days */}
                 <div className="flex flex-col items-center">
-                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} border border-white/10`}>
+                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} `}>
                     <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor} font-mono tabular-nums`}>
                       {timeLeft.days.toString().padStart(2, "0")}
                     </div>
@@ -369,7 +369,7 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
 
                 {/* Hours */}
                 <div className="flex flex-col items-center">
-                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} border border-white/10`}>
+                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} `}>
                     <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor} font-mono tabular-nums`}>
                       {timeLeft.hours.toString().padStart(2, "0")}
                     </div>
@@ -381,7 +381,7 @@ export default function StepWrapper({ currentStep, children }: StepWrapperProps)
 
                 {/* Minutes */}
                 <div className="flex flex-col items-center">
-                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} border border-white/10`}>
+                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} `}>
                     <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor} font-mono tabular-nums`}>
                       {timeLeft.minutes.toString().padStart(2, "0")}
                     </div>
