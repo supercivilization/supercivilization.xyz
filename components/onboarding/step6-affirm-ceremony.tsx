@@ -75,12 +75,12 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
               </div>
             </div>
 
-            <label htmlFor="recording-consent" className="flex items-start gap-4 p-5 sm:p-6 rounded-xl cursor-pointer transition-all border-2 bg-white/5 hover:bg-white/10 border-rose-400/30 hover:border-rose-400/60">
+            <label htmlFor="recording-consent" className="flex items-start gap-4 p-5 sm:p-6 rounded-xl cursor-pointer transition-all border-2 bg-white/5 hover:bg-white/10 border-rose-300/50 hover:border-rose-300">
               <Checkbox
                 id="recording-consent"
                 checked={recordingConsent}
                 onCheckedChange={(checked) => setRecordingConsent(checked as boolean)}
-                className="mt-1 flex-shrink-0 border-2 border-rose-400 bg-white/5 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-orange-500 data-[state=checked]:via-red-500 data-[state=checked]:to-rose-600 data-[state=checked]:border-rose-400"
+                className="mt-1 flex-shrink-0 border-2 border-rose-200 bg-slate-900 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-orange-500 data-[state=checked]:via-red-500 data-[state=checked]:to-rose-600 data-[state=checked]:border-rose-400"
                 aria-label="I Consent to Recording"
               />
               <div className="flex-1 min-w-0">

@@ -107,7 +107,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
                     className={`flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl cursor-pointer transition-all border-2 ${
                       selectedPlan === plan.id
                         ? "bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 border-pink-400/50"
-                        : "bg-white/5 border-fuchsia-400/30 hover:border-fuchsia-400/60"
+                        : "bg-white/5 border-pink-300/50 hover:border-pink-300"
                     }`}
                   >
                     <input
@@ -157,7 +157,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
                   className={`flex-1 p-3 sm:p-4 rounded-lg border-2 transition ${
                     paymentMethod === "card"
                       ? "bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 border-pink-400/50"
-                      : "bg-white/5 border-fuchsia-400/30 hover:border-fuchsia-400/60"
+                      : "bg-white/5 border-pink-300/50 hover:border-pink-300"
                   }`}
                 >
                   <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2 text-white" />
@@ -168,7 +168,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
                   className={`flex-1 p-3 sm:p-4 rounded-lg border-2 transition ${
                     paymentMethod === "crypto"
                       ? "bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 border-pink-400/50"
-                      : "bg-white/5 border-fuchsia-400/30 hover:border-fuchsia-400/60"
+                      : "bg-white/5 border-pink-300/50 hover:border-pink-300"
                   }`}
                 >
                   <Zap className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2 text-white" />
@@ -200,12 +200,12 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
             </div>
 
             {/* Consent */}
-            <label htmlFor="payment-consent" className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl cursor-pointer transition-all border-2 bg-white/5 hover:bg-white/10 border-fuchsia-400/30 hover:border-fuchsia-400/60">
+            <label htmlFor="payment-consent" className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl cursor-pointer transition-all border-2 bg-white/5 hover:bg-white/10 border-pink-300/50 hover:border-pink-300">
               <Checkbox
                 id="payment-consent"
                 checked={paymentConsent}
                 onCheckedChange={(checked) => setPaymentConsent(checked as boolean)}
-                className="mt-1 flex-shrink-0 border-2 border-fuchsia-400 bg-white/5 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-pink-500 data-[state=checked]:via-fuchsia-500 data-[state=checked]:to-pink-600 data-[state=checked]:border-fuchsia-400"
+                className="mt-1 flex-shrink-0 border-2 border-pink-200 bg-slate-900 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-pink-500 data-[state=checked]:via-fuchsia-500 data-[state=checked]:to-pink-600 data-[state=checked]:border-fuchsia-400"
                 aria-label="Payment Authorization"
               />
               <div className="flex-1 min-w-0">
