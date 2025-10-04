@@ -2,6 +2,8 @@ import { getServerSupabaseClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import VerifyClient from "@/components/verify-client"
 
+export const dynamic = 'force-dynamic'
+
 export default async function VerifyPage() {
   const supabase = getServerSupabaseClient()
 

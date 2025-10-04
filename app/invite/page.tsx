@@ -2,6 +2,8 @@ import { getServerSupabaseClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import InviteClient from "@/components/invite-client"
 
+export const dynamic = 'force-dynamic'
+
 export default async function InvitePage() {
   const supabase = getServerSupabaseClient()
 
