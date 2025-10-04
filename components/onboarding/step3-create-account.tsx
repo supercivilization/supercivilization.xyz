@@ -200,7 +200,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   placeholder="Create a strong password"
-                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-white/10 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
+                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-cyan-400/30 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
                 />
                 <button
                   type="button"
@@ -237,7 +237,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   placeholder="Re-enter your password"
-                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-white/10 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
+                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-cyan-400/30 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
                 />
                 <button
                   type="button"

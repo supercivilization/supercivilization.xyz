@@ -42,7 +42,7 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
               <p className="text-sm sm:text-base text-stone-200 leading-relaxed">Your ceremony must be recorded and permanently stored on IPFS.</p>
             </div>
 
-            <div className="bg-white/5 rounded-lg p-5 sm:p-6 border border-white/10">
+            <div className="bg-white/5 rounded-lg p-5 sm:p-6 border border-rose-400/30">
               <h4 className="font-semibold text-white mb-4">Why We Record</h4>
               <div className="space-y-3 text-sm text-stone-200">
                 {[
@@ -75,7 +75,7 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
               </div>
             </div>
 
-            <label htmlFor="recording-consent" className="flex items-start gap-4 p-5 sm:p-6 rounded-xl cursor-pointer transition-all border-2 bg-white/5 hover:bg-white/10 border-white/10 hover:border-rose-400/50">
+            <label htmlFor="recording-consent" className="flex items-start gap-4 p-5 sm:p-6 rounded-xl cursor-pointer transition-all border-2 bg-white/5 hover:bg-white/10 border-rose-400/30 hover:border-rose-400/60">
               <Checkbox
                 id="recording-consent"
                 checked={recordingConsent}
@@ -144,7 +144,7 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
               </div>
             </div>
 
-            <div className="bg-white/5 rounded-lg p-5 sm:p-6 border border-white/10">
+            <div className="bg-white/5 rounded-lg p-5 sm:p-6 border border-rose-400/30">
               <h4 className="font-semibold text-white mb-3 sm:mb-4 text-sm sm:text-base">Ceremony Verification</h4>
               <div className="space-y-2 text-sm">
                 {[

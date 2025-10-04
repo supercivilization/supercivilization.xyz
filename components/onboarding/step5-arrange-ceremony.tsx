@@ -66,7 +66,7 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white/5 rounded-xl p-4 sm:p-5 border border-white/10 mb-3"
+              className="bg-white/5 rounded-xl p-4 sm:p-5 border border-amber-400/30 mb-3"
             >
               <div className="flex items-start gap-3 sm:gap-4">
                 <Shield className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-400 flex-shrink-0 mt-0.5" />
@@ -92,7 +92,7 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: (index + 1) * 0.1 }}
-                className="bg-white/5 rounded-xl p-4 sm:p-5 border border-white/10 mb-3"
+                className="bg-white/5 rounded-xl p-4 sm:p-5 border border-amber-400/30 mb-3"
               >
                 <div className="flex items-start gap-3 sm:gap-4">
                   <Users className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-400 flex-shrink-0 mt-0.5" />

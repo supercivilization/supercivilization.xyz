@@ -154,7 +154,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
                   className={`relative p-4 rounded-xl border-2 transition-all text-left ${
                     isConnected
                       ? "bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20 border-lime-400/50"
-                      : "bg-white/5 border-white/10 hover:border-emerald-400/30 cursor-pointer"
+                      : "bg-white/5 border-emerald-400/30 hover:border-emerald-400/60 cursor-pointer"
                   }`}
                 >
                   {provider.recommended && !connectedAccounts.length && (
@@ -193,7 +193,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
 
             <div className="space-y-4">
               {/* Personal Website */}
-              <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+              <div className="bg-white/5 rounded-xl p-4 border border-emerald-400/30">
                 <Label htmlFor="website" className="flex items-center gap-2 text-sm font-semibold text-zinc-100 mb-2">
                   <Globe className="w-4 h-4" />
                   Personal Website/Portfolio (+{SCORE_VALUES.WEBSITE} pts)
@@ -229,7 +229,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
                 className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                   phoneVerified
                     ? "bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20 border-lime-400/50"
-                    : "bg-white/5 border-white/10 hover:border-emerald-400/30"
+                    : "bg-white/5 border-emerald-400/30 hover:border-emerald-400/60"
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -255,7 +255,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
                 className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                   walletConnected
                     ? "bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20 border-lime-400/50"
-                    : "bg-white/5 border-white/10 hover:border-emerald-400/30"
+                    : "bg-white/5 border-emerald-400/30 hover:border-emerald-400/60"
                 }`}
               >
                 <div className="flex items-center justify-between">

@@ -107,7 +107,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
                     className={`flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl cursor-pointer transition-all border-2 ${
                       selectedPlan === plan.id
                         ? "bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 border-pink-400/50"
-                        : "bg-white/5 border-white/10 hover:border-white/30"
+                        : "bg-white/5 border-fuchsia-400/30 hover:border-fuchsia-400/60"
                     }`}
                   >
                     <input
@@ -157,7 +157,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
                   className={`flex-1 p-3 sm:p-4 rounded-lg border-2 transition ${
                     paymentMethod === "card"
                       ? "bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 border-pink-400/50"
-                      : "bg-white/5 border-white/10 hover:border-white/30"
+                      : "bg-white/5 border-fuchsia-400/30 hover:border-fuchsia-400/60"
                   }`}
                 >
                   <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2 text-white" />
@@ -168,7 +168,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
                   className={`flex-1 p-3 sm:p-4 rounded-lg border-2 transition ${
                     paymentMethod === "crypto"
                       ? "bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 border-pink-400/50"
-                      : "bg-white/5 border-white/10 hover:border-white/30"
+                      : "bg-white/5 border-fuchsia-400/30 hover:border-fuchsia-400/60"
                   }`}
                 >
                   <Zap className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2 text-white" />
@@ -200,7 +200,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
             </div>
 
             {/* Consent */}
-            <label htmlFor="payment-consent" className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl cursor-pointer transition-all border-2 bg-white/5 hover:bg-white/10 border-white/10 hover:border-pink-400/50">
+            <label htmlFor="payment-consent" className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl cursor-pointer transition-all border-2 bg-white/5 hover:bg-white/10 border-fuchsia-400/30 hover:border-fuchsia-400/60">
               <Checkbox
                 id="payment-consent"
                 checked={paymentConsent}
@@ -287,7 +287,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
             <p className="text-lg sm:text-xl text-stone-100 mb-1">Welcome to Supercivilization</p>
             <p className="text-sm sm:text-base text-stone-200 mb-4 sm:mb-6">Member #{String(Date.now()).slice(-4)}</p>
 
-            <div className="bg-white/5 rounded-lg p-5 sm:p-6 border border-white/10 mb-4 sm:mb-6 text-left">
+            <div className="bg-white/5 rounded-lg p-5 sm:p-6 border border-fuchsia-400/30 mb-4 sm:mb-6 text-left">
               <h4 className="font-semibold text-white mb-4 sm:mb-5 text-sm sm:text-base">
                 Discovery Complete - Onboarding Begins
               </h4>
