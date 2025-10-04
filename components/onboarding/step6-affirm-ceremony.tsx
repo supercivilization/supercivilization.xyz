@@ -80,7 +80,7 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
                 id="recording-consent"
                 checked={recordingConsent}
                 onCheckedChange={(checked) => setRecordingConsent(checked as boolean)}
-                className="mt-1 flex-shrink-0 border-2 border-rose-400/60 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-orange-500 data-[state=checked]:via-red-500 data-[state=checked]:to-rose-600 data-[state=checked]:border-rose-400"
+                className="mt-1 flex-shrink-0 border-2 border-rose-400 bg-white/5 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-orange-500 data-[state=checked]:via-red-500 data-[state=checked]:to-rose-600 data-[state=checked]:border-rose-400"
                 aria-label="I Consent to Recording"
               />
               <div className="flex-1 min-w-0">

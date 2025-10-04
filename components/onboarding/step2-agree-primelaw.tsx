@@ -188,7 +188,7 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
                 id={`agreement-${item.key}`}
                 checked={agreements[item.key]}
                 onCheckedChange={() => toggleAgreement(item.key)}
-                className="mt-1 border-2 border-blue-400/60 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-indigo-500 data-[state=checked]:via-blue-500 data-[state=checked]:to-sky-600 data-[state=checked]:border-sky-400"
+                className="mt-1 border-2 border-blue-400 bg-white/5 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-indigo-500 data-[state=checked]:via-blue-500 data-[state=checked]:to-sky-600 data-[state=checked]:border-sky-400"
                 aria-label={item.title}
               />
               <div className="flex-1">

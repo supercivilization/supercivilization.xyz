@@ -205,7 +205,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
                 id="payment-consent"
                 checked={paymentConsent}
                 onCheckedChange={(checked) => setPaymentConsent(checked as boolean)}
-                className="mt-1 flex-shrink-0 border-2 border-fuchsia-400/60 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-pink-500 data-[state=checked]:via-fuchsia-500 data-[state=checked]:to-pink-600 data-[state=checked]:border-fuchsia-400"
+                className="mt-1 flex-shrink-0 border-2 border-fuchsia-400 bg-white/5 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-pink-500 data-[state=checked]:via-fuchsia-500 data-[state=checked]:to-pink-600 data-[state=checked]:border-fuchsia-400"
                 aria-label="Payment Authorization"
               />
               <div className="flex-1 min-w-0">
