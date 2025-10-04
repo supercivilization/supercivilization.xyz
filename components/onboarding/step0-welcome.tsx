@@ -3,13 +3,9 @@
 import { motion } from "framer-motion"
 import { ArrowRight, Shield, FileText, UserPlus, Fingerprint, Calendar, Video, Award, Lock, Play, Clock, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
-interface Step0Props {
-  onComplete: () => void
-  colors?: any
-}
-
-export default function Step0Welcome({ onComplete, colors: _colors }: Step0Props) {
+export default function Step0Welcome() {
   const allSteps = [
     {
       id: 1,
@@ -364,13 +360,14 @@ export default function Step0Welcome({ onComplete, colors: _colors }: Step0Props
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto">
-              <Button
-                onClick={onComplete}
-                className="flex-1 bg-gradient-to-r from-zinc-700 via-zinc-600 to-zinc-700 hover:from-zinc-800 hover:via-zinc-700 hover:to-zinc-800 text-white text-sm sm:text-base py-5 sm:py-6 rounded-lg sm:rounded-xl font-bold shadow-xl shadow-zinc-500/20 hover:shadow-zinc-500/40 transition-all group"
-              >
-                <span>I'm Ready - Begin Discovery</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link href="/discover/1" className="flex-1">
+                <Button
+                  className="w-full bg-gradient-to-r from-zinc-700 via-zinc-600 to-zinc-700 hover:from-zinc-800 hover:via-zinc-700 hover:to-zinc-800 text-white text-sm sm:text-base py-5 sm:py-6 rounded-lg sm:rounded-xl font-bold shadow-xl shadow-zinc-500/20 hover:shadow-zinc-500/40 transition-all group"
+                >
+                  <span>I'm Ready - Begin Discovery</span>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
             </div>
 
             <div className="mt-4 text-center">
