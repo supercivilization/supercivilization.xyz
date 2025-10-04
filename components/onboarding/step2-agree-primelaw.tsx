@@ -181,14 +181,14 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
               className={`flex items-start gap-4 p-5 rounded-xl cursor-pointer transition-all border-2 ${
                 agreements[item.key]
                   ? "bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 border-sky-400/50"
-                  : "bg-white/5 border-blue-400/30 hover:border-sky-400/50"
+                  : "bg-white/5 border-sky-500/60 hover:border-sky-400/80"
               }`}
             >
               <Checkbox
                 id={`agreement-${item.key}`}
                 checked={agreements[item.key]}
                 onCheckedChange={() => toggleAgreement(item.key)}
-                className="mt-1 border-2 border-blue-400 bg-white/5 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-indigo-500 data-[state=checked]:via-blue-500 data-[state=checked]:to-sky-600 data-[state=checked]:border-sky-400"
+                className="mt-1 border-2 border-sky-400 bg-slate-900/50 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-indigo-500 data-[state=checked]:via-blue-500 data-[state=checked]:to-sky-600 data-[state=checked]:border-sky-400"
                 aria-label={item.title}
               />
               <div className="flex-1">
