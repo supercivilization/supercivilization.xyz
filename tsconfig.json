@@ -28,7 +28,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["node", "jest", "react", "next"]
+    "types": ["node", "react", "next"]
   },
   "include": [
     "next-env.d.ts",
@@ -37,6 +37,6 @@
     ".next/types/**/*.ts",
     "node_modules/next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"]
 }
 

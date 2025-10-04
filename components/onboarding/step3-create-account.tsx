@@ -11,9 +11,10 @@ import ProgressIndicator from "./progress-indicator"
 interface Step3Props {
   onComplete: () => void
   timeLeft: string
+  colors?: any
 }
 
-export default function Step3CreateAccount({ onComplete }: Step3Props) {
+export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, colors: _colors }: Step3Props) {
   const [formData, setFormData] = useState({
     displayName: "",
     email: "",
@@ -72,7 +73,8 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
 
     setIsSubmitting(true)
 
-    const username = generateUsername(formData.displayName)
+    // Generate username for future use
+    // const username = generateUsername(formData.displayName)
 
     // TODO: Implement Supabase signup
     // const { data, error } = await supabase.auth.signUp({
@@ -108,17 +110,17 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
 
         <div className="relative z-10">
           <ProgressIndicator currentStep={3} stepTitle="Create Account" estimatedMinutes={3} />
-          <div className="mb-6 sm:mb-8">
+          <div className="mb-4 sm:mb-6">
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 sm:mb-3">Create Your Account</h2>
-            <p className="text-sm sm:text-base text-cyan-100 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-200 leading-relaxed">
               Choose your identity and create your secure account.
             </p>
           </div>
 
-          <div className="space-y-4 sm:space-y-5 mb-6 sm:mb-8">
+          <div className="space-y-4 sm:space-y-5 mb-4 sm:mb-6">
             {/* Display Name */}
             <div>
-              <Label htmlFor="displayName" className="block text-sm sm:text-base font-semibold text-cyan-200 mb-2.5 flex items-center gap-2">
+              <Label htmlFor="displayName" className="block text-sm sm:text-base font-semibold text-slate-100 mb-2.5 flex items-center gap-2">
                 <User className="w-4 h-4" />
                 Display Name
               </Label>
@@ -128,9 +130,9 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
                 value={formData.displayName}
                 onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
                 placeholder="Your preferred name"
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
+                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-white/10 rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
               />
-              <p className="mt-1.5 text-xs text-cyan-200/80">
+              <p className="mt-1.5 text-xs text-slate-300">
                 This is how other members will see you
               </p>
               {formData.displayName && (
@@ -141,7 +143,7 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
                 >
                   <AtSign className="w-3 h-3" />
                   <span className="font-mono">@{generateUsername(formData.displayName) || 'username_preview'}</span>
-                  <span className="text-cyan-200/80">(auto-generated username)</span>
+                  <span className="text-slate-300">(auto-generated username)</span>
                 </motion.div>
               )}
               {errors.displayName && (
@@ -150,7 +152,7 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 border border-teal-400/30"
                 >
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
                   {errors.displayName}
                 </motion.p>
               )}
@@ -158,7 +160,7 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
 
             {/* Email */}
             <div>
-              <Label htmlFor="email" className="block text-sm sm:text-base font-semibold text-cyan-200 mb-2.5 flex items-center gap-2">
+              <Label htmlFor="email" className="block text-sm sm:text-base font-semibold text-slate-100 mb-2.5 flex items-center gap-2">
                 <Mail className="w-4 h-4" />
                 Email Address
               </Label>
@@ -168,9 +170,9 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="your@email.com"
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
+                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-white/10 rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
               />
-              <p className="mt-1.5 text-xs text-cyan-200/80">
+              <p className="mt-1.5 text-xs text-slate-300">
                 We'll send you a verification link
               </p>
               {errors.email && (
@@ -179,7 +181,7 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 border border-teal-400/30"
                 >
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
                   {errors.email}
                 </motion.p>
               )}
@@ -187,7 +189,7 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
 
             {/* Password */}
             <div>
-              <Label htmlFor="password" className="block text-sm sm:text-base font-semibold text-cyan-200 mb-2.5 flex items-center gap-2">
+              <Label htmlFor="password" className="block text-sm sm:text-base font-semibold text-slate-100 mb-2.5 flex items-center gap-2">
                 <Lock className="w-4 h-4" />
                 Password
               </Label>
@@ -198,7 +200,7 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   placeholder="Create a strong password"
-                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
+                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-white/10 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
                 />
                 <button
                   type="button"
@@ -208,7 +210,7 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-              <p className="mt-1.5 text-xs text-cyan-200/80">
+              <p className="mt-1.5 text-xs text-slate-300">
                 Min 8 characters, include uppercase, lowercase, and number
               </p>
               {errors.password && (
@@ -217,7 +219,7 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 border border-teal-400/30"
                 >
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
                   {errors.password}
                 </motion.p>
               )}
@@ -225,7 +227,7 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
 
             {/* Confirm Password */}
             <div>
-              <Label htmlFor="confirmPassword" className="block text-sm sm:text-base font-semibold text-cyan-200 mb-2.5">
+              <Label htmlFor="confirmPassword" className="block text-sm sm:text-base font-semibold text-slate-100 mb-2.5">
                 Confirm Password
               </Label>
               <div className="relative">
@@ -235,7 +237,7 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   placeholder="Re-enter your password"
-                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
+                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-white/10 rounded-xl text-white placeholder-white/40 pr-14 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
                 />
                 <button
                   type="button"
@@ -251,7 +253,7 @@ export default function Step3CreateAccount({ onComplete }: Step3Props) {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-2 text-sm text-cyan-300 flex items-center gap-2 bg-gradient-to-br from-cyan-500/10 via-teal-500/10 to-cyan-600/10 rounded-lg p-2.5 border border-teal-400/30"
                 >
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
                   {errors.confirmPassword}
                 </motion.p>
               )}

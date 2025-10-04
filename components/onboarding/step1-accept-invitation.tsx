@@ -13,7 +13,7 @@ interface Step1Props {
   colors?: any
 }
 
-export default function Step1AcceptInvitation({ onComplete, timeLeft, colors }: Step1Props) {
+export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft, colors: _colors }: Step1Props) {
   const [inviteCode, setInviteCode] = useState("")
   const [validating, setValidating] = useState(false)
   const [validated, setValidated] = useState(false)
@@ -61,13 +61,13 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft, colors }: 
           <ProgressIndicator currentStep={1} stepTitle="Accept Invitation" estimatedMinutes={2} />
 
           {!validated ? (
-            <div className="space-y-6 sm:space-y-8">
+            <div className="space-y-4 sm:space-y-6">
               <div>
                 <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4 flex items-center gap-3">
                   <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 text-purple-400" />
                   Exclusive Invitation
                 </h2>
-                <p className="text-sm sm:text-base text-purple-100 mb-6 sm:mb-8 leading-relaxed text-pretty">
+                <p className="text-sm sm:text-base text-slate-200 mb-4 sm:mb-6 leading-relaxed text-pretty">
                   Supercivilization is invitation-only. Entry requires sponsorship from a member in good standing who
                   has assembled a verification team for you.
                 </p>
@@ -79,9 +79,9 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft, colors }: 
                 >
                   <div className="flex items-start gap-4">
                     <Info className="w-6 h-6 text-purple-300 flex-shrink-0 mt-0.5" />
-                    <div className="text-sm sm:text-base text-purple-100">
-                      <strong className="text-purple-200 text-base sm:text-lg block mb-3">Why invitation-only?</strong>
-                      <ul className="space-y-2 text-purple-200 leading-relaxed">
+                    <div className="text-sm sm:text-base text-slate-200">
+                      <strong className="text-slate-100 text-base sm:text-lg block mb-3">Why invitation-only?</strong>
+                      <ul className="space-y-2 text-slate-200 leading-relaxed">
                         <li className="flex items-start gap-2">
                           <span className="text-purple-400 mt-0.5">•</span>
                           <span>Ensures high-trust relationships</span>
@@ -106,14 +106,14 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft, colors }: 
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-base sm:text-lg font-bold text-purple-200 mb-3">Invitation Code</label>
+                  <label className="block text-base sm:text-lg font-bold text-slate-100 mb-3">Invitation Code</label>
                   <Input
                     type="text"
                     value={inviteCode}
                     onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
                     onKeyPress={(e) => e.key === "Enter" && !validating && inviteCode && validateInvite()}
                     placeholder="SC-2025-XXXX"
-                    className="w-full px-5 sm:px-6 py-4 sm:py-5 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 text-lg sm:text-xl font-mono focus:border-violet-400/50 focus:ring-4 focus:ring-violet-500/20 transition-all"
+                    className="w-full px-5 sm:px-6 py-4 sm:py-5 bg-white/10 border border-white/10 rounded-xl text-white placeholder-white/40 text-lg sm:text-xl font-mono focus:border-violet-400/50 focus:ring-4 focus:ring-violet-500/20 transition-all"
                   />
                   {error && (
                     <motion.div
@@ -121,7 +121,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft, colors }: 
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-2.5 flex items-center gap-2 text-purple-300 text-sm sm:text-base bg-gradient-to-br from-purple-500/10 via-violet-500/10 to-purple-600/10 rounded-lg p-3 border border-purple-400/30"
                     >
-                      <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                      <AlertCircle className="w-5 h-5 flex-shrink-0" />
                       <span>{error}</span>
                     </motion.div>
                   )}
@@ -149,8 +149,8 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft, colors }: 
                   className="bg-gradient-to-br from-purple-500/20 via-violet-500/20 to-purple-600/20 border border-violet-400/30 rounded-xl p-5 shadow-lg"
                   whileHover={{ scale: 1.01 }}
                 >
-                  <p className="text-base sm:text-lg text-violet-200 font-semibold">
-                    <strong className="text-purple-100">Demo Code:</strong> SC-2025-A7B3
+                  <p className="text-base sm:text-lg text-slate-100 font-semibold">
+                    <strong className="text-white">Demo Code:</strong> SC-2025-A7B3
                   </p>
                 </motion.div>
               </div>
@@ -171,12 +171,12 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft, colors }: 
                   <CheckCircle className="w-14 h-14 sm:w-16 sm:h-16 text-violet-400" />
                 </motion.div>
                 <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Invitation Verified</h2>
-                <p className="text-base sm:text-lg text-purple-200">Your verification team is ready</p>
+                <p className="text-base sm:text-lg text-slate-200">Your verification team is ready</p>
               </div>
 
               <div>
                 <h3 className="text-xs sm:text-sm font-semibold text-purple-300 mb-2 sm:mb-3 flex items-center gap-2">
-                  <Shield className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <Shield className="w-4 h-4 sm:w-5 sm:h-5" />
                   Your Sponsor
                 </h3>
                 <div className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10">
@@ -185,15 +185,15 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft, colors }: 
                       <div className="font-semibold text-white text-sm sm:text-base truncate">
                         {DEMO_INVITE.inviter.name}
                       </div>
-                      <div className="text-xs sm:text-sm text-purple-200 font-mono truncate">
+                      <div className="text-xs sm:text-sm text-slate-300 font-mono truncate">
                         @{DEMO_INVITE.inviter.accountName}
                       </div>
                     </div>
-                    <span className="px-2 sm:px-3 py-1 bg-violet-500/20 text-violet-300 text-[10px] sm:text-xs font-medium rounded-full whitespace-nowrap">
+                    <span className="px-2 sm:px-3 py-1 bg-violet-500/20 text-violet-300 text-xs sm:text-sm font-medium rounded-full whitespace-nowrap">
                       {DEMO_INVITE.inviter.standing}
                     </span>
                   </div>
-                  <div className="text-[10px] sm:text-xs text-white/80">
+                  <div className="text-xs sm:text-sm text-slate-300">
                     Member since {DEMO_INVITE.inviter.memberSince}
                   </div>
                 </div>
@@ -201,7 +201,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft, colors }: 
 
               <div>
                 <h3 className="text-xs sm:text-sm font-semibold text-purple-300 mb-2 sm:mb-3 flex items-center gap-2">
-                  <Users className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <Users className="w-4 h-4 sm:w-5 sm:h-5" />
                   Your Witnesses (Pre-assigned)
                 </h3>
                 <div className="space-y-2 sm:space-y-3">
@@ -216,15 +216,15 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft, colors }: 
                       <div className="flex items-center justify-between mb-2 gap-3">
                         <div className="min-w-0">
                           <div className="font-semibold text-white text-sm sm:text-base truncate">{witness.name}</div>
-                          <div className="text-xs sm:text-sm text-purple-200 font-mono truncate">
+                          <div className="text-xs sm:text-sm text-slate-300 font-mono truncate">
                             @{witness.accountName}
                           </div>
                         </div>
-                        <span className="px-2 sm:px-3 py-1 bg-violet-500/20 text-violet-300 text-[10px] sm:text-xs font-medium rounded-full whitespace-nowrap">
+                        <span className="px-2 sm:px-3 py-1 bg-violet-500/20 text-violet-300 text-xs sm:text-sm font-medium rounded-full whitespace-nowrap">
                           {witness.standing}
                         </span>
                       </div>
-                      <div className="text-[10px] sm:text-xs text-white/80">Member since {witness.memberSince}</div>
+                      <div className="text-xs sm:text-sm text-slate-300">Member since {witness.memberSince}</div>
                     </motion.div>
                   ))}
                 </div>
@@ -234,8 +234,8 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft, colors }: 
                 className="bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-purple-400/30 shadow-lg"
                 whileHover={{ scale: 1.01 }}
               >
-                <p className="text-sm sm:text-base text-purple-100 leading-relaxed">
-                  <strong className="text-purple-200 text-sm sm:text-base block mb-2">Next:</strong> Review and
+                <p className="text-sm sm:text-base text-slate-200 leading-relaxed">
+                  <strong className="text-slate-100 text-sm sm:text-base block mb-2">Next:</strong> Review and
                   acknowledge The Prime Law - the constitutional foundation that governs all interactions within
                   Supercivilization.
                 </p>

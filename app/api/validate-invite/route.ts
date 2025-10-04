@@ -45,7 +45,7 @@ export async function GET(request: Request) {
       .from("invites")
       .select("expires_at, is_used, created_at")
       .eq("code", code)
-      .single()
+      .single<{ expires_at: string; is_used: boolean; created_at: string }>()
 
     if (error) {
       console.error("[Validation] Database error:", error)

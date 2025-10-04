@@ -11,6 +11,7 @@ import ProgressIndicator from "./progress-indicator"
 interface Step4Props {
   onComplete: () => void
   timeLeft: string
+  colors?: any
 }
 
 const SCORE_VALUES = {
@@ -29,8 +30,8 @@ const SCORE_VALUES = {
 
 const MINIMUM_SCORE = 40
 
-export default function Step4AuthenticateIdentity({ onComplete }: Step4Props) {
-  const [identityScore, setIdentityScore] = useState(SCORE_VALUES.EMAIL_VERIFIED)
+export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeLeft, colors: _colors }: Step4Props) {
+  const [identityScore, setIdentityScore] = useState<number>(SCORE_VALUES.EMAIL_VERIFIED)
   const [connectedAccounts, setConnectedAccounts] = useState<string[]>([])
   const [personalWebsite, setPersonalWebsite] = useState("")
   const [phoneVerified, setPhoneVerified] = useState(false)
@@ -90,21 +91,24 @@ export default function Step4AuthenticateIdentity({ onComplete }: Step4Props) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
-        <ProgressIndicator currentStep={4} stepTitle="Verify Identity" estimatedMinutes={4} />
+        <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20 pointer-events-none" />
 
-        <div className="mb-6 sm:mb-8">
+        <div className="relative z-10">
+          <ProgressIndicator currentStep={4} stepTitle="Verify Identity" estimatedMinutes={4} />
+
+        <div className="mb-4 sm:mb-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Verify Your Identity</h2>
-          <p className="text-sm sm:text-base text-emerald-100 leading-relaxed">
+          <p className="text-sm sm:text-base text-zinc-200 leading-relaxed">
             Connect one account to verify you're a real person. No government ID required.
           </p>
         </div>
 
         {/* Identity Score Progress */}
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-4 sm:mb-6">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm sm:text-base font-semibold text-emerald-200">Identity Score</span>
+            <span className="text-sm sm:text-base font-semibold text-zinc-100">Identity Score</span>
             <span className="text-sm sm:text-base font-semibold text-white flex items-center gap-2">
               {identityScore}/{MINIMUM_SCORE}
               {canProceed && <CheckCircle className="w-5 h-5 text-lime-400" />}
@@ -120,7 +124,7 @@ export default function Step4AuthenticateIdentity({ onComplete }: Step4Props) {
             />
           </div>
 
-          <p className="text-xs sm:text-sm text-emerald-200/80 mt-2">
+          <p className="text-xs sm:text-sm text-zinc-300 mt-2">
             {canProceed
               ? "✓ Minimum score reached! You can proceed."
               : `Email verified (+20 pts). Connect one account to reach ${MINIMUM_SCORE} points.`
@@ -129,8 +133,8 @@ export default function Step4AuthenticateIdentity({ onComplete }: Step4Props) {
         </div>
 
         {/* Primary Verification Methods */}
-        <div className="mb-6 sm:mb-8">
-          <h3 className="text-base sm:text-lg font-semibold text-emerald-200 mb-4 flex items-center gap-2">
+        <div className="mb-4 sm:mb-6">
+          <h3 className="text-base sm:text-lg font-semibold text-zinc-100 mb-4 flex items-center gap-2">
             <Shield className="w-5 h-5" />
             Connect One Account (Required)
           </h3>
@@ -181,16 +185,16 @@ export default function Step4AuthenticateIdentity({ onComplete }: Step4Props) {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            className="mb-6 sm:mb-8"
+            className="mb-4 sm:mb-6"
           >
-            <h3 className="text-base sm:text-lg font-semibold text-emerald-200 mb-4">
+            <h3 className="text-base sm:text-lg font-semibold text-zinc-100 mb-4">
               Boost Your Profile (Optional)
             </h3>
 
             <div className="space-y-4">
               {/* Personal Website */}
               <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-                <Label htmlFor="website" className="flex items-center gap-2 text-sm font-semibold text-emerald-200 mb-2">
+                <Label htmlFor="website" className="flex items-center gap-2 text-sm font-semibold text-zinc-100 mb-2">
                   <Globe className="w-4 h-4" />
                   Personal Website/Portfolio (+{SCORE_VALUES.WEBSITE} pts)
                 </Label>
@@ -202,7 +206,7 @@ export default function Step4AuthenticateIdentity({ onComplete }: Step4Props) {
                     onChange={(e) => setPersonalWebsite(e.target.value)}
                     placeholder="https://yoursite.com"
                     disabled={connectedAccounts.includes('website')}
-                    className="flex-1 bg-white/10 border-2 border-white/20 rounded-xl text-white placeholder-white/40 focus:border-lime-400/50 focus:ring-4 focus:ring-lime-500/20 transition-all"
+                    className="flex-1 bg-white/10 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-lime-400/50 focus:ring-4 focus:ring-lime-500/20 transition-all"
                   />
                   <Button
                     onClick={handleAddWebsite}
@@ -213,7 +217,7 @@ export default function Step4AuthenticateIdentity({ onComplete }: Step4Props) {
                     {connectedAccounts.includes('website') ? <CheckCircle className="w-4 h-4" /> : 'Add'}
                   </Button>
                 </div>
-                <p className="text-xs text-emerald-200/80 mt-1.5">
+                <p className="text-xs text-zinc-300 mt-1.5">
                   Share your portfolio, blog, or personal homepage
                 </p>
               </div>
@@ -233,7 +237,7 @@ export default function Step4AuthenticateIdentity({ onComplete }: Step4Props) {
                     <Phone className="w-5 h-5 text-white" />
                     <div>
                       <div className="font-semibold text-white text-sm sm:text-base">Phone Verification</div>
-                      <div className="text-xs text-emerald-200/80">SMS verification for extra security</div>
+                      <div className="text-xs text-zinc-300">SMS verification for extra security</div>
                     </div>
                   </div>
 
@@ -259,7 +263,7 @@ export default function Step4AuthenticateIdentity({ onComplete }: Step4Props) {
                     <Wallet className="w-5 h-5 text-white" />
                     <div>
                       <div className="font-semibold text-white text-sm sm:text-base">Web3 Wallet</div>
-                      <div className="text-xs text-emerald-200/80">ENS domain or verified wallet address</div>
+                      <div className="text-xs text-zinc-300">ENS domain or verified wallet address</div>
                     </div>
                   </div>
 
@@ -274,7 +278,7 @@ export default function Step4AuthenticateIdentity({ onComplete }: Step4Props) {
         )}
 
         {/* Verification Team Info */}
-        <div className="bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20 rounded-xl p-4 sm:p-5 border border-lime-400/30 mb-6 sm:mb-8">
+        <div className="bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20 rounded-xl p-4 sm:p-5 border border-lime-400/30 mb-4 sm:mb-6">
           <h4 className="flex items-center gap-2 font-semibold text-white mb-3 text-sm sm:text-base">
             <Users className="w-4 h-4 sm:w-5 sm:h-5" />
             Your Verification Team
@@ -319,6 +323,7 @@ export default function Step4AuthenticateIdentity({ onComplete }: Step4Props) {
             "Connect an account to continue"
           )}
         </Button>
+        </div>
       </motion.div>
     </div>
   )

@@ -25,7 +25,6 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-zinc-100 via-zinc-50 to-zinc-200 dark:from-zinc-900 dark:via-zinc-950 dark:to-zinc-900">
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[url('/futuristic-cityscape.jpg')] bg-cover bg-center opacity-10 dark:opacity-5" />
         <div className="absolute inset-0 bg-gradient-to-b from-zinc-300/30 via-zinc-400/20 to-zinc-500/30 dark:from-zinc-900/60 dark:via-zinc-900/70 dark:to-zinc-950/80" />
       </div>
       <div className="relative z-10 text-center space-y-8 sm:space-y-10 md:space-y-12 px-4 max-w-5xl mx-auto">

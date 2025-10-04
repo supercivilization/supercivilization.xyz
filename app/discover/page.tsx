@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Shield, FileText, UserPlus, Fingerprint, Calendar, Video, Award, CheckCircle, Lock, Timer } from "lucide-react"
+import { Shield, FileText, UserPlus, Fingerprint, Calendar, Video, Award, CheckCircle, Lock } from "lucide-react"
+import Step0Welcome from "@/components/onboarding/step0-welcome"
 import Step1AcceptInvitation from "@/components/onboarding/step1-accept-invitation"
 import Step2AgreePrimeLaw from "@/components/onboarding/step2-agree-primelaw"
 import Step3CreateAccount from "@/components/onboarding/step3-create-account"
@@ -158,7 +159,7 @@ const STEP_ICONS = {
 }
 
 export default function OnboardingPage() {
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4 | 5 | 6 | 7>(1)
+  const [currentStep, setCurrentStep] = useState<0 | 1 | 2 | 3 | 4 | 5 | 6 | 7>(0)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
   const [timeLeft, setTimeLeft] = useState({ days: 7, hours: 0, minutes: 0 })
   const [expiresAt] = useState(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000))
@@ -184,27 +185,29 @@ export default function OnboardingPage() {
     return () => clearInterval(timer)
   }, [expiresAt])
 
-  const currentStepData = STEP_CONFIGS[currentStep]
+  const currentStepData = currentStep === 0 ? null : STEP_CONFIGS[currentStep as 1 | 2 | 3 | 4 | 5 | 6 | 7]
   const allSteps = Object.values(STEP_CONFIGS)
 
   const handleStepComplete = () => {
-    if (!completedSteps.includes(currentStep)) {
+    if (currentStep > 0 && !completedSteps.includes(currentStep)) {
       setCompletedSteps([...completedSteps, currentStep])
     }
     if (currentStep < 7) {
-      setCurrentStep((currentStep + 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7)
+      setCurrentStep((currentStep + 1) as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7)
     }
   }
 
   const handleStepClick = (stepId: number) => {
-    // For demo purposes, allow clicking any step
-    setCurrentStep(stepId as 1 | 2 | 3 | 4 | 5 | 6 | 7)
+    // For demo purposes, allow clicking any step (but not step 0)
+    if (stepId > 0) {
+      setCurrentStep(stepId as 1 | 2 | 3 | 4 | 5 | 6 | 7)
+    }
   }
 
   const timeLeftString = `${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m`
 
   // Context-aware neutral colors for header/footer based on current step
-  const neutral = currentStepData.neutral
+  const neutral = currentStepData?.neutral
   const headerBorderClass =
     neutral === "slate"
       ? "border-slate-800/50"
@@ -219,20 +222,29 @@ export default function OnboardingPage() {
       ? "bg-stone-950/50"
       : "bg-zinc-950/50"
 
+  // Show Step 0 without header/footer
+  if (currentStep === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 transition-all duration-700">
+        <Step0Welcome onComplete={handleStepComplete} />
+      </div>
+    )
+  }
+
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${currentStepData.bgGradient} transition-all duration-700`}>
+    <div className={`min-h-screen bg-gradient-to-br ${currentStepData?.bgGradient || 'from-slate-950 to-slate-950'} transition-all duration-700`}>
       <div className={`border-b ${headerBorderClass} ${headerBgClass} backdrop-blur-sm`}>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 max-w-7xl">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 max-w-7xl">
           {/* Progress Bar */}
-          <div className="flex items-center justify-center mb-6 sm:mb-8">
-            <div className="flex items-center gap-1 sm:gap-2 lg:gap-3">
+          <div className="flex items-center justify-center">
+            <div className="flex items-start gap-0">
               {allSteps.map((step, index) => {
                 const isCompleted = completedSteps.includes(step.id)
                 const isCurrent = currentStep === step.id
                 const isLocked = currentStep < step.id
                 const stepConfig = STEP_CONFIGS[step.id as keyof typeof STEP_CONFIGS]
                 const StepIcon = STEP_ICONS[step.id as keyof typeof STEP_ICONS]
-                const currentStepConfig = STEP_CONFIGS[currentStep]
+                const currentStepConfig = currentStep > 0 ? STEP_CONFIGS[currentStep as keyof typeof STEP_CONFIGS] : STEP_CONFIGS[1]
                 const neutral = currentStepConfig.neutral
 
                 // Generate neutral-based classes
@@ -251,7 +263,7 @@ export default function OnboardingPage() {
                     : "bg-zinc-700/50 text-zinc-500 border border-zinc-600/50 hover:bg-zinc-700/70 hover:border-zinc-500/70"
 
                 return (
-                  <div key={step.id} className="flex items-center">
+                  <div key={step.id} className="flex items-start gap-0">
                     <div className="flex flex-col items-center gap-2 sm:gap-2.5 lg:gap-3">
                       {/* Step Circle */}
                       <motion.button
@@ -264,7 +276,7 @@ export default function OnboardingPage() {
                         whileHover={{ scale: 1.15 }}
                         whileTap={{ scale: 0.95 }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                        className={`relative w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer ${
+                        className={`relative w-11 h-11 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-300 cursor-pointer ${
                           isCompleted
                             ? "bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-lg shadow-emerald-500/30 border border-emerald-300 hover:shadow-emerald-500/50"
                             : isCurrent
@@ -275,29 +287,29 @@ export default function OnboardingPage() {
                         }`}
                       >
                         {isLocked ? (
-                          <Lock className="w-4 h-4 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
+                          <Lock className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
                         ) : isCompleted ? (
                           <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ type: "spring", stiffness: 500 }}
                           >
-                            <CheckCircle className="w-5 h-5 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
+                            <CheckCircle className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
                           </motion.div>
                         ) : (
-                          <StepIcon className="w-4 h-4 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
+                          <StepIcon className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />
                         )}
 
                         {/* Pulse animation for current step */}
                         {isCurrent && (
                           <motion.div
-                            className={`absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-br ${stepConfig.stepBg} opacity-50`}
+                            className={`absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-br ${stepConfig.stepBg} opacity-30`}
                             animate={{
-                              scale: [1, 1.5, 1],
-                              opacity: [0.5, 0, 0.5],
+                              scale: [1, 1.3, 1],
+                              opacity: [0.3, 0, 0.3],
                             }}
                             transition={{
-                              duration: 2,
+                              duration: 3,
                               repeat: Number.POSITIVE_INFINITY,
                               ease: "easeInOut",
                             }}
@@ -317,15 +329,17 @@ export default function OnboardingPage() {
                       </div>
                     </div>
 
-                    {/* Connecting Line */}
+                    {/* Connecting Line - Aligned to center of icon */}
                     {index < allSteps.length - 1 && (
-                      <div className="w-4 sm:w-8 lg:w-12 h-1 mx-1 sm:mx-2 rounded-full bg-zinc-800/50 overflow-hidden mb-6 sm:mb-9 lg:mb-10">
-                        <motion.div
-                          initial={{ scaleX: 0 }}
-                          animate={{ scaleX: isCompleted ? 1 : 0 }}
-                          transition={{ duration: 0.6, ease: "easeOut" }}
-                          className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 origin-left shadow-md shadow-emerald-500/50"
-                        />
+                      <div className="flex items-center h-11 sm:h-14 lg:h-16 mx-1 sm:mx-2">
+                        <div className="w-4 sm:w-8 lg:w-12 h-1 rounded-full bg-zinc-800/50 overflow-hidden">
+                          <motion.div
+                            initial={{ scaleX: 0 }}
+                            animate={{ scaleX: isCompleted ? 1 : 0 }}
+                            transition={{ duration: 0.6, ease: "easeOut" }}
+                            className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 origin-left shadow-md shadow-emerald-500/50"
+                          />
+                        </div>
                       </div>
                     )}
                   </div>
@@ -338,33 +352,21 @@ export default function OnboardingPage() {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-16 max-w-7xl">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 lg:py-12 max-w-7xl">
         <motion.div
           key={`header-${currentStep}`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-8 sm:mb-10 lg:mb-12"
+          className="text-center mb-6 sm:mb-8 lg:mb-10"
         >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="flex items-center justify-center gap-3 sm:gap-4 mb-4 sm:mb-6"
-          >
-            <div className={`h-0.5 sm:h-1 w-12 sm:w-16 lg:w-20 rounded-full ${currentStepData.accentLeft}`} />
-            <p className={`${currentStepData.titleColor} text-sm sm:text-base lg:text-lg font-semibold uppercase tracking-wider px-2 sm:px-4`}>
-              Step {currentStep} of 7
-            </p>
-            <div className={`h-0.5 sm:h-1 w-12 sm:w-16 lg:w-20 rounded-full ${currentStepData.accentRight}`} />
-          </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white px-4 leading-tight text-balance"
           >
-            {currentStepData.fullName}
+            {currentStepData?.fullName || ''}
           </motion.h1>
         </motion.div>
 
@@ -398,48 +400,36 @@ export default function OnboardingPage() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-6"
             >
-              {/* Centered label with decorative lines */}
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <div className={`h-px w-12 sm:w-20 ${currentStepData.accentLeft}`} />
-                <div className="flex items-center gap-2">
-                  <Timer className={`w-4 h-4 ${currentStepData.iconColor} animate-pulse`} />
-                  <p className={`text-xs sm:text-sm font-semibold ${currentStepData.titleColor} uppercase tracking-wider`}>
-                    Time Remaining
-                  </p>
-                </div>
-                <div className={`h-px w-12 sm:w-20 ${currentStepData.accentRight}`} />
-              </div>
-
               {/* Centered timer numbers */}
               <div className="flex items-center justify-center gap-2 sm:gap-3">
                 {/* Days */}
                 <div className="flex flex-col items-center">
-                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} border border-white/10`}>
-                    <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor} font-mono tabular-nums`}>
+                  <div className={`px-3 py-2 rounded-lg ${currentStepData?.iconBg || 'bg-zinc-500/20'} border border-white/10`}>
+                    <div className={`text-xl sm:text-2xl font-bold ${currentStepData?.iconColor || 'text-zinc-400'} font-mono tabular-nums`}>
                       {timeLeft.days.toString().padStart(2, "0")}
                     </div>
                   </div>
                   <p className="text-[10px] sm:text-xs font-medium text-white/40 uppercase tracking-wider mt-1">Days</p>
                 </div>
 
-                <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor}`}>:</div>
+                <div className={`text-xl sm:text-2xl font-bold ${currentStepData?.iconColor || 'text-zinc-400'}`}>:</div>
 
                 {/* Hours */}
                 <div className="flex flex-col items-center">
-                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} border border-white/10`}>
-                    <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor} font-mono tabular-nums`}>
+                  <div className={`px-3 py-2 rounded-lg ${currentStepData?.iconBg || 'bg-zinc-500/20'} border border-white/10`}>
+                    <div className={`text-xl sm:text-2xl font-bold ${currentStepData?.iconColor || 'text-zinc-400'} font-mono tabular-nums`}>
                       {timeLeft.hours.toString().padStart(2, "0")}
                     </div>
                   </div>
                   <p className="text-[10px] sm:text-xs font-medium text-white/40 uppercase tracking-wider mt-1">Hrs</p>
                 </div>
 
-                <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor}`}>:</div>
+                <div className={`text-xl sm:text-2xl font-bold ${currentStepData?.iconColor || 'text-zinc-400'}`}>:</div>
 
                 {/* Minutes */}
                 <div className="flex flex-col items-center">
-                  <div className={`px-3 py-2 rounded-lg ${currentStepData.iconBg} border border-white/10`}>
-                    <div className={`text-xl sm:text-2xl font-bold ${currentStepData.iconColor} font-mono tabular-nums`}>
+                  <div className={`px-3 py-2 rounded-lg ${currentStepData?.iconBg || 'bg-zinc-500/20'} border border-white/10`}>
+                    <div className={`text-xl sm:text-2xl font-bold ${currentStepData?.iconColor || 'text-zinc-400'} font-mono tabular-nums`}>
                       {timeLeft.minutes.toString().padStart(2, "0")}
                     </div>
                   </div>

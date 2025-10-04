@@ -39,8 +39,8 @@ export const theme = {
   },
   typography: {
     fontFamily: {
-      sans: 'Inter, system-ui, sans-serif',
-      mono: 'JetBrains Mono, monospace',
+      sans: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+      mono: 'Inter, -apple-system, BlinkMacSystemFont, monospace',
     },
     fontSize: {
       xs: '0.75rem',

@@ -149,7 +149,7 @@ export default function JoinForm() {
         .select("inviter_id, expires_at, is_used")
         .eq("code", inviteCode)
         .eq("is_used", false)  // Ensure it's still unused
-        .single()
+        .single<{ inviter_id: string; expires_at: string; is_used: boolean }>()
 
       if (inviteError) {
         console.error("Invite validation error:", inviteError)
@@ -195,8 +195,8 @@ export default function JoinForm() {
       }
 
       // Mark invite as used with a final check
-      const { error: updateError } = await supabase
-        .from("invites")
+      const { error: updateError } = await (supabase
+        .from("invites") as any)
         .update({
           invitee_id: authData.user.id,
           is_used: true,

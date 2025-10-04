@@ -12,9 +12,13 @@ export default async function AdminDashboardPage() {
   } = await supabase.auth.getUser()
   if (!user) redirect("/login")
 
-  const { data: profile } = await supabase.from("profiles").select("role").eq("user_id", user.id).single()
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("user_id", user.id)
+    .single<{ role: string }>()
 
-  if (!profile || !["admin", "superadmin"].includes(profile.role)) {
+  if (!profile || error || !["admin", "superadmin"].includes(profile.role)) {
     redirect("/unauthorized")
   }
 
@@ -43,18 +47,18 @@ export default async function AdminDashboardPage() {
     .limit(10)
 
   // Get admin names separately
-  const adminIds = adminLogs?.map((log) => log.admin_id) || []
+  const adminIds = adminLogs?.map((log: any) => log.admin_id) || []
   const { data: adminProfiles } = await supabase.from("profiles").select("id, name").in("id", adminIds)
 
   // Create a map of admin IDs to names
   const adminMap = new Map()
-  adminProfiles?.forEach((profile) => {
+  adminProfiles?.forEach((profile: any) => {
     adminMap.set(profile.id, profile.name)
   })
 
   // Format the logs with admin names
   const formattedLogs =
-    adminLogs?.map((log) => ({
+    adminLogs?.map((log: any) => ({
       id: log.id,
       action: log.action,
       target_table: log.target_table,

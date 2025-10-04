@@ -22,13 +22,13 @@ export default async function DashboardPage() {
     .from("profiles")
     .select("*")
     .eq("user_id", user.id)
-    .single()
+    .single<{ id: string; user_id: string; name: string; email: string; status: string; role: string; reputation: number; created_at: string }>()
 
   if (profileError || !profile) {
     console.error('Profile error:', profileError)
     // If profile doesn't exist, create one
-    const { data: newProfile, error: createError } = await supabase
-      .from("profiles")
+    const { data: newProfile, error: createError } = await (supabase
+      .from("profiles") as any)
       .insert([
         {
           user_id: user.id,
@@ -52,8 +52,8 @@ export default async function DashboardPage() {
   }
 
   // Get user's invites
-  const { data: invites, error: invitesError } = await supabase
-    .from("invites")
+  const { data: invites, error: invitesError } = await (supabase
+    .from("invites") as any)
     .select(`
       id,
       code,
@@ -72,8 +72,8 @@ export default async function DashboardPage() {
   }
 
   // Get user's verifications
-  const { data: verifications, error: verificationsError } = await supabase
-    .from("verifications")
+  const { data: verifications, error: verificationsError } = await (supabase
+    .from("verifications") as any)
     .select(`
       id,
       confirmed,
@@ -87,23 +87,23 @@ export default async function DashboardPage() {
   if (verificationsError) {
     console.error('Verifications error:', verificationsError)
     // Don't throw error for verifications, just return empty array
-    return <DashboardClient profile={profile} invites={invites?.map(invite => ({
+    return <DashboardClient profile={profile} invites={invites?.map((invite: any) => ({
       ...invite,
       invitee: invite.invitee[0] || { name: "", status: "" }
     })) || []} verifications={[]} />
   }
 
   return (
-    <DashboardClient 
-      profile={profile} 
-      invites={invites?.map(invite => ({
+    <DashboardClient
+      profile={profile}
+      invites={invites?.map((invite: any) => ({
         ...invite,
         invitee: invite.invitee[0] || { name: "", status: "" }
-      })) || []} 
-      verifications={verifications?.map(verification => ({
+      })) || []}
+      verifications={verifications?.map((verification: any) => ({
         ...verification,
         invitee: verification.invitee[0] || { name: "", status: "" }
-      })) || []} 
+      })) || []}
     />
   )
 }

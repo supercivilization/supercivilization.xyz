@@ -10,9 +10,10 @@ import ProgressIndicator from "./progress-indicator"
 interface Step6Props {
   onComplete: () => void
   timeLeft: string
+  colors?: any
 }
 
-export default function Step6AffirmCeremony({ onComplete }: Step6Props) {
+export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, colors: _colors }: Step6Props) {
   const [recordingConsent, setRecordingConsent] = useState(false)
   const [uploadedFile, setUploadedFile] = useState(false)
 
@@ -27,20 +28,23 @@ export default function Step6AffirmCeremony({ onComplete }: Step6Props) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
-        <ProgressIndicator currentStep={6} stepTitle="Affirm Ceremony" estimatedMinutes={2} />
+        <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 pointer-events-none" />
+
+        <div className="relative z-10">
+          <ProgressIndicator currentStep={6} stepTitle="Affirm Ceremony" estimatedMinutes={2} />
 
         {!uploadedFile ? (
-          <div className="space-y-6 sm:space-y-8">
+          <div className="space-y-4 sm:space-y-6">
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Recording Consent</h2>
-              <p className="text-sm sm:text-base text-orange-100 leading-relaxed">Your ceremony must be recorded and permanently stored on IPFS.</p>
+              <p className="text-sm sm:text-base text-stone-200 leading-relaxed">Your ceremony must be recorded and permanently stored on IPFS.</p>
             </div>
 
             <div className="bg-white/5 rounded-lg p-5 sm:p-6 border border-white/10">
               <h4 className="font-semibold text-white mb-4">Why We Record</h4>
-              <div className="space-y-3 text-sm text-white/90">
+              <div className="space-y-3 text-sm text-stone-200">
                 {[
                   {
                     title: "Immutable Proof",
@@ -76,16 +80,16 @@ export default function Step6AffirmCeremony({ onComplete }: Step6Props) {
                 id="recording-consent"
                 checked={recordingConsent}
                 onCheckedChange={(checked) => setRecordingConsent(checked as boolean)}
-                className="mt-1 flex-shrink-0"
+                className="mt-1 flex-shrink-0 border-2 border-white/40 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-orange-500 data-[state=checked]:via-red-500 data-[state=checked]:to-rose-600 data-[state=checked]:border-rose-400"
                 aria-label="I Consent to Recording"
               />
               <div className="flex-1 min-w-0">
                 <div className="font-semibold text-white mb-2 text-sm sm:text-base">I Consent to Recording</div>
-                <div className="text-xs sm:text-sm text-white/85 leading-relaxed">
+                <div className="text-xs sm:text-sm text-stone-200 leading-relaxed">
                   I consent to having my induction ceremony recorded and stored on IPFS. I understand this recording
                   becomes part of the permanent, immutable record of Supercivilization membership and includes:
                 </div>
-                <ul className="mt-2 text-sm text-white/80 space-y-1 ml-4">
+                <ul className="mt-2 text-sm text-stone-200 space-y-1 ml-4">
                   <li>• My full legal name and face</li>
                   <li>• My verbal oath to The Prime Law</li>
                   <li>• Witness attestations of my identity and commitment</li>
@@ -95,7 +99,7 @@ export default function Step6AffirmCeremony({ onComplete }: Step6Props) {
             </label>
 
             <div className="bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 rounded-lg p-4 sm:p-5 border border-rose-400/30">
-              <p className="text-xs sm:text-sm text-orange-100 leading-relaxed">
+              <p className="text-xs sm:text-sm text-stone-200 leading-relaxed">
                 <strong className="text-white">Demo:</strong> Click the button below to simulate uploading your ceremony
                 recording.
               </p>
@@ -120,18 +124,18 @@ export default function Step6AffirmCeremony({ onComplete }: Step6Props) {
             </Button>
           </div>
         ) : (
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6 sm:space-y-8">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-4 sm:space-y-6">
             <div className="bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 rounded-lg p-5 sm:p-6 border border-rose-400/50">
               <div className="flex items-center gap-4 mb-4 sm:mb-5">
                 <CheckCircle className="w-12 h-12 sm:w-14 sm:h-14 text-rose-400 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold text-white mb-1 text-sm sm:text-base">Recording Uploaded Successfully</div>
-                  <div className="text-xs sm:text-sm text-orange-100">Stored on IPFS: Permanent & Immutable</div>
+                  <div className="text-xs sm:text-sm text-stone-200">Stored on IPFS: Permanent & Immutable</div>
                 </div>
               </div>
               <div className="bg-white/10 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-white/85">IPFS Hash</span>
+                  <span className="text-sm text-stone-200">IPFS Hash</span>
                   <Video className="w-4 h-4 text-rose-400" />
                 </div>
                 <code className="text-xs text-rose-300 font-mono break-all">
@@ -157,14 +161,14 @@ export default function Step6AffirmCeremony({ onComplete }: Step6Props) {
                     className="flex items-center gap-2"
                   >
                     <CheckCircle className="w-4 h-4 text-rose-400" />
-                    <span className="text-white/90">{item}</span>
+                    <span className="text-stone-200">{item}</span>
                   </motion.div>
                 ))}
               </div>
             </div>
 
             <div className="bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 rounded-lg p-4 sm:p-5 border border-rose-400/30">
-              <p className="text-xs sm:text-sm text-orange-100 leading-relaxed">
+              <p className="text-xs sm:text-sm text-stone-200 leading-relaxed">
                 <strong className="text-white">Next:</strong> Complete payment to activate your membership and mint NFTs
                 for all ceremony participants.
               </p>
@@ -176,6 +180,7 @@ export default function Step6AffirmCeremony({ onComplete }: Step6Props) {
             </Button>
           </motion.div>
         )}
+        </div>
       </motion.div>
     </div>
   )

@@ -28,8 +28,8 @@ export function useAuth() {
         }
 
         // Get the user profile
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
+        const { data: profile, error: profileError } = await (supabase
+          .from("profiles") as any)
           .select("*")
           .eq("user_id", authUser.id)
           .single()

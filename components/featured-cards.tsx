@@ -43,7 +43,7 @@ export default function FeaturedCards() {
           >
             <div
               onClick={() => window.open("https://www.superachiever.xyz/", "_blank")}
-              className={`p-8 sm:p-10 space-y-6 sm:space-y-8 relative z-10 bg-gradient-to-br ${card.bgClass} ${card.hoverClass} transition-all duration-300 flex flex-col items-center text-center border border-zinc-200/50 dark:border-zinc-800/50 cursor-pointer`}
+              className={`p-8 sm:p-10 space-y-6 sm:space-y-8 relative z-10 bg-gradient-to-br ${card.bgClass} ${card.hoverClass} transition-all duration-300 flex flex-col items-center text-center cursor-pointer`}
             >
               <h2
                 className={`text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight ${card.titleClass}`}

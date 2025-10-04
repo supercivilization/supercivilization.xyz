@@ -12,7 +12,7 @@ export default async function InvitePage() {
   if (!user) redirect("/login")
 
   // Check if user is active
-  const { data: profile } = await supabase.from("profiles").select("status").eq("user_id", user.id).single()
+  const { data: profile } = await supabase.from("profiles").select("status").eq("user_id", user.id).single<{ status: string }>()
 
   if (!profile || profile.status !== "active") {
     redirect("/dashboard")

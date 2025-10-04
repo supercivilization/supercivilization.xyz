@@ -21,8 +21,8 @@ export default async function VerifyPage() {
   if (profileError || !profile) redirect("/login")
 
   // Get all pending users
-  const { data: pendingUsers } = await supabase
-    .from("profiles")
+  const { data: pendingUsers } = await (supabase
+    .from("profiles") as any)
     .select(`
       id,
       user_id,
@@ -34,21 +34,21 @@ export default async function VerifyPage() {
     `)
     .eq("status", "pending")
     .order("created_at", { ascending: false })
-    .then(({ data }) => ({
-      data: data?.map((user) => ({
+    .then(({ data }: any) => ({
+      data: data?.map((user: any) => ({
         ...user,
         inviter: user.inviter[0] || { name: "" }
       }))
     }))
 
   // Get already verified users
-  const { data: verifications } = await supabase
-    .from("verifications")
+  const { data: verifications } = await (supabase
+    .from("verifications") as any)
     .select("invitee_id")
     .eq("verifier_id", user.id)
 
-  const verifiedIds = verifications?.map((v) => v.invitee_id) || []
-  const usersToVerify = pendingUsers?.filter((u) => !verifiedIds.includes(u.user_id)) || []
+  const verifiedIds = verifications?.map((v: any) => v.invitee_id) || []
+  const usersToVerify = pendingUsers?.filter((u: any) => !verifiedIds.includes(u.user_id)) || []
 
   return <VerifyClient pendingUsers={usersToVerify} />
 }

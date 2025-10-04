@@ -22,14 +22,14 @@ const stepColors = {
 export default function ProgressIndicator({
   currentStep,
   totalSteps = 7,
-  stepTitle,
+  stepTitle: _stepTitle,
   estimatedMinutes,
 }: ProgressIndicatorProps) {
   const colorClass = stepColors[currentStep as keyof typeof stepColors] || stepColors[1]
 
   return (
-    <div className="mb-6 sm:mb-8">
-      <div className="flex items-center justify-between mb-4">
+    <div className="mb-4 sm:mb-6">
+      <div className="flex items-center justify-between mb-3">
         {/* Step Dots */}
         <div className="flex items-center gap-2">
           {Array.from({ length: totalSteps }).map((_, index) => (

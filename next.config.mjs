@@ -7,6 +7,9 @@ const nextConfig = {
   },
   poweredByHeader: false,
   trailingSlash: false,
+  // Fix workspace root warning
+  output: 'standalone',
+  outputFileTracingRoot: import.meta.dirname,
   experimental: {
     optimizePackageImports: [
       'lucide-react',
@@ -21,6 +24,8 @@ const nextConfig = {
       bodySizeLimit: '2mb',
     },
   },
+  // Turbopack configuration (moved from experimental.turbo)
+  turbopack: {},
   // Ensure we handle all errors properly
   onDemandEntries: {
     // Keep the build page in memory for longer

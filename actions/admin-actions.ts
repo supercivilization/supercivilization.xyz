@@ -18,9 +18,17 @@ async function verifyAdmin() {
   }
 
   // Check if the user is an admin
-  const { data: profile } = await supabase.from("profiles").select("role").eq("user_id", user.id).single()
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("user_id", user.id)
+    .single<{ role: string }>()
 
-  if (!profile || !["admin", "superadmin"].includes(profile.role)) {
+  if (!profile || error) {
+    redirect("/unauthorized")
+  }
+
+  if (!["admin", "superadmin"].includes(profile.role)) {
     redirect("/unauthorized")
   }
 
@@ -37,14 +45,16 @@ async function logAdminAction(
 ) {
   const supabase = getActionSupabaseClient()
 
-  await supabase.from("admin_logs").insert({
+  const logEntry = {
     admin_id: adminId,
     action,
     target_table: targetTable,
     target_id: targetId,
-    details,
+    details: details as any,
     created_at: new Date().toISOString(),
-  })
+  }
+
+  await (supabase.from("admin_logs") as any).insert(logEntry)
 }
 
 // Update user role
@@ -58,8 +68,8 @@ export async function updateUserRole(userId: string, newRole: UserRole) {
 
   const supabase = getActionSupabaseClient()
 
-  const { error } = await supabase
-    .from("profiles")
+  const { error } = await (supabase
+    .from("profiles") as any)
     .update({ role: newRole, updated_at: new Date().toISOString() })
     .eq("user_id", userId)
 
@@ -77,8 +87,8 @@ export async function banUser(userId: string, reason: string) {
   const { user } = await verifyAdmin()
   const supabase = getActionSupabaseClient()
 
-  const { error } = await supabase
-    .from("profiles")
+  const { error } = await (supabase
+    .from("profiles") as any)
     .update({
       status: "banned",
       updated_at: new Date().toISOString(),

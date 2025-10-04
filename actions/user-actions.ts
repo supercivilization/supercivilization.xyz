@@ -17,9 +17,13 @@ export async function generateInviteCode(expiryHours = 24) {
   }
 
   // Check if the user is active
-  const { data: profile } = await supabase.from("profiles").select("status").eq("user_id", user.id).single()
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("status")
+    .eq("user_id", user.id)
+    .single<{ status: string }>()
 
-  if (!profile || profile.status !== "active") {
+  if (!profile || profileError || profile.status !== "active") {
     throw new Error("Only active users can generate invite codes")
   }
 
@@ -35,8 +39,8 @@ export async function generateInviteCode(expiryHours = 24) {
   expiryDate.setHours(expiryDate.getHours() + expiryHours)
 
   // Insert the invite
-  const { data, error } = await supabase
-    .from("invites")
+  const { data, error } = await (supabase
+    .from("invites") as any)
     .insert({
       code,
       inviter_id: user.id,
@@ -66,14 +70,18 @@ export async function verifyUser(inviteeId: string, confirmed: boolean, reason?:
   }
 
   // Check if the user is active
-  const { data: profile } = await supabase.from("profiles").select("status").eq("user_id", user.id).single()
+  const { data: profile, error: profileError2 } = await supabase
+    .from("profiles")
+    .select("status")
+    .eq("user_id", user.id)
+    .single<{ status: string }>()
 
-  if (!profile || profile.status !== "active") {
+  if (!profile || profileError2 || profile.status !== "active") {
     throw new Error("Only active users can verify others")
   }
 
   // Create verification record
-  const { error: verificationError } = await supabase.from("verifications").insert({
+  const { error: verificationError } = await (supabase.from("verifications") as any).insert({
     invitee_id: inviteeId,
     verifier_id: user.id,
     confirmed,
@@ -85,8 +93,8 @@ export async function verifyUser(inviteeId: string, confirmed: boolean, reason?:
 
   // If rejected, update user status
   if (!confirmed) {
-    const { error: updateError } = await supabase
-      .from("profiles")
+    const { error: updateError } = await (supabase
+      .from("profiles") as any)
       .update({ status: "rejected", updated_at: new Date().toISOString() })
       .eq("user_id", inviteeId)
 
@@ -101,8 +109,8 @@ export async function verifyUser(inviteeId: string, confirmed: boolean, reason?:
 
     // If two or more verifications, activate the user
     if (count && count >= 2) {
-      const { error: updateError } = await supabase
-        .from("profiles")
+      const { error: updateError } = await (supabase
+        .from("profiles") as any)
         .update({ status: "active", updated_at: new Date().toISOString() })
         .eq("user_id", inviteeId)
 
