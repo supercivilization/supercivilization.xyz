@@ -28,7 +28,7 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-rose-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 pointer-events-none" />
 
@@ -80,7 +80,7 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
                 id="recording-consent"
                 checked={recordingConsent}
                 onCheckedChange={(checked) => setRecordingConsent(checked as boolean)}
-                className="mt-1 flex-shrink-0 border-2 border-white/40 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-orange-500 data-[state=checked]:via-red-500 data-[state=checked]:to-rose-600 data-[state=checked]:border-rose-400"
+                className="mt-1 flex-shrink-0 border-2 border-rose-400/60 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-orange-500 data-[state=checked]:via-red-500 data-[state=checked]:to-rose-600 data-[state=checked]:border-rose-400"
                 aria-label="I Consent to Recording"
               />
               <div className="flex-1 min-w-0">

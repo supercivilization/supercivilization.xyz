@@ -103,7 +103,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-cyan-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         {/* Gradient border effect */}
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-cyan-500/20 via-teal-500/20 to-cyan-500/20 pointer-events-none" />
@@ -130,7 +130,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                 value={formData.displayName}
                 onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
                 placeholder="Your preferred name"
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-white/10 rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
+                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-cyan-400/30 rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/70 focus:ring-4 focus:ring-teal-500/20 transition-all"
               />
               <p className="mt-1.5 text-xs text-slate-300">
                 This is how other members will see you
@@ -170,7 +170,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="your@email.com"
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-white/10 rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/50 focus:ring-4 focus:ring-teal-500/20 transition-all"
+                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-cyan-400/30 rounded-xl text-white placeholder-white/40 text-base focus:border-teal-400/70 focus:ring-4 focus:ring-teal-500/20 transition-all"
               />
               <p className="mt-1.5 text-xs text-slate-300">
                 We'll send you a verification link

@@ -40,7 +40,7 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-amber-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-amber-500/20 via-yellow-500/20 to-amber-500/20 pointer-events-none" />
 
@@ -138,7 +138,7 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
                   value={formData.preferredDate}
                   onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
                   min={new Date().toISOString().split("T")[0]}
-                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-white/10 rounded-xl text-white text-base focus:border-yellow-400/50 focus:ring-4 focus:ring-yellow-500/20 transition-all"
+                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-amber-400/30 rounded-xl text-white text-base focus:border-yellow-400/50 focus:ring-4 focus:ring-yellow-500/20 transition-all"
                 />
               </div>
               <div>
@@ -150,7 +150,7 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
                   type="time"
                   value={formData.preferredTime}
                   onChange={(e) => setFormData({ ...formData, preferredTime: e.target.value })}
-                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-white/10 rounded-xl text-white text-base focus:border-yellow-400/50 focus:ring-4 focus:ring-yellow-500/20 transition-all"
+                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-amber-400/30 rounded-xl text-white text-base focus:border-yellow-400/50 focus:ring-4 focus:ring-yellow-500/20 transition-all"
                 />
               </div>
             </div>
@@ -164,7 +164,7 @@ export default function Step5ArrangeCeremony({ onComplete, timeLeft: _timeLeft, 
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 placeholder="Any scheduling preferences or constraints..."
                 rows={3}
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-white/10 rounded-xl text-white placeholder-white/40 text-base focus:border-yellow-400/50 focus:ring-4 focus:ring-yellow-500/20 transition-all resize-none"
+                className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border border-amber-400/30 rounded-xl text-white placeholder-white/40 text-base focus:border-yellow-400/50 focus:ring-4 focus:ring-yellow-500/20 transition-all resize-none"
               />
             </div>
           </div>

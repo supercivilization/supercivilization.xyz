@@ -53,7 +53,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-violet-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-purple-500/20 via-transparent to-purple-500/20 pointer-events-none" />
 
@@ -113,7 +113,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
                     onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
                     onKeyPress={(e) => e.key === "Enter" && !validating && inviteCode && validateInvite()}
                     placeholder="SC-2025-XXXX"
-                    className="w-full px-5 sm:px-6 py-4 sm:py-5 bg-white/10 border border-white/10 rounded-xl text-white placeholder-white/40 text-lg sm:text-xl font-mono focus:border-violet-400/50 focus:ring-4 focus:ring-violet-500/20 transition-all"
+                    className="w-full px-5 sm:px-6 py-4 sm:py-5 bg-white/10 border border-violet-400/30 rounded-xl text-white placeholder-white/40 text-lg sm:text-xl font-mono focus:border-violet-400/70 focus:ring-4 focus:ring-violet-500/20 transition-all"
                   />
                   {error && (
                     <motion.div
@@ -211,7 +211,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10"
+                      className="bg-white/5 rounded-lg p-3 sm:p-4 border border-violet-400/30"
                     >
                       <div className="flex items-center justify-between mb-2 gap-3">
                         <div className="min-w-0">

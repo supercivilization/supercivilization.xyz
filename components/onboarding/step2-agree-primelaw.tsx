@@ -32,7 +32,7 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-blue-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 pointer-events-none" />
 
@@ -65,7 +65,7 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
           </h3>
 
           <div className="space-y-4 text-white">
-            <div className="bg-white/10 rounded-lg p-4 border border-white/20">
+            <div className="bg-white/10 rounded-lg p-4 border border-indigo-400/30">
               <p className="font-semibold mb-2 text-slate-100">Preamble</p>
               <ul className="space-y-2 text-sm text-slate-200">
                 <li>• The purpose of human life is to prosper and live happily</li>
@@ -122,7 +122,7 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            className="bg-white/5 rounded-lg p-5 sm:p-6 mb-4 sm:mb-6 border border-white/10"
+            className="bg-white/5 rounded-lg p-5 sm:p-6 mb-4 sm:mb-6 border border-blue-500/20"
           >
             <h4 className="font-semibold text-white mb-3">What This Means in Practice</h4>
             <div className="space-y-3 text-sm text-slate-200">
@@ -181,14 +181,14 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
               className={`flex items-start gap-4 p-5 rounded-xl cursor-pointer transition-all border-2 ${
                 agreements[item.key]
                   ? "bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 border-sky-400/50"
-                  : "bg-white/5 border-white/10 hover:border-white/30"
+                  : "bg-white/5 border-blue-400/30 hover:border-sky-400/50"
               }`}
             >
               <Checkbox
                 id={`agreement-${item.key}`}
                 checked={agreements[item.key]}
                 onCheckedChange={() => toggleAgreement(item.key)}
-                className="mt-1 border-2 border-white/40 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-indigo-500 data-[state=checked]:via-blue-500 data-[state=checked]:to-sky-600 data-[state=checked]:border-sky-400"
+                className="mt-1 border-2 border-blue-400/60 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-indigo-500 data-[state=checked]:via-blue-500 data-[state=checked]:to-sky-600 data-[state=checked]:border-sky-400"
                 aria-label={item.title}
               />
               <div className="flex-1">

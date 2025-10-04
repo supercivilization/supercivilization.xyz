@@ -59,7 +59,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-fuchsia-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-500/20 pointer-events-none" />
 
@@ -181,18 +181,18 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
                   <Input
                     type="text"
                     placeholder="Card number"
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-white/10 rounded-lg text-white placeholder-white/40 text-sm sm:text-base focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20 transition-all"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-fuchsia-400/30 rounded-lg text-white placeholder-white/40 text-sm sm:text-base focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20 transition-all"
                   />
                   <div className="grid grid-cols-2 gap-2 sm:gap-3">
                     <Input
                       type="text"
                       placeholder="MM/YY"
-                      className="px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-white/10 rounded-lg text-white placeholder-white/40 text-sm sm:text-base focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20 transition-all"
+                      className="px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-fuchsia-400/30 rounded-lg text-white placeholder-white/40 text-sm sm:text-base focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20 transition-all"
                     />
                     <Input
                       type="text"
                       placeholder="CVC"
-                      className="px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-white/10 rounded-lg text-white placeholder-white/40 text-sm sm:text-base focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20 transition-all"
+                      className="px-3 sm:px-4 py-2 sm:py-3 bg-white/10 border border-fuchsia-400/30 rounded-lg text-white placeholder-white/40 text-sm sm:text-base focus:border-fuchsia-400/50 focus:ring-4 focus:ring-fuchsia-500/20 transition-all"
                     />
                   </div>
                 </div>
@@ -205,7 +205,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
                 id="payment-consent"
                 checked={paymentConsent}
                 onCheckedChange={(checked) => setPaymentConsent(checked as boolean)}
-                className="mt-1 flex-shrink-0 border-2 border-white/40 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-pink-500 data-[state=checked]:via-fuchsia-500 data-[state=checked]:to-pink-600 data-[state=checked]:border-fuchsia-400"
+                className="mt-1 flex-shrink-0 border-2 border-fuchsia-400/60 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-pink-500 data-[state=checked]:via-fuchsia-500 data-[state=checked]:to-pink-600 data-[state=checked]:border-fuchsia-400"
                 aria-label="Payment Authorization"
               />
               <div className="flex-1 min-w-0">

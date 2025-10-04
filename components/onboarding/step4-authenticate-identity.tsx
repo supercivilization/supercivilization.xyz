@@ -91,7 +91,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
+        className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-emerald-500/20 p-6 sm:p-8 md:p-10 shadow-2xl overflow-hidden"
       >
         <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-emerald-500/20 via-green-500/20 to-lime-500/20 pointer-events-none" />
 
@@ -206,7 +206,7 @@ export default function Step4AuthenticateIdentity({ onComplete, timeLeft: _timeL
                     onChange={(e) => setPersonalWebsite(e.target.value)}
                     placeholder="https://yoursite.com"
                     disabled={connectedAccounts.includes('website')}
-                    className="flex-1 bg-white/10 border border-white/10 rounded-xl text-white placeholder-white/40 focus:border-lime-400/50 focus:ring-4 focus:ring-lime-500/20 transition-all"
+                    className="flex-1 bg-white/10 border border-emerald-400/30 rounded-xl text-white placeholder-white/40 focus:border-lime-400/70 focus:ring-4 focus:ring-lime-500/20 transition-all"
                   />
                   <Button
                     onClick={handleAddWebsite}
