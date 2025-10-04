@@ -3,6 +3,8 @@ import { getAdminStats } from "@/actions/admin-actions"
 import { redirect } from "next/navigation"
 import AdminDashboardClient from "@/components/admin-dashboard-client"
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminDashboardPage() {
   const supabase = getServerSupabaseClient()
 
