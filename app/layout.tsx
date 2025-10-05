@@ -14,7 +14,7 @@ const inter = Inter({
 export const metadata = {
   title: "Supercivilization | Vivify Further, Unify Faster, Thrive Forever",
   description: "We help you vivify further as an individual superachiever, unify faster as a collective of superachievers, and thrive forever in the supercivilization ecosystem.",
-  generator: 'v0.dev',
+  generator: 'Next.js 15',
   authors: [{ name: 'Joshua Seymour', url: 'https://www.joshuaseymour.com' }],
   creator: 'Joshua Seymour',
   publisher: 'Supercivilization',
