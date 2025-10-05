@@ -228,7 +228,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 onBlur={() => setTouchedFields({ ...touchedFields, email: true })}
                 placeholder="your@email.com"
-                className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-0 rounded-xl text-white placeholder-white/40 text-base focus-visible:ring-4 focus-visible:ring-teal-500/20 transition-opacity ${focusVisible.default} `}
+                className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 ring-1 ring-inset ring-white/10 shadow-md shadow-cyan-500/10 rounded-xl text-white placeholder-white/40 text-base focus-visible:ring-4 focus-visible:ring-teal-500/20 transition-opacity ${focusVisible.default} ${errors.email ? 'ring-red-400/50' : ''}`}
               />
               <p className="mt-1.5 text-xs text-slate-300">
                 We'll send you a verification link
@@ -259,7 +259,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   onBlur={() => setTouchedFields({ ...touchedFields, password: true })}
                   placeholder="Create a strong password"
-                  className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-0 rounded-xl text-white placeholder-white/40 pr-14 text-base focus-visible:ring-4 focus-visible:ring-teal-500/20 transition-opacity ${focusVisible.default} `}
+                  className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 ring-1 ring-inset ring-white/10 shadow-md shadow-cyan-500/10 rounded-xl text-white placeholder-white/40 pr-14 text-base focus-visible:ring-4 focus-visible:ring-teal-500/20 transition-opacity ${focusVisible.default} ${errors.password ? 'ring-red-400/50' : ''}`}
                 />
                 <button
                   type="button"
@@ -325,7 +325,7 @@ export default function Step3CreateAccount({ onComplete, timeLeft: _timeLeft, co
                   onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   onBlur={() => setTouchedFields({ ...touchedFields, confirmPassword: true })}
                   placeholder="Re-enter your password"
-                  className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 border-0 rounded-xl text-white placeholder-white/40 pr-14 text-base focus-visible:ring-4 focus-visible:ring-teal-500/20 transition-opacity ${focusVisible.default} `}
+                  className={`w-full px-4 sm:px-5 py-3 sm:py-4 bg-white/10 ring-1 ring-inset ring-white/10 shadow-md shadow-cyan-500/10 rounded-xl text-white placeholder-white/40 pr-14 text-base focus-visible:ring-4 focus-visible:ring-teal-500/20 transition-opacity ${focusVisible.default} ${errors.confirmPassword ? 'ring-red-400/50' : ''}`}
                 />
                 <button
                   type="button"
