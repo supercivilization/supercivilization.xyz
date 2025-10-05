@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import { Shield, FileText, UserPlus, Fingerprint, Calendar, Video, Award, CheckCircle, Lock } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { contrastSafeText, touchTarget, focusVisible } from "@/lib/ui-utils"
+import { contrastSafeText, touchTarget } from "@/lib/ui-utils"
 
 const STEP_CONFIGS = {
   1: {
