@@ -22,7 +22,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
   const [processing, setProcessing] = useState(false)
 
   const plans = [
-    { id: "monthly", name: "Monthly", price: 50, period: "month", description: "Cancel anytime after 3-month minimum" },
+    { id: "monthly", name: "Monthly", price: 50, period: "month", description: "Cancel anytime - no long-term commitment required" },
     {
       id: "annual",
       name: "Annual",
@@ -30,7 +30,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
       period: "year",
       monthlyEquivalent: 40,
       savings: 20,
-      description: "Best value - $40/month equivalent",
+      description: "Best value - $40/month equivalent, cancel anytime",
       recommended: true,
     },
     {
@@ -38,7 +38,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
       name: "Founding Member",
       price: 5000,
       period: "lifetime",
-      description: "Lifetime membership + special benefits",
+      description: "Lifetime access + governance privileges",
     },
   ]
 
@@ -70,7 +70,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
           <div className="space-y-4 sm:space-y-6">
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold text-white text-shadow mb-3 sm:mb-4">Activate Membership</h2>
-              <p className="text-sm sm:text-base text-stone-200 leading-relaxed mb-4 sm:mb-6">Financial commitment demonstrates skin-in-the-game and funds our path to network state status.</p>
+              <p className="text-sm sm:text-base text-stone-200 leading-relaxed mb-4 sm:mb-6">Membership includes access to our community platform, weekly meetings, educational resources, and participation in governance. You can cancel at any time.</p>
             </div>
 
             <div className="bg-gradient-to-br from-pink-500/20 via-fuchsia-500/20 to-pink-600/20 rounded-lg p-5 sm:p-6 ring-1 ring-inset ring-white/10 shadow-md shadow-pink-500/10">
@@ -211,8 +211,7 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
               <div className="flex-1 min-w-0">
                 <div className="font-semibold text-white mb-2 text-sm sm:text-base">Payment Authorization</div>
                 <div className="text-xs sm:text-sm text-stone-200 leading-relaxed">
-                  I authorize payment of ${selectedPlanDetails.price} for {selectedPlanDetails.name} membership. Past
-                  contributions are non-refundable except within first 7 days.
+                  I authorize payment of ${selectedPlanDetails.price} for {selectedPlanDetails.name} membership. Full refund available within 7 days. You may cancel at any time without penalty.
                 </div>
               </div>
             </label>
@@ -247,13 +246,13 @@ export default function Step7ActivateMembership({ onComplete, timeLeft: _timeLef
             >
               <Sparkles className="w-14 h-14 sm:w-16 sm:h-16 text-pink-400 animate-pulse" />
             </motion.div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white text-shadow mb-4 sm:mb-5">Minting Membership NFTs</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white text-shadow mb-4 sm:mb-5">Activating Membership</h2>
             <p className="text-sm sm:text-base text-stone-200 mb-4 sm:mb-6">
-              Creating on-chain proof for all participants
+              Setting up your account and community access
             </p>
 
             <div className="space-y-2 sm:space-y-3 max-w-md mx-auto">
-              {["Your Member NFT", "Inviter Reward NFT", "Witness 1 Reward NFT", "Witness 2 Reward NFT"].map(
+              {["Creating your member profile", "Granting platform access", "Notifying your sponsors", "Scheduling welcome meeting"].map(
                 (item, index) => (
                   <motion.div
                     key={index}

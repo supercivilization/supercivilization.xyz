@@ -39,25 +39,25 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
         {!uploadedFile ? (
           <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className={`text-2xl sm:text-3xl font-bold text-white text-shadow mb-3 sm:mb-4 ${contrastSafeText.heading}`}>Recording Consent</h2>
-              <p className={`text-sm sm:text-base text-stone-200 leading-relaxed ${contrastSafeText.body}`}>Your ceremony must be recorded and permanently stored on IPFS.</p>
+              <h2 className={`text-2xl sm:text-3xl font-bold text-white text-shadow mb-3 sm:mb-4 ${contrastSafeText.heading}`}>Video Introduction Ceremony</h2>
+              <p className={`text-sm sm:text-base text-stone-200 leading-relaxed ${contrastSafeText.body}`}>Participate in a video introduction ceremony with your sponsoring members. This helps establish real human connections and accountability within the community. Recording is optional and at your discretion.</p>
             </div>
 
             <div className="bg-white/5 rounded-lg p-5 sm:p-6 ring-1 ring-inset ring-white/10 shadow-md shadow-rose-500/10">
-              <h4 className="font-semibold text-white mb-4">Why We Record</h4>
+              <h4 className="font-semibold text-white mb-4">Benefits of the Video Ceremony</h4>
               <div className="space-y-3 text-sm text-stone-200">
                 {[
                   {
-                    title: "Immutable Proof",
-                    desc: "Creates permanent, verifiable record of your commitment to The Prime Law",
+                    title: "Human Connection",
+                    desc: "Meet your sponsors face-to-face and build genuine relationships",
                   },
                   {
-                    title: "Social Accountability",
-                    desc: "Your witnesses' attestations become part of the permanent record",
+                    title: "Community Accountability",
+                    desc: "Establish trust with members who are vouching for you",
                   },
                   {
-                    title: "Network State Foundation",
-                    desc: "Building auditable history for eventual diplomatic recognition",
+                    title: "Optional Documentation",
+                    desc: "You may choose to record this for your own records if you wish",
                   },
                 ].map((item, index) => (
                   <motion.div
@@ -82,27 +82,19 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
                 checked={recordingConsent}
                 onCheckedChange={(checked) => setRecordingConsent(checked as boolean)}
                 className={`mt-1 flex-shrink-0 data-[state=checked]:bg-gradient-to-br data-[state=checked]:from-orange-500 data-[state=checked]:via-red-500 data-[state=checked]:to-rose-600 focus-visible:ring-rose-500/40 ${focusVisible.highContrast}`}
-                aria-label="I Consent to Recording"
+                aria-label="Ceremony Participation Acknowledgment"
               />
               <div className="flex-1 min-w-0">
-                <div className="font-semibold text-white mb-2 text-sm sm:text-base">I Consent to Recording</div>
+                <div className="font-semibold text-white mb-2 text-sm sm:text-base">I Acknowledge Ceremony Participation</div>
                 <div className="text-xs sm:text-sm text-stone-200 leading-relaxed">
-                  I consent to having my induction ceremony recorded and stored on IPFS. I understand this recording
-                  becomes part of the permanent, immutable record of Supercivilization membership and includes:
+                  I agree to participate in a video introduction ceremony with my sponsors. I understand this is optional and I may choose whether or not to record it for my own purposes.
                 </div>
-                <ul className="mt-2 text-sm text-stone-200 space-y-1 ml-4">
-                  <li>• My full legal name and face</li>
-                  <li>• My verbal oath to The Prime Law</li>
-                  <li>• Witness attestations of my identity and commitment</li>
-                  <li>• Timestamp and cryptographic proof</li>
-                </ul>
               </div>
             </label>
 
             <div className="bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 rounded-lg p-4 sm:p-5 ring-1 ring-inset ring-white/10 shadow-md shadow-rose-500/10">
               <p className="text-xs sm:text-sm text-stone-200 leading-relaxed">
-                <strong className="text-white">Demo:</strong> Click the button below to simulate uploading your ceremony
-                recording.
+                <strong className="text-white">Demo:</strong> Click the button below to confirm ceremony participation.
               </p>
             </div>
 
@@ -114,12 +106,12 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
             >
               {recordingConsent ? (
                 <>
-                  Upload Ceremony Recording
+                  Confirm Ceremony Participation
                   <Upload className="w-5 h-5 ml-2" />
                 </>
               ) : (
                 <>
-                  Consent Required
+                  Acknowledgment Required
                   <Camera className="w-5 h-5 ml-2" />
                 </>
               )}
@@ -131,18 +123,18 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
               <div className="flex items-center gap-4 mb-4 sm:mb-5">
                 <CheckCircle className="w-12 h-12 sm:w-14 sm:h-14 text-rose-400 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-white mb-1 text-sm sm:text-base">Recording Uploaded Successfully</div>
-                  <div className="text-xs sm:text-sm text-stone-200">Stored on IPFS: Permanent & Immutable</div>
+                  <div className="font-semibold text-white mb-1 text-sm sm:text-base">Ceremony Participation Confirmed</div>
+                  <div className="text-xs sm:text-sm text-stone-200">Ready to proceed with activation</div>
                 </div>
               </div>
               <div className="bg-white/10 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-stone-200">IPFS Hash</span>
+                  <span className="text-sm text-stone-200">Ceremony Scheduled</span>
                   <Video className="w-4 h-4 text-rose-400" />
                 </div>
-                <code className="text-xs text-rose-300 font-mono break-all">
-                  QmX4Kx3JNB8gD7nVWqMp8sL2tY9vR5wH6fE1aZ3cB2mN4
-                </code>
+                <p className="text-xs text-rose-300">
+                  Your sponsor will coordinate timing for the video introduction
+                </p>
               </div>
             </div>
 
@@ -150,10 +142,10 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
               <h4 className="font-semibold text-white mb-3 sm:mb-4 text-sm sm:text-base">Ceremony Verification</h4>
               <div className="space-y-2 text-sm">
                 {[
-                  "All participants confirmed present",
-                  "Prime Law reading verified",
-                  "Oath spoken and recorded",
-                  "Witness attestations completed",
+                  "All participants will be notified",
+                  "Introduction ceremony scheduled",
+                  "Sponsors confirmed availability",
+                  "Video call details will be sent",
                 ].map((item, index) => (
                   <motion.div
                     key={index}
@@ -171,8 +163,7 @@ export default function Step6AffirmCeremony({ onComplete, timeLeft: _timeLeft, c
 
             <div className="bg-gradient-to-br from-orange-500/20 via-red-500/20 to-rose-500/20 rounded-lg p-4 sm:p-5 ring-1 ring-inset ring-white/10 shadow-md shadow-rose-500/10">
               <p className="text-xs sm:text-sm text-stone-200 leading-relaxed">
-                <strong className="text-white">Next:</strong> Complete payment to activate your membership and mint NFTs
-                for all ceremony participants.
+                <strong className="text-white">Next:</strong> Review membership options and activate your account.
               </p>
             </div>
 

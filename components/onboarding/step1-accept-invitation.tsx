@@ -68,8 +68,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
                   Exclusive Invitation
                 </h2>
                 <p className="text-sm sm:text-base text-slate-200 mb-4 sm:mb-6 leading-relaxed text-pretty">
-                  Supercivilization is invitation-only. Entry requires sponsorship from a member in good standing who
-                  has assembled a verification team for you.
+                  Supercivilization is a community exploring alternative governance and voluntary cooperation. Joining requires an invitation from an existing member who can vouch for your alignment with our principles.
                 </p>
 
                 <motion.div
@@ -243,9 +242,7 @@ export default function Step1AcceptInvitation({ onComplete, timeLeft: _timeLeft,
                 whileHover={{ scale: 1.01 }}
               >
                 <p className="text-sm sm:text-base text-slate-200 leading-relaxed">
-                  <strong className="text-slate-100 text-sm sm:text-base block mb-2">Next:</strong> Review and
-                  acknowledge The Prime Law - the constitutional foundation that governs all interactions within
-                  Supercivilization.
+                  <strong className="text-slate-100 text-sm sm:text-base block mb-2">Next:</strong> Review our founding principles based on the concept of non-aggression and voluntary cooperation. You're free to discuss and question these principles.
                 </p>
               </motion.div>
 

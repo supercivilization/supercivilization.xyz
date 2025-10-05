@@ -43,16 +43,13 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
           <div className="mb-4 sm:mb-6">
           <h2 className={`text-2xl sm:text-3xl font-bold text-white text-shadow mb-3 sm:mb-4 ${contrastSafeText.heading}`}>The Prime Law</h2>
           <p className={`text-sm sm:text-base text-slate-200 mb-4 sm:mb-6 leading-relaxed text-pretty ${contrastSafeText.body}`}>
-            Before creating your account, you must understand and acknowledge The Prime Law - the single constitutional
-            principle that governs all interactions within Supercivilization.
+            Review our founding principles based on the concept of non-aggression and voluntary cooperation. These principles guide all interactions within Supercivilization. You're encouraged to discuss and question them.
           </p>
           <div className="bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-xl p-6 ring-1 ring-inset ring-white/10 shadow-lg shadow-sky-500/10">
             <div className="flex items-start gap-4">
               <Shield className="w-6 h-6 text-sky-300 flex-shrink-0 mt-0.5" />
               <p className="text-sm sm:text-base text-slate-100 leading-relaxed">
-                This is not fine print. The Prime Law is the <strong className="text-white">only law</strong> we have.
-                Everything else - Terms of Service, Privacy Policy, Community Guidelines - flows from and must align
-                with this foundational principle.
+                The Prime Law is our core principle. All Terms of Service, Privacy Policy, and Community Guidelines flow from this foundational concept of voluntary cooperation and non-aggression.
               </p>
             </div>
           </div>
@@ -208,8 +205,7 @@ export default function Step2AgreePrimeLaw({ onComplete, timeLeft: _timeLeft, co
           <div className="mb-4 sm:mb-6 bg-gradient-to-br from-indigo-500/20 via-blue-500/20 to-sky-500/20 rounded-lg p-4 sm:p-5 ring-1 ring-inset ring-white/10 shadow-md shadow-sky-500/10 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-sky-300 flex-shrink-0 mt-0.5" />
             <p className="text-sm text-slate-200">
-              You must acknowledge all three agreements to proceed. These are not optional - they are the constitutional
-              foundation of Supercivilization.
+              Please acknowledge all three agreements to continue. Membership is based on voluntary alignment with these principles.
             </p>
           </div>
         )}
