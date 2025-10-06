@@ -7,6 +7,8 @@ import { ProfileForm } from '@/components/forms/profile-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
+export const dynamic = 'force-dynamic';
+
 export default function ProfilePage() {
   const [userId, setUserId] = useState<string | undefined>();
   const supabase = createSupabaseClient();
