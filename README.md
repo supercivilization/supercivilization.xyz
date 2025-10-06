@@ -24,8 +24,9 @@ Supercivilization is a modern web platform featuring a public landing page and c
 supercivilization/
 ├── app/
 │   ├── page.tsx           # Homepage
-│   ├── discover/          # Public landing page
-│   ├── onboard/           # 7-step onboarding flow
+│   ├── discover/          # Public landing + membership journey
+│   │   └── [step]/        # 7-step detailed membership process
+│   ├── onboard/           # Quick 7-step onboarding
 │   ├── api/               # API routes
 │   └── auth/              # Authentication routes
 ├── components/
@@ -94,15 +95,24 @@ pnpm test:e2e     # Run Playwright E2E tests
 - Introduction to Supercivilization philosophy
 
 ### Onboarding (`/onboard`)
-Eight-step process for new members:
+Seven-step process for new members:
 1. **Welcome** - Introduction and overview
-2. **Accept Invitation** - Verify invitation code
-3. **Agree to Prime Law** - Review constitutional foundation
-4. **Create Account** - Set up user credentials
-5. **Authenticate Identity** - Connect accounts for verification
-6. **Arrange Ceremony** - Schedule live ceremony session
-7. **Affirm Ceremony** - Complete ceremony process
-8. **Activate Membership** - Finalize onboarding
+2. **Profile** - Complete your profile
+3. **Preferences** - Set your preferences
+4. **Connect** - Connect your accounts
+5. **Explore** - Explore features
+6. **Learn** - Learn the basics
+7. **Complete** - Finalize setup
+
+### Discover (`/discover/[step]`)
+Detailed membership journey (7 steps):
+1. **Accept Invitation** - Verify invitation code
+2. **Agree to Prime Law** - Review constitutional foundation
+3. **Create Account** - Set up user credentials
+4. **Authenticate Identity** - Connect accounts for verification
+5. **Arrange Ceremony** - Schedule live ceremony session
+6. **Affirm Ceremony** - Complete ceremony process
+7. **Activate Membership** - Finalize membership
 
 ## SEO & Metadata
 
@@ -148,5 +158,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Founded by [Joshua Seymour](https://joshuaseymour.com)**
-Part of the [Supercivilization](https://supercivilization.xyz) ecosystem
+Built with Next.js 15, React 19, and modern web technologies.
