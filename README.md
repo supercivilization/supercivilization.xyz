@@ -30,10 +30,9 @@ Supercivilization is a modern web platform featuring a public landing page and a
 - **Upstash Redis 1.35.3** - Serverless Redis
 - **Upstash Ratelimit 2.0.6** - Rate limiting implementation
 
-### Form Handling & Validation
+### Form Handling
 - **React Hook Form 7.64.0** - Form state management
-- **Zod 4.1.5** - Schema validation
-- **@hookform/resolvers 5.2.1** - Integration layer
+- **React 19 Form Actions** - Native form submission with useFormStatus and useActionState
 
 ### Advanced UI Components
 - **Command Palette**: cmdk 1.1.1

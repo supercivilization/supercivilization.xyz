@@ -55,10 +55,9 @@
 - **@upstash/redis 1.35.3** - Serverless Redis
 - **@upstash/ratelimit 2.0.6** - Rate limiting
 
-### **Form Handling & Validation**
-- **React Hook Form 7.62** - Form state management
-- **Zod 4.1.5** - Schema validation
-- **@hookform/resolvers 5.2.1** - RHF + Zod integration
+### **Form Handling**
+- **React Hook Form 7.64.0** - Form state management
+- **React 19 Form Actions** - Native form submission with useFormStatus and useActionState
 
 ### **UI Component Library** (shadcn/ui - Full Suite)
 - **@radix-ui/react-*** - Complete Radix UI primitives collection
@@ -137,8 +136,7 @@ supercivilization/
 │   └── charts/         # Data visualization
 ├── lib/                # Utilities and helpers
 │   ├── supabase/      # Supabase client utilities
-│   ├── upstash/       # Redis and rate limiting
-│   ├── schemas/       # Zod validation schemas
+│   ├── rate-limiting.ts # Upstash Redis rate limiting
 │   └── utils.ts       # Helper functions
 ├── types/             # TypeScript definitions
 └── tests/             # Test files
@@ -341,56 +339,64 @@ export function Chart({ data }) {
 
 ## 📝 **Form Handling**
 
-### **Complete Form Example**
+### **Modern React 19 Form with Server Actions**
 
 ```typescript
 'use client';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
+async function loginAction(prevState: any, formData: FormData) {
+  const email = formData.get('email') as string;
+  const password = formData.get('password') as string;
 
-type FormData = z.infer<typeof schema>;
+  // Server-side validation
+  if (!email?.includes('@')) {
+    return { error: 'Invalid email address' };
+  }
+  if (password?.length < 8) {
+    return { error: 'Password must be at least 8 characters' };
+  }
+
+  try {
+    // Handle authentication
+    return { success: true };
+  } catch (error) {
+    return { error: 'Login failed' };
+  }
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending ? 'Submitting...' : 'Submit'}
+    </Button>
+  );
+}
 
 export function LoginForm() {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
-    resolver: zodResolver(schema),
-  });
-
-  const onSubmit = async (data: FormData) => {
-    try {
-      // Handle submission
-      toast.success('Login successful!');
-    } catch (error) {
-      toast.error('Login failed');
-    }
-  };
+  const [state, formAction] = useActionState(loginAction, null);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form action={formAction}>
       <div>
         <Label htmlFor="email">Email</Label>
-        <Input id="email" {...register('email')} />
-        {errors.email && <p className="text-destructive">{errors.email.message}</p>}
+        <Input id="email" name="email" type="email" required />
       </div>
 
       <div>
         <Label htmlFor="password">Password</Label>
-        <Input id="password" type="password" {...register('password')} />
-        {errors.password && <p className="text-destructive">{errors.password.message}</p>}
+        <Input id="password" name="password" type="password" required minLength={8} />
       </div>
 
-      <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Submitting...' : 'Submit'}
-      </Button>
+      {state?.error && <p className="text-destructive">{state.error}</p>}
+
+      <SubmitButton />
     </form>
   );
 }
@@ -491,9 +497,9 @@ pnpm build
 ### **During Development**
 1. Use shadcn/ui components (don't reinvent)
 2. Apply Supabase for data operations
-3. Implement rate limiting on API routes
-4. Use toast for user feedback
-5. Follow React Hook Form + Zod pattern
+3. Implement rate limiting on API routes with Upstash
+4. Use toast (sonner) for user feedback
+5. Use React 19 Form Actions with useActionState and useFormStatus
 
 ### **After Changes**
 1. Run `pnpm type-check`
