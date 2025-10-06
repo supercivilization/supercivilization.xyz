@@ -4,46 +4,124 @@ A parallel society built on genius. Join the next evolution of civilization.
 
 ## Overview
 
-Supercivilization is a modern web platform featuring a public landing page and comprehensive onboarding experience for new members. Built with the latest web technologies and best practices for performance, accessibility, and SEO.
+Supercivilization is a modern web platform featuring a public landing page and a comprehensive membership onboarding ceremony. Built with Next.js 15, React 19, TypeScript, and a full suite of modern UI libraries.
 
 ## Tech Stack
 
+### Core Framework
 - **Next.js 15.5.4** with App Router and Turbopack
-- **React 19.1.1** with Server Components
+- **React 19.2.0** with Server Components
 - **TypeScript 5.9.2** (strict mode)
+
+### Styling & UI
 - **Tailwind CSS 4.1.12** with Oxide engine
-- **shadcn/ui Platform** - Complete component library
-- **Supabase 2.56.1** for backend and authentication
-- **Framer Motion 12.23.12** for animations
-- **Vitest 3.2.4** for unit testing
-- **Playwright 1.55.0** for E2E testing
+- **Radix UI** - Complete primitives library via shadcn/ui
+- **Framer Motion 12.23.12** - Animation library
+- **tailwindcss-animate 1.0.7** - Animation utilities
+- **class-variance-authority 0.7.1** - Component variant management
+- **Lucide React** - Icon system
+
+### Backend & Database
+- **Supabase** - Backend and authentication
+  - `@supabase/supabase-js 2.56.1` - JavaScript client
+  - `@supabase/ssr 0.7.0` - Server-side rendering support
+
+### Caching & Rate Limiting
+- **Upstash Redis 1.35.3** - Serverless Redis
+- **Upstash Ratelimit 2.0.6** - Rate limiting implementation
+
+### Form Handling & Validation
+- **React Hook Form 7.64.0** - Form state management
+- **Zod 4.1.5** - Schema validation
+- **@hookform/resolvers 5.2.1** - Integration layer
+
+### Advanced UI Components
+- **Command Palette**: cmdk 1.1.1
+- **Toast Notifications**: sonner 2.0.7
+- **Drawer**: vaul 1.1.2
+- **Carousel**: embla-carousel-react 8.6.0
+- **Charts**: recharts 3.1.2
+- **Drag & Drop**: @dnd-kit (core, sortable, utilities)
+- **Date Picker**: react-day-picker 9.11.0
+- **OTP Input**: input-otp 1.4.2
+- **Resizable Panels**: react-resizable-panels 3.0.5
+- **Intersection Observer**: react-intersection-observer 9.16.0
+
+### Utilities
+- **date-fns 4.1.0** - Date utilities
+- **clsx 2.1.1** - Conditional classes
+- **tailwind-merge 3.3.1** - Class merging
+- **node-fetch 3.3.2** - Fetch polyfill
+
+### Testing (In Development)
+- **Vitest 3.2.4** - Unit testing framework
+- **Playwright 1.55.0** - E2E testing (configuration pending)
+- **Testing Library** - React component testing utilities
+
+### Development Tools
+- **ESLint** with Next.js configuration
+- **Prettier** - Code formatting
+- **tsx 4.20.5** - TypeScript execution
+- **dotenv 17.2.1** - Environment variables
 
 ## Project Structure
 
 ```
 supercivilization/
 ├── app/
-│   ├── page.tsx           # Homepage
-│   ├── discover/          # Public landing + membership journey
-│   │   └── [step]/        # 7-step detailed membership process
-│   ├── onboard/           # Quick 7-step onboarding
-│   ├── api/               # API routes
-│   └── auth/              # Authentication routes
+│   ├── page.tsx              # Homepage with Hero and Featured Cards
+│   ├── layout.tsx            # Root layout with metadata
+│   ├── globals.css           # Global styles
+│   ├── discover/             # Membership journey landing
+│   │   └── [step]/           # Dynamic ceremony steps (1-7)
+│   ├── onboard/              # Onboarding flow
+│   ├── api/                  # API routes
+│   │   ├── auth/             # Authentication endpoints
+│   │   ├── health/           # Health check
+│   │   ├── rate-limit/       # Rate limiting
+│   │   ├── validate-invite/  # Invite validation
+│   │   └── resend-verification/
+│   └── auth/                 # Auth routes (callback, reset-password)
 ├── components/
-│   ├── ui/                # shadcn/ui components
-│   └── onboarding/        # Onboarding step components
+│   ├── ui/                   # shadcn/ui components (50+ components)
+│   ├── onboarding/           # Step components for membership ceremony
+│   │   ├── step0-welcome.tsx
+│   │   ├── step1-accept-invitation.tsx
+│   │   ├── step2-agree-primelaw.tsx
+│   │   ├── step3-create-account.tsx
+│   │   ├── step4-authenticate-identity.tsx
+│   │   ├── step5-arrange-ceremony.tsx
+│   │   ├── step6-affirm-ceremony.tsx
+│   │   └── step7-activate-membership.tsx
+│   ├── hero.tsx              # Homepage hero section
+│   ├── featured-cards.tsx    # Homepage feature cards
+│   └── *.test.tsx            # Component tests
 ├── lib/
-│   ├── supabase/          # Supabase client utilities
-│   └── schemas/           # Zod validation schemas
-└── tests/                 # Test files
+│   ├── supabase/             # Supabase client setup
+│   │   ├── client.ts         # Browser client
+│   │   └── server.ts         # Server client
+│   ├── rate-limiting.ts      # Upstash rate limiting
+│   ├── trust-scoring.ts      # Trust score calculations
+│   ├── password-utils.ts     # Password validation
+│   ├── error-handling.ts     # Error utilities
+│   └── utils.ts              # General utilities
+├── hooks/                    # Custom React hooks
+├── public/                   # Static assets
+├── types/                    # TypeScript type definitions
+└── Configuration files
+    ├── next.config.mjs       # Next.js configuration
+    ├── tailwind.config.ts    # Tailwind configuration
+    ├── tsconfig.json         # TypeScript configuration
+    ├── vitest.config.ts      # Vitest configuration
+    └── .env.local            # Environment variables (not committed)
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 24+ (with native TypeScript support)
-- pnpm 9+ (package manager)
+- **Node.js 24+** (with native TypeScript support recommended)
+- **pnpm 9+** (package manager)
 
 ### Installation
 
@@ -62,24 +140,32 @@ supercivilization/
    ```bash
    cp .env.example .env.local
    ```
-   Edit `.env.local` with your Supabase credentials.
+   Configure the following:
+   - `NEXT_PUBLIC_SUPABASE_URL` - Your Supabase project URL
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase anonymous key
+   - `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key
+   - `UPSTASH_REDIS_REST_URL` - Upstash Redis URL
+   - `UPSTASH_REDIS_REST_TOKEN` - Upstash Redis token
 
 4. **Run the development server:**
    ```bash
    pnpm dev
    ```
 
-5. **Open [http://localhost:3000](http://localhost:3000) in your browser.**
+5. **Open [http://localhost:3000](http://localhost:3000)**
 
 ## Available Scripts
 
 ```bash
-pnpm dev          # Start development server with Turbopack
-pnpm build        # Create production build
-pnpm start        # Start production server
-pnpm lint         # Run ESLint
-pnpm test         # Run Vitest unit tests
-pnpm test:e2e     # Run Playwright E2E tests
+pnpm dev           # Start development server with Turbopack
+pnpm build         # Create production build with Turbopack
+pnpm start         # Start production server
+pnpm lint          # Run ESLint
+pnpm test          # Run Vitest unit tests
+pnpm test:watch    # Run tests in watch mode
+pnpm test:coverage # Generate test coverage report
+pnpm test:e2e      # Run Playwright E2E tests (when configured)
+pnpm test:e2e:ui   # Run Playwright with UI mode
 ```
 
 ## Core Features
@@ -87,32 +173,24 @@ pnpm test:e2e     # Run Playwright E2E tests
 ### Homepage (`/`)
 - Hero section with call-to-action
 - Featured cards showcasing key features
-- Modern, responsive design with animations
+- Responsive design with animations
 
-### Discover (`/discover`)
-- Public landing page
-- Community showcase
-- Introduction to Supercivilization philosophy
+### Membership Onboarding (`/onboard` and `/discover/[step]`)
 
-### Onboarding (`/onboard`)
-Seven-step process for new members:
-1. **Welcome** - Introduction and overview
-2. **Profile** - Complete your profile
-3. **Preferences** - Set your preferences
-4. **Connect** - Connect your accounts
-5. **Explore** - Explore features
-6. **Learn** - Learn the basics
-7. **Complete** - Finalize setup
-
-### Discover (`/discover/[step]`)
-Detailed membership journey (7 steps):
+Seven-step ceremony process:
 1. **Accept Invitation** - Verify invitation code
-2. **Agree to Prime Law** - Review constitutional foundation
-3. **Create Account** - Set up user credentials
+2. **Agree to Prime Law** - Review and accept constitutional foundation
+3. **Create Account** - Set up credentials and profile
 4. **Authenticate Identity** - Connect accounts for verification
 5. **Arrange Ceremony** - Schedule live ceremony session
-6. **Affirm Ceremony** - Complete ceremony process
-7. **Activate Membership** - Finalize membership
+6. **Affirm Ceremony** - Complete the ceremony process
+7. **Activate Membership** - Finalize and activate membership
+
+### API Integration
+- Supabase authentication and database
+- Upstash Redis rate limiting
+- Health monitoring endpoints
+- Invite validation system
 
 ## SEO & Metadata
 
@@ -122,27 +200,30 @@ The site includes comprehensive SEO optimization:
 - Optimized for search engines and social sharing
 - Schema.org compliant cross-referencing
 
-## Deployment
-
-The project is deployed on Vercel with:
-- Automatic builds from main branch
-- Environment variable management
-- Edge Runtime support
-- Static page optimization
-- A+ SEO and performance scores
-
 ## Development
 
 ### Code Quality
-- TypeScript strict mode
-- ESLint with Next.js config
-- Prettier for code formatting
-- Comprehensive test coverage
+- TypeScript strict mode enabled
+- ESLint with Next.js configuration
+- Prettier for consistent formatting
 
-### Testing
-- **Unit Tests**: Vitest for component and utility testing
-- **E2E Tests**: Playwright for user flow testing
-- **Type Safety**: Full TypeScript coverage
+### Testing Status
+- Unit tests: In development (Vitest configured, 6 test files exist)
+- E2E tests: Framework installed, configuration needed
+- Component tests: Testing Library available
+
+### Known Limitations
+- Playwright E2E tests not yet implemented
+- Test coverage incomplete
+
+## Deployment
+
+Optimized for Vercel deployment with:
+- Automatic builds from main branch
+- Environment variable management
+- Edge Runtime support
+- Standalone output mode
+- A+ SEO and performance scores
 
 ## Contributing
 
@@ -154,7 +235,7 @@ The project is deployed on Vercel with:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+See the [LICENSE](LICENSE) file for details.
 
 ---
 
