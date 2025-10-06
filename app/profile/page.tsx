@@ -7,7 +7,7 @@ import { ProfileForm } from '@/components/forms/profile-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function ProfilePage() {
+function ProfileContent() {
   const [userId, setUserId] = useState<string | undefined>();
 
   useEffect(() => {
@@ -95,4 +95,34 @@ export default function ProfilePage() {
       </Card>
     </div>
   );
+}
+
+export default function ProfilePage() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="container max-w-2xl py-10">
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-8 w-[200px]" />
+            <Skeleton className="h-4 w-[300px]" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-6">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return <ProfileContent />;
 }
