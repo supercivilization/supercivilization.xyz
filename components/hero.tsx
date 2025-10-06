@@ -62,7 +62,7 @@ export default function Hero() {
             size="lg"
             variant="outline"
             className="bg-zinc-50/80 hover:bg-zinc-100/80 text-zinc-800 dark:bg-zinc-900/50 dark:hover:bg-zinc-800/50 dark:text-zinc-100 border-zinc-300 dark:border-zinc-700 transition-all duration-300 transform hover:scale-105 font-semibold px-8 sm:px-10 py-3 text-lg sm:text-xl rounded-md backdrop-blur-sm"
-            onClick={handleContributeClick}
+            disabled
           >
             Keep Going
           </Button>

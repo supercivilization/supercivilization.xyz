@@ -42,7 +42,10 @@ export default function FeaturedCards() {
             className={`rounded-lg overflow-hidden transition-all duration-300 transform hover:scale-105 hover:z-10`}
           >
             <div
-              onClick={() => window.open("https://www.superachiever.xyz/", "_blank")}
+              onClick={() => {
+                const url = card.title === "Superachievers" ? "https://www.superachievers.xyz/" : "https://www.superachiever.xyz/"
+                window.open(url, "_blank")
+              }}
               className={`p-8 sm:p-10 space-y-6 sm:space-y-8 relative z-10 bg-gradient-to-br ${card.bgClass} ${card.hoverClass} transition-all duration-300 flex flex-col items-center text-center cursor-pointer`}
             >
               <h2
@@ -56,7 +59,8 @@ export default function FeaturedCards() {
                 className={`${card.buttonClass} transition-all duration-300 transform hover:scale-105 font-semibold px-6 sm:px-8 py-3 text-base sm:text-lg rounded-md mt-4 sm:mt-6 mx-auto`}
                 onClick={(e) => {
                   e.stopPropagation()
-                  window.open("https://www.superachiever.xyz/", "_blank")
+                  const url = card.title === "Superachievers" ? "https://www.superachievers.xyz/" : "https://www.superachiever.xyz/"
+                  window.open(url, "_blank")
                 }}
               >
                 {card.cta}
