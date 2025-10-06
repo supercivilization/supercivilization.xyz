@@ -18,10 +18,6 @@ export default function Hero() {
     router.push("/join")
   }
 
-  const handleContributeClick = () => {
-    router.push("/login")
-  }
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-zinc-100 via-zinc-50 to-zinc-200 dark:from-zinc-900 dark:via-zinc-950 dark:to-zinc-900">
       <div className="absolute inset-0 z-0">
