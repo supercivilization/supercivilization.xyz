@@ -28,6 +28,3 @@ export function createSupabaseClient() {
   return supabaseClient
 }
 
-// Default client instance
-export const supabase = createSupabaseClient()
-
