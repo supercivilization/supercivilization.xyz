@@ -9,17 +9,17 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ProfilePage() {
   const [userId, setUserId] = useState<string | undefined>();
-  const supabase = createSupabaseClient();
 
   useEffect(() => {
     async function getUser() {
+      const supabase = createSupabaseClient();
       const {
         data: { user },
       } = await supabase.auth.getUser();
       setUserId(user?.id);
     }
     getUser();
-  }, [supabase.auth]);
+  }, []);
 
   const { data: profile, isLoading, error } = useProfile(userId);
 
