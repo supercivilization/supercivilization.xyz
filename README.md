@@ -30,9 +30,15 @@ Supercivilization is a modern web platform featuring a public landing page and a
 - **Upstash Redis 1.35.3** - Serverless Redis
 - **Upstash Ratelimit 2.0.6** - Rate limiting implementation
 
-### Form Handling
+### State Management & Data Fetching
+- **TanStack Query 5.90.2** - Server state management and data fetching
+- **Zustand 5.0.8** - Client-side UI state management
 - **React Hook Form 7.64.0** - Form state management
-- **React 19 Form Actions** - Native form submission with useFormStatus and useActionState
+- **Zod 4.1.11** - Schema validation
+- **@hookform/resolvers 5.2.2** - Form validation integration
+
+### Error Tracking
+- **Sentry 10.17.0** - Production error monitoring and performance tracking
 
 ### Advanced UI Components
 - **Command Palette**: cmdk 1.1.1
@@ -166,6 +172,61 @@ pnpm test:coverage # Generate test coverage report
 pnpm test:e2e      # Run Playwright E2E tests (when configured)
 pnpm test:e2e:ui   # Run Playwright with UI mode
 ```
+
+## Architecture & Best Practices
+
+### State Management Strategy
+
+**When to use each tool:**
+
+| Use Case | Tool | Why |
+|----------|------|-----|
+| Server data (API, database) | TanStack Query | Caching, refetching, synchronization |
+| UI state (sidebar, modals) | Zustand | Lightweight, persists to localStorage |
+| Form state | React Hook Form + Zod | Validation, error handling, type safety |
+| Single component state | React useState | Simplest solution for isolated state |
+
+### Data Fetching Pattern
+
+All data fetching uses **TanStack Query** for:
+- Automatic caching and background refetching
+- Loading and error states
+- Optimistic updates
+- Integration with Sentry for error tracking
+
+Example:
+```typescript
+import { useProfile } from '@/lib/query/hooks/use-profile';
+
+const { data, isLoading, error } = useProfile(userId);
+```
+
+### Form Validation Pattern
+
+All forms use **React Hook Form + Zod** for:
+- Type-safe validation schemas
+- Client-side validation
+- Server-side validation
+- Clear error messages
+
+Example:
+```typescript
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { profileSchema } from '@/lib/schemas/profile';
+
+const form = useForm({
+  resolver: zodResolver(profileSchema),
+});
+```
+
+### Error Tracking
+
+**Sentry** automatically captures:
+- React Query errors
+- Mutation errors
+- Unhandled exceptions
+- Performance metrics
 
 ## Core Features
 
