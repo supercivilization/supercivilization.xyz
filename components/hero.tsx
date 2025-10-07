@@ -25,23 +25,23 @@ export default function Hero() {
       </div>
       <div className="relative z-10 text-center space-y-8 sm:space-y-10 md:space-y-12 px-4 max-w-5xl mx-auto">
         <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tight">
-          <span className="text-fuchsia-600">S</span>
-          <span className="text-pink-600">u</span>
-          <span className="text-rose-600">p</span>
-          <span className="text-red-600">e</span>
-          <span className="text-orange-600">r</span>
-          <span className="text-amber-600">c</span>
-          <span className="text-yellow-600">i</span>
-          <span className="text-lime-600">v</span>
-          <span className="text-green-600">i</span>
-          <span className="text-emerald-600">l</span>
-          <span className="text-teal-600">i</span>
-          <span className="text-cyan-600">z</span>
-          <span className="text-sky-600">a</span>
-          <span className="text-blue-600">t</span>
-          <span className="text-indigo-600">i</span>
-          <span className="text-violet-600">o</span>
-          <span className="text-purple-600">n</span>
+          <span className="text-fuchsia-500">S</span>
+          <span className="text-pink-500">u</span>
+          <span className="text-rose-500">p</span>
+          <span className="text-red-500">e</span>
+          <span className="text-orange-500">r</span>
+          <span className="text-amber-500">c</span>
+          <span className="text-yellow-500">i</span>
+          <span className="text-lime-500">v</span>
+          <span className="text-green-500">i</span>
+          <span className="text-emerald-500">l</span>
+          <span className="text-teal-500">i</span>
+          <span className="text-cyan-500">z</span>
+          <span className="text-sky-500">a</span>
+          <span className="text-blue-500">t</span>
+          <span className="text-indigo-500">i</span>
+          <span className="text-violet-500">o</span>
+          <span className="text-purple-500">n</span>
         </h1>
         <p className="text-3xl sm:text-4xl md:text-5xl font-medium text-zinc-600 dark:text-zinc-200 leading-relaxed max-w-3xl mx-auto">
           Avolve from Degen to Regen
