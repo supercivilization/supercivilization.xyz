@@ -2,7 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['placeholder.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'placeholder.com',
+      },
+    ],
     formats: ['image/avif', 'image/webp'],
   },
   poweredByHeader: false,
@@ -24,8 +29,6 @@ const nextConfig = {
       bodySizeLimit: '2mb',
     },
   },
-  // Turbopack configuration (moved from experimental.turbo)
-  turbopack: {},
   // Ensure we handle all errors properly
   onDemandEntries: {
     // Keep the build page in memory for longer
