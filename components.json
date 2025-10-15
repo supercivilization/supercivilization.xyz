@@ -17,5 +17,11 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "iconLibrary": "lucide"
+  "iconLibrary": "lucide",
+  "registries": {
+    "@magicui-pro": {
+      "url": "https://pro.magicui.design/r/{name}.json",
+      "token": "${MAGICUI_PRO_REGISTRY_TOKEN}"
+    }
+  }
 }

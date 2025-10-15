@@ -113,22 +113,28 @@ const jsonLd = {
         "@type": "ImageObject",
         "@id": "https://supercivilization.xyz/#logo",
         url: "https://supercivilization.xyz/logo.png",
-        contentUrl: "https://supercivilization.xyz/logo.svg",
+        encodingFormat: "image/png",
         caption: "Supercivilization Logo",
-        width: "512",
-        height: "512",
+        width: 512,
+        height: 512,
       },
       image: {
         "@type": "ImageObject",
         "@id": "https://supercivilization.xyz/#logo",
       },
       description:
-        "We help you vivify further as an individual superachiever, unify faster as a collective of superachievers, and thrive forever in the supercivilization ecosystem.",
+        "We help you vivify further as an individual superachiever, unify faster as a collective of superachievers, and thrive forever in the supercivilization ecosystem. Launching January 1, 2026.",
       slogan: "Vivify Further, Unify Faster, Thrive Forever",
       foundingDate: "2026-01-01",
       foundingLocation: {
         "@type": "Place",
         name: "San Miguel de Allende, Guanajuato, Mexico",
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "San Miguel de Allende",
+        addressRegion: "Guanajuato",
+        addressCountry: "MX",
       },
       email: "admin@supercivilization.xyz",
       founder: {
@@ -153,20 +159,10 @@ const jsonLd = {
         contactType: "Customer Support",
         availableLanguage: "English",
       },
-      owns: [
-        {
-          "@type": "WebSite",
-          "@id": "https://avolve.io/#website",
-          name: "Avolve.io",
-          url: "https://avolve.io",
-        },
-        {
-          "@type": "SoftwareApplication",
-          "@id": "https://avolve.io/#application",
-          name: "Avolve.io Platform",
-          url: "https://avolve.io",
-        },
-      ],
+      owns: {
+        "@type": "SoftwareApplication",
+        "@id": "https://avolve.io/#softwareapplication",
+      },
       publishingPrinciples: "https://supercivilization.xyz/principles",
       knowsAbout: [
         "Individual Achievement",
@@ -221,7 +217,7 @@ const jsonLd = {
           "@type": "Offer",
           itemOffered: {
             "@type": "SoftwareApplication",
-            "@id": "https://avolve.io/#application",
+            "@id": "https://avolve.io/#softwareapplication",
             name: "Avolve.io Platform",
             url: "https://avolve.io",
           },
@@ -342,22 +338,6 @@ const jsonLd = {
             item: "https://supercivilization.xyz",
           },
         ],
-      },
-    },
-    {
-      "@type": "Person",
-      "@id": "https://joshuaseymour.com/#person",
-      name: "Joshua Seymour",
-      url: "https://joshuaseymour.com",
-      image: "https://joshuaseymour.com/profile.png",
-      jobTitle: "Founder",
-      worksFor: {
-        "@type": "Organization",
-        "@id": "https://supercivilization.xyz/#organization",
-      },
-      founder: {
-        "@type": "Organization",
-        "@id": "https://supercivilization.xyz/#organization",
       },
     },
     {

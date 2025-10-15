@@ -1,0 +1,34 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "url": "https://mcp.supabase.com/mcp",
+      "description": "Remote Supabase MCP server with OAuth 2.1 auth",
+      "params": {
+        "features": "database,docs,debugging,development,functions,storage",
+        "readonly": false
+      }
+    },
+    "supabase-local": {
+      "url": "http://localhost:54321/mcp",
+      "description": "Local Supabase instance for development",
+      "params": {
+        "features": "account,database,development,functions,storage,branching"
+      }
+    },
+    "supabase-prod": {
+      "url": "https://mcp.supabase.com/mcp",
+      "description": "Production Supabase (read-only)",
+      "params": {
+        "features": "database,docs,debugging",
+        "readonly": true,
+        "project": "${SUPABASE_PROJECT_REF}"
+      }
+    }
+  },
+  "toolGeneration": {
+    "outputDir": "./src/tools/",
+    "typescript": true,
+    "validation": true,
+    "documentation": true
+  }
+}
